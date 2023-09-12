@@ -30,13 +30,11 @@ export default function Home() {
             一块小板子
           </h1>
           <p>
-            计算机专业大二在读 (全栈开发)
-            Mainly use React/Vue Next/Nuxt.js + TypeScript + UnoCSS + ...
+            存一些文章或者日记 + 小工具， 本站技术栈为 Next.js、MDX、UnoCSS
+            CSS、TypeScript
           </p>
         </div>
       </div>
-
-
     </article>
   );
 }

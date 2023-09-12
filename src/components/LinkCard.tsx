@@ -7,22 +7,22 @@ const routes = [
   {
     name: "首页",
     path: "/",
-    icon: "home",
+    icon: "i-tabler-home",
   },
   {
-    name: "标签",
-    path: "/tags",
-    icon: "tags",
+    name: "聊天",
+    path: "/chat",
+    icon: "i-tabler-message",
   },
   {
     name: "工具箱",
     path: "/toolbox",
-    icon: "toolbox",
+    icon: "i-tabler-tools",
   },
   {
     name: "关于",
     path: "/about",
-    icon: "about",
+    icon: "i-tabler-info-circle",
   },
 ];
 
@@ -33,13 +33,36 @@ export default function LinkCard() {
     console.log(window.location.pathname);
   }, []);
 
+  useEffect(() => {
+    // 检查颜色模式
+    let checkColorScheme = () => {
+      // 根据系统主题切换浅色和深色模式
+      // 使用daisyUI
+      const html = document.querySelector("html");
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        html?.setAttribute("data-theme", "night");
+      } else {
+        html?.setAttribute("data-theme", "winter");
+      }
+    };
+
+    checkColorScheme();
+
+    // 当系统颜色发生变化
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        checkColorScheme();
+      });
+  }, []);
+
   function select(item: string) {
     setCurrent(item);
   }
 
   return (
     <>
-      <ul className="md:hidden fixed bottom-0 left-0 right-0 menu menu-horizontal bg-base-200 rounded-lt-xl rounded-rt-xl gap-2">
+      <ul className="md:hidden fixed bottom-0 left-0 right-0 menu menu-lg menu-horizontal bg-base-200 rounded-lt-xl rounded-rt-xl gap-2">
         {routes.map((route) => (
           <li key={route.path} className="flex-1">
             <Link
@@ -49,7 +72,7 @@ export default function LinkCard() {
               href={route.path}
               onClick={() => select(route.path)}
             >
-              <i className={`i-tabler-${route.icon}`}></i>
+              <i className={route.icon}></i>
               {route.name}
             </Link>
           </li>

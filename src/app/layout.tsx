@@ -14,11 +14,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="zh-CN">
       <body className="flex flex-col justify-center items-center">
-        <LinkCard />
         {children}
+        <LinkCard />
       </body>
     </html>
   );

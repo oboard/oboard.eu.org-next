@@ -9,14 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/node": "20.6.0",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
-    "eslint": "8.49.0",
-    "eslint-config-next": "13.4.19",
     "next": "13.4.19",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "typescript": "5.2.2"
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.1.119",
+    "@iconify-json/tabler": "^1.1.91",
+    "@types/node": "20.5.6",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "@unocss/postcss": "latest",
+    "@unocss/preset-icons": "^0.55.7",
+    "@unocss/preset-typography": "^0.55.7",
+    "@unocss/transformer-attributify-jsx": "^0.55.7",
+    "daisyui": "^3.7.3",
+    "eslint": "8.47.0",
+    "eslint-config-next": "13.4.19",
+    "postcss": "8.4.28",
+    "typescript": "5.2.2",
+    "unocss": "latest"
   }
 }

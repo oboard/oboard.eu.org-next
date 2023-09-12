@@ -1,0 +1,105 @@
+"use client";
+
+import Link from "next/link";
+import React, { useEffect } from "react";
+
+const routes = [
+  {
+    name: "首页",
+    path: "/",
+    icon: "home",
+  },
+  {
+    name: "标签",
+    path: "/tags",
+    icon: "tags",
+  },
+  {
+    name: "工具箱",
+    path: "/toolbox",
+    icon: "toolbox",
+  },
+  {
+    name: "关于",
+    path: "/about",
+    icon: "about",
+  },
+];
+
+export default function LinkCard() {
+  const [current, setCurrent] = React.useState("");
+  useEffect(() => {
+    setCurrent(window.location.pathname);
+    console.log(window.location.pathname);
+  }, []);
+
+  function select(item: string) {
+    setCurrent(item);
+  }
+
+  return (
+    <>
+      <ul className="md:hidden fixed bottom-0 left-0 right-0 menu menu-horizontal bg-base-200 rounded-lt-xl rounded-rt-xl gap-2">
+        {routes.map((route) => (
+          <li key={route.path} className="flex-1">
+            <Link
+              className={`flex flex-row justify-center menu-item ${
+                current === route.path ? "active" : ""
+              }`}
+              href={route.path}
+              onClick={() => select(route.path)}
+            >
+              <i className={`i-tabler-${route.icon}`}></i>
+              {route.name}
+            </Link>
+          </li>
+        ))}
+        {/* <li>
+          <Link href={""}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+            </svg>
+            Inbox
+            <span className="badge badge-sm">99+</span>
+          </Link>
+        </li> */}
+      </ul>
+
+      <ul className="hidden md:flex fixed top-10 group items-center px-3 ring-1 ring-zinc-900/5 dark:ring-zinc-100/10 rounded-full bg-gradient-to-b from-zinc-50/70 to-white/70 dark:from-zinc-900/70 dark:to-zinc-800/70 backdrop-blur backdrop-saturate-200 shadow-lg shadow-zinc-800/5">
+        <div
+          className="pointer-events-none absolute -inset-px rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-primary/[0.12]"
+          style={{
+            background:
+              "radial-gradient(99.4481px at 220px 8px, primary 0%, transparent 65%)",
+          }}
+          aria-hidden="true"
+        ></div>
+        {routes.map((route) => (
+          <li key={route.path}>
+            <Link
+              className={`relative block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
+                current === route.path ? "text-primary" : ""
+              }`}
+              href={route.path}
+              onClick={() => select(route.path)}
+            >
+              {route.name}
+              <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0"></span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}

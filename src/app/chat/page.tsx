@@ -31,13 +31,14 @@ const useLocalStorage = (
   fallbackState: string | never[]
 ) => {
   const [value, setValue] = useState(
-   ( (typeof window !== 'undefined') &&
-    JSON.parse(localStorage.getItem(storageKey) ?? "") )|| fallbackState
+    (typeof window !== "undefined" &&
+      JSON.parse(localStorage.getItem(storageKey) ?? "[]")) ||
+      fallbackState
   );
 
   useEffect(() => {
-    if (typeof window !== 'undefined') 
-    localStorage.setItem(storageKey, JSON.stringify(value));
+    if (typeof window !== "undefined")
+      localStorage.setItem(storageKey, JSON.stringify(value));
   }, [value, storageKey]);
 
   if (typeof window == "undefined") return [fallbackState, () => {}];

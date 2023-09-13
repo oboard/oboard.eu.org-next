@@ -109,10 +109,26 @@ export default function Chat() {
     });
   }
 
+  // 检查userId是否可用
+  function checkUserIdAvalible() {
+    if (userId == undefined || userId == null || userId.length < 5) {
+      setUserId(genUuid());
+      // 刷新页面
+      if (window) {
+        window.location.reload();
+        return false;
+      }
+    }
+    return true;
+  }
+
   // 设置定时拉去信息
   useEffect(() => {
     let timer = setInterval(() => {
       console.log(`userId: ${userId}`);
+
+      checkUserIdAvalible();
+      
       try {
         fetch("/api/chat")
           .then((res) => res.json())
@@ -190,12 +206,7 @@ export default function Chat() {
   let sendMessage = () => {
     if (input.length == 0) return;
 
-    //   // 生成userId
-    if (userId == undefined || userId == null || userId.length < 5) {
-      // 如果没有，就生成一个
-      console.log(`regen userId`);
-      setUserId(genUuid());
-    }
+    if(!checkUserIdAvalible()) return;
 
     // let time = new Date().toLocaleString();
     let msg: MessageInfo = {

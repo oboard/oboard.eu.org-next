@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { MessageInfo } from "../../models/chat/message";
 import { NextResponse } from "next/server";
 
-export let messages: MessageInfo[] = [];
+let messages: MessageInfo[] = [];
 
 export async function GET(request: Request) {
 

@@ -30,20 +30,22 @@ const useLocalStorage = (
   storageKey: string,
   fallbackState: string | never[]
 ) => {
-  if (typeof window !== "undefined") {
-    const [value, setValue] = useState(
-      JSON.parse(localStorage.getItem(storageKey) ?? "") || fallbackState
-    );
+  const [value, setValue] = useState(
+   ( (typeof window !== 'undefined') &&
+    JSON.parse(localStorage.getItem(storageKey) ?? "") )|| fallbackState
+  );
 
-    useEffect(() => {
-      localStorage.setItem(storageKey, JSON.stringify(value));
-    }, [value, storageKey]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') 
+    localStorage.setItem(storageKey, JSON.stringify(value));
+  }, [value, storageKey]);
 
-    return [value, setValue];
-  }
+  if (typeof window == "undefined") return [fallbackState, () => {}];
+
+  return [value, setValue];
 
   // If there is no window (e.g., server-side rendering), provide a fallback.
-  return [fallbackState, () => {}]; // Return a dummy setState function.
+  // return [fallbackState, () => {}]; // Return a dummy setState function.
 };
 // export let messages = [];
 
@@ -97,7 +99,6 @@ export default function Chat() {
   const [userId, setUserId] = useLocalStorage("userId", genUuid());
   const [following, setFollowing] = useState(true);
   let first = true;
-
 
   function toBottom() {
     const chatBox = document.querySelector(".chatbox");
@@ -258,17 +259,19 @@ export default function Chat() {
     return () => {
       chatbox?.removeEventListener("scroll", (e) => {});
       clearTimeout(scrollTimer.current);
-    }
+    };
   }, []);
 
   return (
     <NoSSR>
       {/* 一个用于滚动到底部对悬浮按钮，如果following为false则显示 */}
       {/* 底部剧中 */}
-      <div className="fixed bottom-32 z-40 left-1/2 transform -translate-x-1/2"
-      style={{
-        display: following ? 'none' : 'block'
-      }}>
+      <div
+        className="fixed bottom-32 z-40 left-1/2 transform -translate-x-1/2"
+        style={{
+          display: following ? "none" : "block",
+        }}
+      >
         <button
           className={
             "btn btn-circle btn-accent flex items-center justify-center"
@@ -427,24 +430,28 @@ export default function Chat() {
           ></input>
 
           {/* 发送按钮 */}
-          {input && <button
-            className="btn btn-circle btn-primary btn-sm"
-            onClick={() => {
-              sendMessage();
-            }}
-          >
-            <i className="i-tabler-send text-xl" />
-          </button>}
+          {input && (
+            <button
+              className="btn btn-circle btn-primary btn-sm"
+              onClick={() => {
+                sendMessage();
+              }}
+            >
+              <i className="i-tabler-send text-xl" />
+            </button>
+          )}
 
           {/* 更多 */}
-          {!input && <button
-            className="btn btn-circle btn-sm"
-            onClick={() => {
-              sendMessage();
-            }}
-          >
-            <i className="i-tabler-plus text-xl" />
-          </button>}
+          {!input && (
+            <button
+              className="btn btn-circle btn-sm"
+              onClick={() => {
+                sendMessage();
+              }}
+            >
+              <i className="i-tabler-plus text-xl" />
+            </button>
+          )}
         </div>
       </div>
     </NoSSR>

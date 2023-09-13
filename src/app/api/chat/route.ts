@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
-import { MessageInfo } from "../../models/chat/message";
+import { MessageInfo, MessageStatus } from "../../models/chat/message";
 import { NextResponse } from "next/server";
 
 let messages: MessageInfo[] = [];
@@ -48,6 +48,11 @@ export async function POST(request: Request) {
     if (typeof item.time === "string" || item.time == undefined) {
       // 时间戳
       item.time = new Date().getTime();
+
+      if (item.status == MessageStatus.Sending) {
+        item.status = MessageStatus.Sent;
+      }
+
     }
   });
   // 按照时间戳排序

@@ -4,4 +4,12 @@ export type MessageInfo = {
     userId: string;
     content: string;
     time: number | undefined;
+    status: MessageStatus;
 };
+
+export enum MessageStatus {
+    Sending,
+    Sent,
+    // Received,
+    Seen,
+}

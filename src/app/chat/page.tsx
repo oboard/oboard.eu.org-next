@@ -4,7 +4,7 @@ import { Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { MessageInfo } from "../models/chat/message";
+import { MessageInfo, MessageStatus } from "../models/chat/message";
 import NoSSR from "@/components/NoSSR";
 
 const CodeBlock = ({
@@ -96,6 +96,7 @@ export default function Chat() {
     MessageInfo[],
     React.Dispatch<React.SetStateAction<MessageInfo[]>>
   ];
+  const [showMenu, setShowMenu] = useState(false);
   const [input, setInput] = useLocalStorage("input", "");
   const [userId, setUserId] = useLocalStorage("userId", genUuid());
   const [following, setFollowing] = useState(true);
@@ -128,7 +129,7 @@ export default function Chat() {
       console.log(`userId: ${userId}`);
 
       checkUserIdAvalible();
-      
+
       try {
         fetch("/api/chat")
           .then((res) => res.json())
@@ -138,23 +139,27 @@ export default function Chat() {
             if (data !== undefined && data !== null) {
               temp = [...data, ...temp];
               // 去重
-              temp = temp.filter((item, index) => {
-                return (
-                  temp.findIndex((item2) => {
-                    return item.id === item2.id;
-                  }) === index
-                );
-              });
+              temp = temp.filter(
+                (item, index, array) =>
+                  array.findIndex((item2) => item.id === item2.id) === index
+              );
 
               // 过滤掉空信息
               temp = temp.filter((item) => {
-                return item.content !== "";
+                if (item.content == undefined || item.content == null) {
+                  return false;
+                }
+                return item.content.trim() !== "";
               });
 
               temp.forEach((item) => {
                 if (typeof item.time === "string" || item.time == undefined) {
                   // 时间戳
                   item.time = new Date().getTime();
+
+                  if(item.status == MessageStatus.Sent && item.userId == userId){
+                    item.status = MessageStatus.Seen;
+                  }
                 }
               });
               // 按照时间戳排序
@@ -206,7 +211,7 @@ export default function Chat() {
   let sendMessage = () => {
     if (input.length == 0) return;
 
-    if(!checkUserIdAvalible()) return;
+    if (!checkUserIdAvalible()) return;
 
     // let time = new Date().toLocaleString();
     let msg: MessageInfo = {
@@ -214,6 +219,7 @@ export default function Chat() {
       userId: userId,
       content: input,
       time: undefined,
+      status: MessageStatus.Sending,
     };
     // 直接插入到数组中
     setMessages([...messages, msg]);
@@ -274,6 +280,43 @@ export default function Chat() {
     };
   }, []);
 
+  // uuid作为种子，生成随机数，然后取1-7数字，作为颜色
+  function genColor(uuid: string) {
+    if (uuid == undefined || uuid == null || uuid.length < 5) {
+      return "";
+    }
+    let seed = parseInt(uuid.replace(/-/g, "").slice(0, 8), 16);
+    const colors = [
+      "chat-bubble-primary",
+      "chat-bubble-secondary",
+      "chat-bubble-accent",
+      "chat-bubble-neutral",
+      "chat-bubble-success",
+      "chat-bubble-warning",
+      "chat-bubble-error",
+    ];
+    let color = colors[seed % 7];
+    return color;
+  }
+
+  // 通过时间戳获取时间，如果时间不是很久，就显示多久之前，否则显示具体时间
+  function getTime(time: number | undefined) {
+    if (time == undefined) return "";
+    let now = new Date().getTime();
+    let diff = now - time;
+    if (diff < 1000 * 60) {
+      return `${Math.floor(diff / 1000)}秒前`;
+    } else if (diff < 1000 * 60 * 60) {
+      return `${Math.floor(diff / (1000 * 60))}分钟前`;
+    } else if (diff < 1000 * 60 * 60 * 24) {
+      return `${Math.floor(diff / (1000 * 60 * 60))}小时前`;
+    // } else if (diff < 1000 * 60 * 60 * 24 * 30) {
+    //   return `${Math.floor(diff / (1000 * 60 * 60 * 24))}天前`;
+    } else {
+      return new Date(time).toLocaleString();
+    }
+  }
+
   return (
     <NoSSR>
       {/* 一个用于滚动到底部对悬浮按钮，如果following为false则显示 */}
@@ -325,99 +368,43 @@ export default function Chat() {
               (item: MessageInfo, index: Key | null | undefined) => (
                 // 模仿微信的样式,有气泡的感觉，要显示时间
                 // 要根据uuid判断是否是自己发的，如果是自己发的靠右，别人发的靠左
+
                 <div
-                  key={index}
                   className={
-                    "flex flex-col gap-1 px-2 py-1" +
-                    (item.userId === userId ? " items-end" : " items-start")
+                    "chat " +
+                    (item.userId === userId ? " chat-end" : "chat-start")
                   }
+                  key={index}
                 >
+                  {/* <div className="chat-image avatar">
+    <div className="w-10 rounded-full">
+      <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+    </div>
+  </div> */}
+                  <div className="chat-header">
+                    {/* Obi-Wan Kenobi */}
+                    <time className="text-xs opacity-50">{getTime(item.time)}</time>
+                  </div>
                   <div
                     className={
-                      "flex flex-col gap-1" +
-                      (item.userId === userId ? " items-end" : " items-start")
+                      "chat-bubble " +
+                      genColor(item.userId)
                     }
                   >
-                    <div
-                      className={
-                        "rounded-md p-2 max-w-md" +
-                        (item.userId === userId
-                          ? " bg-primary text-primary-content"
-                          : " bg-base-200 text-base-content")
-                      }
-                    >
-                      {/* 以markdown展示 */}
-                      <ReactMarkdown
-                        components={{
-                          code({
-                            node,
-                            inline,
-                            className,
-                            children,
-                            ...props
-                          }) {
-                            const match = /language-(\w+)/.exec(
-                              className || ""
-                            );
-                            return !inline && match ? (
-                              <CodeBlock language={match[1]}>
-                                {String(children).replace(/\n$/, "")}
-                              </CodeBlock>
-                            ) : (
-                              <code className={className} {...props}>
-                                {children}
-                              </code>
-                            );
-                          },
-                          // 链接
-                          a({ node, className, children, ...props }) {
-                            return (
-                              <div className="flex flex-row gap-1 items-center">
-                                {/* 链接图标 */}
-                                <svg
-                                  // 颜色
-                                  className={
-                                    (item.userId === userId
-                                      ? "text-primary-content"
-                                      : "text-base-content") + " fill-current"
-                                  }
-                                  viewBox="0 0 1024 1024"
-                                  version="1.1"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                >
-                                  <path d="M573.44 640a187.68 187.68 0 0 1-132.8-55.36L416 560l45.28-45.28 24.64 24.64a124.32 124.32 0 0 0 170.08 5.76l1.44-1.28a49.44 49.44 0 0 0 4-3.84l101.28-101.28a124.16 124.16 0 0 0 0-176l-1.92-1.92a124.16 124.16 0 0 0-176 0l-51.68 51.68a49.44 49.44 0 0 0-3.84 4l-20 24.96-49.92-40L480 276.32a108.16 108.16 0 0 1 8.64-9.28l51.68-51.68a188.16 188.16 0 0 1 266.72 0l1.92 1.92a188.16 188.16 0 0 1 0 266.72l-101.28 101.28a112 112 0 0 1-8.48 7.84 190.24 190.24 0 0 1-125.28 48z"></path>
-                                  <path
-                                    d="M350.72 864a187.36 187.36 0 0 1-133.28-55.36l-1.92-1.92a188.16 188.16 0 0 1 0-266.72l101.28-101.28a112 112 0 0 1 8.48-7.84 188.32 188.32 0 0 1 258.08 7.84L608 464l-45.28 45.28-24.64-24.64A124.32 124.32 0 0 0 368 478.88l-1.44 1.28a49.44 49.44 0 0 0-4 3.84l-101.28 101.28a124.16 124.16 0 0 0 0 176l1.92 1.92a124.16 124.16 0 0 0 176 0l51.68-51.68a49.44 49.44 0 0 0 3.84-4l20-24.96 50.08 40-20.8 25.12a108.16 108.16 0 0 1-8.64 9.28l-51.68 51.68A187.36 187.36 0 0 1 350.72 864z"
-                                    p-id="4051"
-                                  ></path>
-                                </svg>
-                                <a
-                                  className="link-hover"
-                                  target="_blank"
-                                  {...props}
-                                >
-                                  {children}
-                                </a>
-                              </div>
-                            );
-                          },
-                        }}
-                      >
-                        {item.content}
-                      </ReactMarkdown>
-                      {/* {item.content} */}
-                    </div>
-                    <div className="text-gray-400 text-xs">
-                      {
-                        // item.time是时间戳，转换为可读的时间字符串
-                        new Date(
-                          item.time || new Date().getTime()
-                        ).toLocaleString()
-                      }
-                    </div>
+                    {item.content}
                   </div>
+                  <div className="chat-footer opacity-50">{(()=>{
+                    switch(item.status) {
+                      case MessageStatus.Sending:
+                        return "发送中";
+                      case MessageStatus.Sent:
+                        return "已发送";
+                      case MessageStatus.Seen:
+                        return "已读";
+                      default:
+                        return "";
+                    }
+                  })()}</div>
                 </div>
               )
             )}
@@ -445,6 +432,8 @@ export default function Chat() {
           {input && (
             <button
               className="btn btn-circle btn-primary btn-sm"
+              // 字数限制10000字
+              disabled={input.length > 10000}
               onClick={() => {
                 sendMessage();
               }}
@@ -458,7 +447,8 @@ export default function Chat() {
             <button
               className="btn btn-circle btn-sm"
               onClick={() => {
-                sendMessage();
+                // 弹出菜单
+                setShowMenu(!showMenu);
               }}
             >
               <i className="i-tabler-plus text-xl" />

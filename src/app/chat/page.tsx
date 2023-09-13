@@ -1,10 +1,11 @@
 "use client";
 
-import { Key, useEffect, useState } from "react";
+import { Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { MessageInfo } from "../models/chat/message";
+import NoSSR from "@/components/NoSSR";
 
 const CodeBlock = ({
   language,
@@ -25,7 +26,6 @@ const CodeBlock = ({
     </SyntaxHighlighter>
   );
 };
-
 const useLocalStorage = (
   storageKey: string,
   fallbackState: string | never[]
@@ -38,9 +38,12 @@ const useLocalStorage = (
     useEffect(() => {
       localStorage.setItem(storageKey, JSON.stringify(value));
     }, [value, storageKey]);
+
     return [value, setValue];
   }
-  return useState(fallbackState);
+
+  // If there is no window (e.g., server-side rendering), provide a fallback.
+  return [fallbackState, () => {}]; // Return a dummy setState function.
 };
 // export let messages = [];
 
@@ -226,7 +229,7 @@ export default function Chat() {
   //     time: "time",
   // }
 
-  let scrollTimer: NodeJS.Timeout | undefined;
+  let scrollTimer = useRef<NodeJS.Timeout | undefined>();
 
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
@@ -239,26 +242,27 @@ export default function Chat() {
       ) {
         setFollowing(true);
         // 定时滚动到底部
-        if (scrollTimer) clearTimeout(scrollTimer);
-        scrollTimer = setInterval(() => {
+        if (scrollTimer.current) {
+          clearTimeout(scrollTimer.current);
+        }
+        scrollTimer.current = setInterval(() => {
           toBottom();
-          console.log('following')
         }, 500);
       } else {
         setFollowing(false);
         // 取消定时
-        clearTimeout(scrollTimer);
+        clearTimeout(scrollTimer.current);
       }
     });
 
     return () => {
       chatbox?.removeEventListener("scroll", (e) => {});
-      clearTimeout(scrollTimer);
+      clearTimeout(scrollTimer.current);
     }
   }, []);
 
   return (
-    <>
+    <NoSSR>
       {/* 一个用于滚动到底部对悬浮按钮，如果following为false则显示 */}
       {/* 底部剧中 */}
       <div className="fixed bottom-32 z-40 left-1/2 transform -translate-x-1/2"
@@ -404,10 +408,10 @@ export default function Chat() {
             )}
           </div>
         </div>
-        <div className="fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row gap-2 p-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-base-100">
+        <div className="border border-secondary-content m-4 overflow-hidden rounded-full fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row items-center pr-2 gap-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-base-100">
           {/* // 要支持多行输入，按Shift+Enter 或者Ctrl+Enter换行 */}
           <input
-            className="textarea textarea-bordered flex-grow h-0"
+            className="input flex-grow focus:outline-0 transition-all duration-200"
             value={input}
             onKeyDown={(e) => {
               if (e.key === "Enter" && (e.ctrlKey || e.shiftKey)) {
@@ -422,16 +426,27 @@ export default function Chat() {
             }}
           ></input>
 
-          <button
-            className="btn btn-primary"
+          {/* 发送按钮 */}
+          {input && <button
+            className="btn btn-circle btn-primary btn-sm"
             onClick={() => {
               sendMessage();
             }}
           >
             <i className="i-tabler-send text-xl" />
-          </button>
+          </button>}
+
+          {/* 更多 */}
+          {!input && <button
+            className="btn btn-circle btn-sm"
+            onClick={() => {
+              sendMessage();
+            }}
+          >
+            <i className="i-tabler-plus text-xl" />
+          </button>}
         </div>
       </div>
-    </>
+    </NoSSR>
   );
 }

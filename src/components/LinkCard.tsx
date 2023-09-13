@@ -73,7 +73,7 @@ export default function LinkCard() {
               onClick={() => select(route.path)}
             >
               <i className={route.icon}></i>
-              {route.name}
+              <div className="hidden sm:block">{route.name}</div>
             </Link>
           </li>
         ))}

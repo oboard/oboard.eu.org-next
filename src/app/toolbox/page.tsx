@@ -12,29 +12,22 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
   );
 };
 
+const toolbox = [
+  {
+    name: "优学院题库导出助手",
+    desc: "导出优学院题库到 Word",
+    url: "https://uexport.oboard.eu.org/",
+  },
+];
+
 export default function Home() {
   return (
     <article className={"text-base prose py-24 px-4"}>
-      <div className="flex flex-row items-center gap-4">
-        <div className="avatar">
-          <div className="w-16 rounded-full">
-            <img
-              src="https://upload.jianshu.io/users/upload_avatars/8761709/3101d25e-1917-47dd-bdee-58bbda3352ac.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/300/format/webp"
-              alt={"Head"}
-              className="avatar avatar-circle"
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className="w-fit text-3xl font-medium text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-            一块小板子
-          </h1>
-          <p>
-            存一些文章或者日记 + 小工具， 本站技术栈为 Next.js、MDX、UnoCSS
-            CSS、TypeScript
-          </p>
-        </div>
-      </div>
+      {toolbox.map((item) => (
+        <Link key={item.url} href={item.url}>
+          {item.name}
+        </Link>
+      ))}
     </article>
   );
 }

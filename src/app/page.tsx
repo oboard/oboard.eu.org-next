@@ -18,10 +18,12 @@ export default function Home() {
       <div className="flex flex-row items-center gap-4">
         <div className="avatar">
           <div className="w-16 rounded-full">
-            <img
+            <Image
               src="https://upload.jianshu.io/users/upload_avatars/8761709/3101d25e-1917-47dd-bdee-58bbda3352ac.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/300/format/webp"
               alt={"Head"}
               className="avatar avatar-circle"
+              width={256}
+              height={256}
             />
           </div>
         </div>

@@ -100,7 +100,6 @@ export default function Chat() {
   const [input, setInput] = useLocalStorage("input", "");
   const [userId, setUserId] = useLocalStorage("userId", genUuid());
   const [following, setFollowing] = useState(true);
-  let first = true;
 
   function toBottom() {
     const chatbox = document.querySelector("html");
@@ -125,6 +124,8 @@ export default function Chat() {
 
   // 设置定时拉去信息
   useEffect(() => {
+    let first = true;
+    
     let timer = setInterval(() => {
       console.log(`userId: ${userId}`);
 

@@ -16,7 +16,7 @@ const routes = [
   },
   {
     name: "工具箱",
-    path: "/toolbox",
+    path: "/tools",
     icon: "i-tabler-tools",
   },
   {
@@ -62,7 +62,7 @@ export default function LinkCard() {
 
   return (
     <>
-      <ul className="md:hidden fixed bottom-0 left-0 right-0 menu menu-lg menu-horizontal bg-base-200 rounded-lt-xl rounded-rt-xl gap-2">
+      <ul className="md:hidden fixed bottom-0 left-0 right-0 menu h-16 menu-lg menu-horizontal bg-base-200 gap-2">
         {routes.map((route) => (
           <li key={route.path} className="flex-1">
             <Link

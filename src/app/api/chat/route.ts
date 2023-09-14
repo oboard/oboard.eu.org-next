@@ -7,10 +7,15 @@ let messages: MessageInfo[] = [];
 
 export async function GET(request: Request) {
 
-  return NextResponse.json(
-    messages.length > 100
-      ? messages.splice(messages.length - 100, 100)
-      : messages,
+  // 根据startTime筛选
+  const { searchParams } = new URL(request.url);
+  const startTime = searchParams.get("startTime");
+
+  const result = messages.filter((item) => {
+    return (item.time ?? 0) > Number(startTime);
+  });
+
+  return NextResponse.json(result, 
     {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -36,7 +41,7 @@ export async function POST(request: Request) {
   messages = [...messages, ...body];
   // 要通过比对uuid来判断是否重复
   messages = messages.filter((item, index, arr) => {
-    return arr.findIndex((item2) => item2.id === item.id) === index;
+    return (arr.findIndex((item2) => item2.id === item.id) === index)
   });
 
   // 过滤掉空信息
@@ -60,8 +65,6 @@ export async function POST(request: Request) {
     return (a.time ?? 0) - (b.time ?? 0);
   });
 
-  // // 如果超过100条，删除100条之前的
-  // if (messages.length > 100) messages = messages.slice(100);
   // 保活处理
   setInterval(() => {
     messages = messages;

@@ -11,5 +11,5 @@ export enum MessageStatus {
     Sending,
     Sent,
     // Received,
-    Seen,
+    // Seen,
 }

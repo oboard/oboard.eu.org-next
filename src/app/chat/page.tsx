@@ -103,9 +103,9 @@ export default function Chat() {
   let first = true;
 
   function toBottom() {
-    const chatBox = document.querySelector(".chatbox");
-    chatBox?.scrollTo({
-      top: chatBox?.scrollHeight,
+    const chatbox = document.querySelector("html");
+    chatbox?.scrollTo({
+      top: chatbox?.scrollHeight,
       behavior: "smooth",
     });
   }
@@ -131,7 +131,7 @@ export default function Chat() {
       checkUserIdAvalible();
 
       try {
-        fetch("/api/chat")
+        fetch(`/api/chat?startTime=${messages[messages.length - 1]?.time ?? 0}`)
           .then((res) => res.json())
           .then((data) => {
             let temp = [...messages];
@@ -156,39 +156,36 @@ export default function Chat() {
                 if (typeof item.time === "string" || item.time == undefined) {
                   // 时间戳
                   item.time = new Date().getTime();
-
-                  if(item.status == MessageStatus.Sent && item.userId == userId){
-                    item.status = MessageStatus.Seen;
-                  }
                 }
               });
+
               // 按照时间戳排序
               temp.sort((a, b) => {
                 return (a.time ?? 0) - (b.time ?? 0);
               });
 
               // 筛选出服务器没有但本地有的信息
-              let syncMessages = temp.filter((item) => {
-                return (
-                  data.findIndex((item2: { id: string }) => {
-                    return item.id === item2.id;
-                  }) === -1
-                );
-              });
-              // 如果超过一百条只发送后面100条
-              if (syncMessages.length > 100) {
-                syncMessages = syncMessages.slice(-100);
-              }
-              // 如果有，就发送给服务器
-              if (syncMessages.length > 0) {
-                fetch("/api/chat", {
-                  method: "POST",
-                  body: JSON.stringify(syncMessages),
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                });
-              }
+              // let syncMessages = temp.filter((item) => {
+              //   return (
+              //     data.findIndex((item2: { id: string }) => {
+              //       return item.id === item2.id;
+              //     }) === -1
+              //   );
+              // });
+              // // 如果超过一百条只发送后面100条
+              // if (syncMessages.length > 100) {
+              //   syncMessages = syncMessages.slice(-100);
+              // }
+              // // 如果有，就发送给服务器
+              // if (syncMessages.length > 0) {
+              //   fetch("/api/chat", {
+              //     method: "POST",
+              //     body: JSON.stringify(syncMessages),
+              //     headers: {
+              //       "Content-Type": "application/json",
+              //     },
+              //   });
+              // }
             }
 
             setMessages(temp);
@@ -252,7 +249,7 @@ export default function Chat() {
 
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
-    let chatbox = document.querySelector(".chatbox");
+    const chatbox = document.querySelector("html");
     chatbox?.addEventListener("scroll", (e) => {
       // 如果滑动到底部或者超过底部，就设置following为true，否则为false
       if (
@@ -310,8 +307,8 @@ export default function Chat() {
       return `${Math.floor(diff / (1000 * 60))}分钟前`;
     } else if (diff < 1000 * 60 * 60 * 24) {
       return `${Math.floor(diff / (1000 * 60 * 60))}小时前`;
-    // } else if (diff < 1000 * 60 * 60 * 24 * 30) {
-    //   return `${Math.floor(diff / (1000 * 60 * 60 * 24))}天前`;
+      // } else if (diff < 1000 * 60 * 60 * 24 * 30) {
+      //   return `${Math.floor(diff / (1000 * 60 * 60 * 24))}天前`;
     } else {
       return new Date(time).toLocaleString();
     }
@@ -332,7 +329,7 @@ export default function Chat() {
             "btn btn-circle btn-accent flex items-center justify-center"
           }
           onClick={() => {
-            const chatbox = document.querySelector(".chatbox");
+            const chatbox = document.querySelector("html");
             chatbox?.scrollTo({
               top: chatbox?.scrollHeight,
               behavior: "smooth",
@@ -362,8 +359,8 @@ export default function Chat() {
       </div>
       <div className="flex flex-col w-full">
         {/* 底部需要空出一些距离 */}
-        <div className="flex-grow flex flex-col h-screen w-full">
-          <div className="chatbox w-full flex-grow flex overflow-y-scroll flex-col p-4 pb-32">
+        <div className="flex-grow flex flex-col w-full">
+          <div className="chatbox w-full flex-grow flex flex-col p-4 pb-48">
             {messages.map(
               (item: MessageInfo, index: Key | null | undefined) => (
                 // 模仿微信的样式,有气泡的感觉，要显示时间
@@ -383,34 +380,33 @@ export default function Chat() {
   </div> */}
                   <div className="chat-header">
                     {/* Obi-Wan Kenobi */}
-                    <time className="text-xs opacity-50">{getTime(item.time)}</time>
+                    <time className="text-xs opacity-50">
+                      {getTime(item.time)}
+                    </time>
                   </div>
-                  <div
-                    className={
-                      "chat-bubble " +
-                      genColor(item.userId)
-                    }
-                  >
+                  <div className={"chat-bubble " + genColor(item.userId)}>
                     {item.content}
                   </div>
-                  <div className="chat-footer opacity-50">{(()=>{
-                    switch(item.status) {
-                      case MessageStatus.Sending:
-                        return "发送中";
-                      case MessageStatus.Sent:
-                        return "已发送";
-                      case MessageStatus.Seen:
-                        return "已读";
-                      default:
-                        return "";
-                    }
-                  })()}</div>
+                  <div className="chat-footer opacity-50">
+                    {(() => {
+                      switch (item.status) {
+                        case MessageStatus.Sending:
+                          return "发送中";
+                        case MessageStatus.Sent:
+                          return "";
+                        // case MessageStatus.Seen:
+                        //   return "已读";
+                        default:
+                          return "";
+                      }
+                    })()}
+                  </div>
                 </div>
               )
             )}
           </div>
         </div>
-        <div className="border border-secondary-content m-4 overflow-hidden rounded-full fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row items-center pr-2 gap-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-base-100">
+        <div className="px-4 py-2 bg-base-200 fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row items-center pr-2 gap-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-base-100">
           {/* // 要支持多行输入，按Shift+Enter 或者Ctrl+Enter换行 */}
           <input
             className="input flex-grow focus:outline-0 transition-all duration-200"
@@ -431,7 +427,7 @@ export default function Chat() {
           {/* 发送按钮 */}
           {input && (
             <button
-              className="btn btn-circle btn-primary btn-sm"
+              className="btn btn-circle btn-primary"
               // 字数限制10000字
               disabled={input.length > 10000}
               onClick={() => {
@@ -444,15 +440,19 @@ export default function Chat() {
 
           {/* 更多 */}
           {!input && (
-            <button
-              className="btn btn-circle btn-sm"
-              onClick={() => {
-                // 弹出菜单
-                setShowMenu(!showMenu);
-              }}
-            >
-              <i className="i-tabler-plus text-xl" />
-            </button>
+            <details className="dropdown dropdown-end dropdown-top">
+              <summary className="m-1 btn">
+                <i className="i-tabler-plus text-xl" />
+              </summary>
+              <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                <li>
+                  <a>Item 1</a>
+                </li>
+                <li>
+                  <a>Item 2</a>
+                </li>
+              </ul>
+            </details>
           )}
         </div>
       </div>

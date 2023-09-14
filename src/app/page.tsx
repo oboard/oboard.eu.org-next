@@ -31,10 +31,17 @@ export default function Home() {
           </h1>
           <p>
             计算机专业大二在读 (全栈开发)
-            Mainly use React/Vue Next/Nuxt.js + TypeScript + UnoCSS + ...
+            <br />
+            <i className="i-logos-react" />React <i className="i-logos-vue" />Vue <i className="i-logos-nextjs-icon" />Next.js <i className="i-logos-nuxt-icon" />Nuxt.js <i className="i-logos-typescript-icon" />TypeScript <i className="i-logos-unocss" />UnoCSS ...
+            <br />
+            <i className="i-logos-flutter" />Flutter <i className="i-logos-dart" />Dart + ...
           </p>
         </div>
       </div>
+
+      <p className="text-center text-gray-500 dark:text-gray-400">
+        © 2023 oboard. All Rights Reserved.
+      </p>
 
 
     </article>

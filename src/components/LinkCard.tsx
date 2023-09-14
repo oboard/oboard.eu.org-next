@@ -26,11 +26,31 @@ const routes = [
   },
 ];
 
+const paths = routes.map((route) => route.path);
+
 export default function LinkCard() {
-  const [current, setCurrent] = React.useState("");
+  const [current, _setCurrent] = React.useState("");
+  const setCurrent = (path?: string) => {
+    _setCurrent(path ?? window.location.pathname);
+    console.log(window.location.pathname, current, paths);
+  };
   useEffect(() => {
-    setCurrent(window.location.pathname);
-    console.log(window.location.pathname);
+    setCurrent();
+    
+    // 当路由发生变化
+    window.addEventListener("popstate", () => {
+      setCurrent();
+    });
+    window.addEventListener("hashchange", () => {
+      setCurrent();
+    });
+    window.addEventListener("load", () => {
+      setCurrent();
+    });
+    window.addEventListener("beforeunload", () => {
+      setCurrent();
+    });
+
   }, []);
 
   useEffect(() => {
@@ -56,10 +76,6 @@ export default function LinkCard() {
       });
   }, []);
 
-  function select(item: string) {
-    setCurrent(item);
-  }
-
   return (
     <>
       <ul className="md:hidden fixed bottom-0 left-0 right-0 menu h-16 menu-lg menu-horizontal bg-base-200 gap-2">
@@ -70,7 +86,7 @@ export default function LinkCard() {
                 current === route.path ? "active" : ""
               }`}
               href={route.path}
-              onClick={() => select(route.path)}
+              onClick={() => setCurrent}
             >
               <i className={route.icon}></i>
               <div className="hidden sm:block">{route.name}</div>
@@ -99,7 +115,7 @@ export default function LinkCard() {
         </li> */}
       </ul>
 
-      <ul className="hidden md:flex fixed top-10 group items-center px-3 ring-1 ring-zinc-900/5 dark:ring-zinc-100/10 rounded-full bg-gradient-to-b from-zinc-50/70 to-white/70 dark:from-zinc-900/70 dark:to-zinc-800/70 backdrop-blur backdrop-saturate-200 shadow-lg shadow-zinc-800/5">
+      <ul className="hidden md:flex fixed top-10 group items-center ring-1 ring-zinc-900/5 dark:ring-zinc-100/10 rounded-full bg-gradient-to-b from-zinc-50/70 to-white/70 dark:from-zinc-900/70 dark:to-zinc-800/70 backdrop-blur backdrop-saturate-200 shadow-lg shadow-zinc-800/5">
         <div
           className="pointer-events-none absolute -inset-px rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-primary/[0.12]"
           style={{
@@ -108,20 +124,37 @@ export default function LinkCard() {
           }}
           aria-hidden="true"
         ></div>
-        {routes.map((route) => (
-          <li key={route.path}>
-            <Link
-              className={`relative block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
-                current === route.path ? "text-primary" : ""
-              }`}
-              href={route.path}
-              onClick={() => select(route.path)}
+        <div className="flex flex-row items-center gap-2 transition-width">
+          
+           {(current.slice(0, current.lastIndexOf("/")) !== current) && <Link
+              className="btn btn-ghost btn-sm rounded-full"
+              href={current.slice(0, current.lastIndexOf("/"))}
+              onClick={() => setCurrent(current.slice(0, current.lastIndexOf("/")))}
             >
-              {route.name}
-              <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0"></span>
-            </Link>
-          </li>
-        ))}
+              <i className="i-tabler-arrow-left"></i>
+            </Link>}
+
+            
+          <div className="flex flex-row items-center gap-2 pr-2">
+          {
+            routes.map((route) => (
+              <li key={route.path}>
+                <button
+                  className={`relative block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
+                    current === route.path ? "text-primary" : ""
+                  }`}
+                  onClick={() => window.history.back()}
+                >
+                  {route.name}
+                  <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0"></span>
+                </button>
+              </li>
+            ))
+          }
+          </div>
+
+
+        </div>
       </ul>
     </>
   );

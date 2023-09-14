@@ -1,3 +1,5 @@
+"use client";
+
 import React, { PropsWithChildren } from "react";
 import style from "./styles.module.scss";
 // import clsx from 'clsx'
@@ -6,7 +8,7 @@ import Image from "next/image";
 
 export default function FakeRecord() {
   return (
-    <div className={"py-24 px-4"}>
+    <div className={"py-24 px-4 flex flex-col gap-4 w-full"}>
       
         <input className="w-full input input-bordered" placeholder="输入UID"></input>
         <textarea className="w-full h-96 textarea textarea-bordered" placeholder="输入题目"></textarea>

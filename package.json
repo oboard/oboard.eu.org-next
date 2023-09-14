@@ -15,6 +15,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@iconify-json/logos": "^1.1.36",
     "@iconify-json/lucide": "^1.1.119",
     "@iconify-json/tabler": "^1.1.91",
     "@types/node": "20.5.6",

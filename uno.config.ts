@@ -24,6 +24,7 @@ export default defineConfig({
             },
             collections: {
                 tabler: () => import('@iconify-json/tabler/icons.json').then(i => i.default as any),
+                logos: () => import('@iconify-json/logos/icons.json').then(i => i.default),
             },
         }),
     ], transformers: [

@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@iconify-json/logos': ^1.1.36
   '@iconify-json/lucide': ^1.1.119
   '@iconify-json/tabler': ^1.1.91
   '@types/node': 20.5.6
@@ -32,6 +33,7 @@ dependencies:
   uuid: 9.0.1
 
 devDependencies:
+  '@iconify-json/logos': 1.1.36
   '@iconify-json/lucide': 1.1.126
   '@iconify-json/tabler': 1.1.91
   '@types/node': 20.5.6
@@ -145,6 +147,12 @@ packages:
 
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    dev: true
+
+  /@iconify-json/logos/1.1.36:
+    resolution: {integrity: sha512-YdBiDwmomgedInuBS4YcQ+qpMkvixBhPqmwRLtnNp+qd9C/lKfM5Y4pNsSi6lRZSALiOqXxiZJZ1e9+L+BRrKQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify-json/lucide/1.1.126:

@@ -1,5 +1,4 @@
 // 使用http协议上传图片和读取图片
-import { MessageInfo, MessageStatus } from "../../../models/chat/message";
 import { NextResponse } from "next/server";
 
 let files: Map<string, Uint8Array> = new Map();
@@ -12,6 +11,7 @@ export async function GET(request: Request) {
     const result = files.get(key);
 
     if (result == undefined) {
+        // 如果没有找到
         return NextResponse.json({ message: "Not Found" }, {
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -20,11 +20,7 @@ export async function GET(request: Request) {
         });
     }
 
-    // const iterator = makeIterator()
-    // const stream = iteratorToStream(iterator)
-
-    // return new Response(stream)
-
+    // 返回的是二进制数据
     return new Response(result.buffer, {
         headers: {
             "Access-Control-Allow-Origin": "*",

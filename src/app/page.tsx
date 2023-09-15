@@ -12,10 +12,131 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
   );
 };
 
+export const ability = [
+  {
+    name: "Web",
+    description: "Web 前端开发",
+    children: [
+      {
+        icon: "i-logos-react",
+        name: "React",
+      },
+      {
+        icon: "i-logos-vue",
+        name: "Vue",
+      },
+      {
+        icon: "i-logos-nextjs-icon",
+        name: "Next.js",
+      },
+      {
+        icon: "i-logos-nuxt-icon",
+        name: "Nuxt.js",
+      },
+      {
+        icon: "i-logos-typescript-icon",
+        name: "TypeScript",
+      },
+      {
+        icon: "i-logos-javascript",
+        name: "JavaScript",
+      },
+      {
+        icon: "i-logos-tailwindcss-icon",
+        name: "Tailwind CSS",
+      },
+      {
+        icon: "i-logos-unocss",
+        name: "UnoCSS",
+      },
+    
+    ],
+  },
+  {
+    name: "App",
+    description: "App 开发",
+    children: [
+      {
+        icon: "i-logos-flutter",
+        name: "Flutter",
+      },
+      {
+        icon: "i-logos-dart",
+        name: "Dart",
+      },
+      {
+        icon: "i-logos-android-icon",
+        name: "Android",
+      },
+      {
+        icon: "i-logos-kotlin-icon",
+        name: "Kotlin",
+      },
+      {
+        icon: "i-logos-java",
+        name: "Java",
+      },
+      {
+        icon: "i-logos-ios",
+        name: "iOS",
+      },
+      {
+        icon: "i-logos-swift",
+        name: "Swift",
+      },
+    ],
+  },
+  {
+    name: "AI",
+    description: "人工智能",
+    children: [
+      {
+        icon: "i-logos-python",
+        name: "Python",
+      },
+      {
+        icon: "i-logos-tensorflow",
+        name: "TensorFlow",
+      },
+      {
+        icon: "i-logos-pytorch-icon",
+        name: "PyTorch",
+      },
+    ],
+  },
+  {
+    name: "Design",
+    description: "设计",
+    children: [
+      {
+        icon: "i-logos-blender",
+        name: "Blender",
+      },
+      {
+        icon: "i-logos-adobe-photoshop",
+        name: "Photoshop",
+      },
+      {
+        icon: "i-logos-adobe-premiere",
+        name: "Premiere Pro",
+      },
+      {
+        icon: "i-logos-adobe-after-effects",
+        name: "After Effects",
+      },
+      {
+        icon: "i-logos-adobe-illustrator",
+        name: "Illustrator",
+      },
+    ],
+  },
+
+]
+
 export default function Home() {
   return (
     <article className={"text-base prose py-24 px-4"}>
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row items-start gap-4">
         <div className="avatar">
           <div className="w-16 rounded-full">
             <Image
@@ -33,10 +154,22 @@ export default function Home() {
           </h1>
           <p>
             计算机专业大二在读 (全栈开发)
-            <br />
-            <i className="i-logos-react" />React <i className="i-logos-vue" />Vue <i className="i-logos-nextjs-icon" />Next.js <i className="i-logos-nuxt-icon" />Nuxt.js <i className="i-logos-typescript-icon" />TypeScript <i className="i-logos-unocss" />UnoCSS ...
-            <br />
-            <i className="i-logos-flutter" />Flutter <i className="i-logos-dart" />Dart + ...
+           {
+            ability.map((item) => (
+              <div key={item.name} className="flex flex-col gap-2">
+                <h2 className="text-xl font-medium">{item.name}</h2>
+                <p>{item.description}</p>
+                <div className="flex flex-row flex-wrap gap-2">
+                  {item.children.map((child) => (
+                    <div key={child.name} className="flex flex-row items-center gap-2">
+                      <i className={child.icon}></i>
+                      <span>{child.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+           }
           </p>
         </div>
       </div>

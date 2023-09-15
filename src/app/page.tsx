@@ -154,6 +154,8 @@ export default function Home() {
           </h1>
           <p>
             计算机专业大二在读 (全栈开发)
+            <br />
+            下面是我的能力👇
            {
             ability.map((item) => (
               <div key={item.name} className="flex flex-col gap-2">

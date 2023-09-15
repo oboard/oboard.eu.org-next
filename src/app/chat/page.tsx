@@ -52,6 +52,57 @@ const CodeBlock = ({
 //   }
 // }
 
+// // 使用http协议上传图片和读取图片
+// import { MessageInfo, MessageStatus } from "../../../models/chat/message";
+// import { NextResponse } from "next/server";
+
+// let files: Map<string, Uint8Array> = new Map();
+
+// export async function GET(request: Request) {
+
+//     const { searchParams } = new URL(request.url);
+//     const key = searchParams.get("key") ?? "";
+
+//     const result = files.get(key);
+
+//     return NextResponse.json(result,
+//         {
+//             headers: {
+//                 "Access-Control-Allow-Origin": "*",
+//             },
+//             status: 200,
+//         });
+// }
+
+// export async function POST(request: Request) {
+//     const body = await request.arrayBuffer();
+
+//     const { searchParams } = new URL(request.url);
+//     const key = searchParams.get("key") ?? "";
+
+//     files.set(key, new Uint8Array(body));
+
+//     // 返回成功
+//     return NextResponse.json({ message: "success" }, {
+//         headers: {
+//             "Access-Control-Allow-Origin": "*",
+//         },
+//         status: 200,
+//     });
+// }
+
+const upload = async (file: File) => {
+  // Uint8Array
+  let arrayBuffer = await file.arrayBuffer();
+
+  let res = await fetch("/api/chat/file", {
+    method: "POST",
+    body: arrayBuffer,
+  });
+  let data = await res.json();
+  return data.url;
+};
+
 // 生成uuid
 const genUuid = () => {
   let s: any[] = [];
@@ -76,7 +127,6 @@ export default function Chat() {
     MessageInfo[],
     React.Dispatch<React.SetStateAction<MessageInfo[]>>
   ];
-  const [showMenu, setShowMenu] = useState(false);
   const [input, setInput] = useLocalStorage("input", "");
   const [userId, setUserId] = useLocalStorage("userId", genUuid());
   const [following, setFollowing] = useState(true);
@@ -105,7 +155,7 @@ export default function Chat() {
   // 设置定时拉去信息
   useEffect(() => {
     let first = true;
-    
+
     let timer = setInterval(() => {
       console.log(`userId: ${userId}`);
 
@@ -184,6 +234,45 @@ export default function Chat() {
       clearInterval(timer);
     };
   }, []);
+
+  // 发送图片
+  const sendPicture = () => {
+    // 读取图片
+    let input = document.createElement("input");
+    input.type = "file";
+
+    input.onchange = () => {
+      if (input.files == null || input.files.length == 0) return;
+
+      if (!checkUserIdAvalible()) return;
+
+      let file = input.files[0];
+      let reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = () => {
+        upload(file).then((url) => {
+          let msg: MessageInfo = {
+            id: genUuid(),
+            userId: userId,
+            content: `![${file.name}](${url})`,
+            time: undefined,
+            status: MessageStatus.Sending,
+          };
+          // 直接插入到数组中
+          setMessages([...messages, msg]);
+          // 发送信息
+          fetch("/api/chat", {
+            method: "POST",
+            body: JSON.stringify([msg]),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        });
+      };
+    };
+    input.click();
+  };
 
   // 发送信息
   let sendMessage = () => {
@@ -366,7 +455,8 @@ export default function Chat() {
                     </time>
                   </div>
                   <div className={"chat-bubble " + genColor(item.userId)}>
-                    {item.content}
+                    <ReactMarkdown>{item.content}</ReactMarkdown>
+                    {/* {item.content} */}
                   </div>
                   <div className="chat-footer opacity-50">
                     {(() => {
@@ -427,16 +517,47 @@ export default function Chat() {
               </summary>
               <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
                 <li>
-                  <a>Item 1</a>
+                  <a
+                    onClick={() =>
+                      (
+                        document?.getElementById(
+                          "my_modal_1"
+                        ) as HTMLDialogElement
+                      )?.showModal()
+                    }
+                  >
+                    长文本
+                  </a>
                 </li>
                 <li>
-                  <a>Item 2</a>
+                  <a onClick={sendPicture}>图片</a>
                 </li>
               </ul>
             </details>
           )}
         </div>
       </div>
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">输入长信息</h3>
+          <textarea
+            className="w-full h-96 textarea textarea-bordered my-2"
+            placeholder="输入信息"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          ></textarea>
+          <div className="modal-action">
+            <form method="dialog">
+              <div className="flex flex-row gap-2">
+                <button className="btn" onClick={sendMessage}>
+                  发送
+                </button>
+                <button className="btn">取消</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </NoSSR>
   );
 }

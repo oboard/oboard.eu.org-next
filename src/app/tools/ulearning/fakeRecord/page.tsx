@@ -13,7 +13,8 @@ export default function FakeRecord() {
 
   const convert = () => {
     let obj: any = {};
-    content.chapters.forEach((item: any) => {
+    const data = JSON.parse(content);
+    data.chapters.forEach((item: any) => {
       item.items.forEach((item1: any) => {
         obj[item1.itemid] = {
           name: item1.title,
@@ -51,8 +52,9 @@ export default function FakeRecord() {
   };
 
   return (
-    <div className={"py-24 px-4 flex flex-col gap-4 w-full"}>
-      <button className="btn btn-primary" onClick={convert}>
+    <div className={"py-24 px-4 flex flex-col items-center gap-4 w-full"}>
+      <h1 className="text-4xl">优学院学习记录转换助手</h1>
+      <button className="btn btn-primary w-full" onClick={convert}>
         转换
       </button>
 

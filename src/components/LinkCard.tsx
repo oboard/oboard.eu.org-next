@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 
 const routes = [
@@ -29,29 +30,8 @@ const routes = [
 const paths = routes.map((route) => route.path);
 
 export default function LinkCard() {
-  const [current, _setCurrent] = React.useState("");
-  const setCurrent = (path?: string) => {
-    _setCurrent(path ?? window.location.pathname);
-    console.log(window.location.pathname, current, paths);
-  };
-  useEffect(() => {
-    setCurrent();
-    
-    // 当路由发生变化
-    window.addEventListener("popstate", () => {
-      setCurrent();
-    });
-    window.addEventListener("hashchange", () => {
-      setCurrent();
-    });
-    window.addEventListener("load", () => {
-      setCurrent();
-    });
-    window.addEventListener("beforeunload", () => {
-      setCurrent();
-    });
-
-  }, []);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     // 检查颜色模式
@@ -83,10 +63,9 @@ export default function LinkCard() {
           <li key={route.path} className="flex-1">
             <Link
               className={`flex flex-row justify-center menu-item ${
-                current === route.path ? "active" : ""
+                pathname === route.path ? "active" : ""
               }`}
               href={route.path}
-              onClick={() => setCurrent}
             >
               <i className={route.icon}></i>
               <div className="hidden sm:block">{route.name}</div>
@@ -125,35 +104,33 @@ export default function LinkCard() {
           aria-hidden="true"
         ></div>
         <div className="flex flex-row items-center gap-2 transition-width">
-          
-           {(current.slice(0, current.lastIndexOf("/")) !== current) && <Link
+          {/* {pathname} */}
+          {pathname == "/" ? (
+            <div className="w-2" />
+          ) : (
+            <button
               className="btn btn-ghost btn-sm rounded-full"
-              href={current.slice(0, current.lastIndexOf("/"))}
-              onClick={() => setCurrent(current.slice(0, current.lastIndexOf("/")))}
+              onClick={() => router.back()}
             >
               <i className="i-tabler-arrow-left"></i>
-            </Link>}
+            </button>
+          )}
 
-            
           <div className="flex flex-row items-center gap-2 pr-2">
-          {
-            routes.map((route) => (
+            {routes.map((route) => (
               <li key={route.path}>
-                <button
+                <Link
                   className={`relative block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
-                    current === route.path ? "text-primary" : ""
+                    pathname === route.path ? "text-primary" : ""
                   }`}
-                  onClick={() => window.history.back()}
+                  href={route.path}
                 >
                   {route.name}
                   <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0"></span>
-                </button>
+                </Link>
               </li>
-            ))
-          }
+            ))}
           </div>
-
-
         </div>
       </ul>
     </>

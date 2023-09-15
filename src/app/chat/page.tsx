@@ -6,6 +6,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { MessageInfo, MessageStatus } from "../models/chat/message";
 import NoSSR from "@/components/NoSSR";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const CodeBlock = ({
   language,
@@ -26,28 +27,7 @@ const CodeBlock = ({
     </SyntaxHighlighter>
   );
 };
-const useLocalStorage = (
-  storageKey: string,
-  fallbackState: string | never[]
-) => {
-  const [value, setValue] = useState(
-    (typeof window !== "undefined" &&
-      JSON.parse(localStorage.getItem(storageKey) ?? "[]")) ||
-      fallbackState
-  );
 
-  useEffect(() => {
-    if (typeof window !== "undefined")
-      localStorage.setItem(storageKey, JSON.stringify(value));
-  }, [value, storageKey]);
-
-  if (typeof window == "undefined") return [fallbackState, () => {}];
-
-  return [value, setValue];
-
-  // If there is no window (e.g., server-side rendering), provide a fallback.
-  // return [fallbackState, () => {}]; // Return a dummy setState function.
-};
 // export let messages = [];
 
 // export default function handler(req, res) {

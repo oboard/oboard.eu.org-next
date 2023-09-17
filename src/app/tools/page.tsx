@@ -32,7 +32,7 @@ const toolbox = [
   {
 
     name: "微信公众号文章解析助手",
-    desc: "解析微信公众号文章的封面、标题、简介",
+    desc: "解析微信公众号文章的封面、标题、简介，支持秀米！",
     url: "/tools/wemedia/weixin/article",
     img: "/preview/weixin_article.jpg",
     tag: ["微信公众号", "文章解析"],
@@ -43,7 +43,7 @@ const toolbox = [
     name: "小红书文章解析助手",
     desc: "解析小红书文章的封面、标题、简介",
     url: "/tools/wemedia/xhs/article",
-    img: "/preview/weixin_article.jpg",
+    img: "/preview/xhs_article.jpg",
     tag: ["小红书", "文章解析"],
     new: true,
     developing: false,

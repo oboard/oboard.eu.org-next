@@ -22,6 +22,18 @@ const nextConfig = {
         protocol: "https",
         hostname: "mmbiz.qpic.cn",
       },
+      {
+        protocol: "https",
+        hostname: "img.xiumi.us",
+      },
+      {
+        protocol: "https",
+        hostname: "statics.xiumi.us",
+      },
+      {
+        protocol: "http",
+        hostname: "mmbiz.qpic.cn",
+      },
     ],
   },
 };

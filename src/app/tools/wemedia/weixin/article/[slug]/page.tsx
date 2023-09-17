@@ -32,6 +32,7 @@ async function getPosts(link: string) {
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
     },
   });
+  let isXiumi = false;
 
   const template = await res.text();
   // 解析html
@@ -42,11 +43,21 @@ async function getPosts(link: string) {
   const metas = dom.head.getElementsByTagName("meta");
   const meta = {} as any;
   for (let i = 0; i < metas.length; i++) {
-    const key = metas[i].getAttribute("property");
+    const key = metas[i].getAttribute("property") || metas[i].getAttribute("name") ||  metas[i].getAttribute("itemprop");
     const value = metas[i].getAttribute("content");
     if (key && value) {
       meta[key] = value;
     }
+  }
+  if(meta['image']) {
+    meta['og:image'] = meta['image']
+  }
+  if(meta['description']) {
+    meta['og:description'] = meta['description']
+  }
+  if(meta['name']) {
+    meta['og:title'] = meta['name']
+    isXiumi = true;
   }
   console.log(meta);
   // {
@@ -64,6 +75,44 @@ async function getPosts(link: string) {
   //   'twitter:site': 'Weixin Official Accounts Platform',
   //   'twitter:description': '面试无从下手？心理学支招来帮助你！'
   // }
+
+  if(isXiumi) {
+    const dataUrl = 'https://' + dom.head.outerHTML.split("show_data_url%22%3A%22%2F%2F")[1].split('%22%2C%22show_url')[0];
+    const res = await fetch(decodeURIComponent(dataUrl), {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+        "Cache-Control": "no-cache",
+        Cookie:
+          "xhsTrackerId=dce20a5f-0d69-4166-a0be-750dc6162f4c; xhsTrackerId.sig=2fK0z_q0teMcEpSE_mL4nK4LDo6GXH4BtQv43oJUSJg; a1=186546c40abxxkxzffthtu0w45fb2w7khl6w7flhf30000286050; webId=769d75a19ae6fdceb5af2ebd21080217; web_session=030037a4dff28ef07339b6e094244a8ccbc817; abRequestId=769d75a19ae6fdceb5af2ebd21080217; gid=yY0qyi0jf4xSyYK24KS481i10DCCTCuii9x9Kxi78E42iEq8DJEWTW888JYK8288DyiKWSqj; xsecappid=xhs-pc-web; webBuild=3.7.3; cache_feeds=[]; websectiga=16f444b9ff5e3d7e258b5f7674489196303a0b160e16647c6c2b4dcb609f4134; sec_poison_id=44f0a768-171a-4f38-9b4e-2a63b90ba76f",
+        Dnt: "1",
+        Pragma: "no-cache",
+        "Sec-Ch-Ua": '"Not)A;Brand";v="24", "Chromium";v="116"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "same-origin",
+        "Sec-Fetch-User": "?1",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)",
+      },
+    });
+    const template = await res.text();
+    // 匹配template中的<img src=\"//img.xiumi.us/xmi/ua/4rI8R/i/56954313b2edfd3aeb64880d793e3c2b-sz_7503622.jpg?x-oss-process=style/xmwebp\" 中的图片链接不一定是jpg，可能是gif等
+    // 有多处匹配
+    let imageLinks = template.match(/(\/\/|\/\/)[^\s]+\"/g);
+    imageLinks = imageLinks.map(link => {
+      // \\"//
+      return "https://" + link.replace(/\\\\\"\/\//g, '').replace(/\\\"\/\//g, '').replace(/\\\\\"\/\//g, '')
+    })
+    meta["imageLinks"] = imageLinks;
+  }  else {
 
   // 获取图片
   const imageElements = dom.querySelectorAll("img");
@@ -83,6 +132,7 @@ async function getPosts(link: string) {
 
   // 现在 imageLinks 数组包含了所有图片链接
   meta["imageLinks"] = imageLinks;
+}
 
   return meta;
 }
@@ -101,7 +151,8 @@ export default async function WeixinArticle({ params }: any) {
   return (
     <>
       <main className="py-24 px-4 flex flex-col gap-4 justify-center items-center">
-        <h1 className="text-4xl font-bold">微信公众号</h1>
+        <h1 className="text-4xl font-bold">微信公众号解析助手</h1>
+        <p className="text-lg text-opacity-50">同时支持秀米</p>
 
         <ShareLinkBox shareText={params && params.slug} />
 
@@ -138,16 +189,16 @@ export default async function WeixinArticle({ params }: any) {
                 </a>
                 
                 <div className="card-actions justify-end">
-                  <Copyer body={data["og:description"]}>复制标题</Copyer>
-                  <Copyer body={data["og:title"]}>复制文案</Copyer>
-                  <Copyer body={data["og:article:author"]}>复制作者</Copyer>
-                  <Copyer body={data["og:url"]}>复制链接</Copyer>
-                  <Copyer body={data["og:image"]}>复制图片链接</Copyer>
+                  {/* 复制按钮 */}
+                  {data["og:description"] && <Copyer body={data["og:description"]}>复制标题</Copyer>}
+                  {data["og:article:author"] && <Copyer body={data["og:article:author"]}>复制作者</Copyer>}
+                  {data["og:url"] && <Copyer body={data["og:url"]}>复制链接</Copyer>}
+                  {data["og:image"] && <><Copyer body={data["og:image"]}>复制图片链接</Copyer>
                   <DownloadButton
-                    className="w-32 my-4"
                     link={data["og:image"]}
                     name={data["og:title"]}
                   />
+                  </>}
                 </div>
               </div>
             </div>

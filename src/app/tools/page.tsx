@@ -27,16 +27,35 @@ const toolbox = [
     img: "/preview/fakeRecord.jpg",
     tag: ["优学院", "学习记录", "转换"],
     new: true,
+    developing: false,
+  },
+  {
+
+    name: "微信公众号文章解析助手",
+    desc: "解析微信公众号文章的封面、标题、简介",
+    url: "/tools/wemedia/weixin/article",
+    img: "/preview/weixin_article.jpg",
+    tag: ["微信公众号", "文章解析"],
+    new: true,
     developing: true,
   },
+  {
+    name: "小红书文章解析助手",
+    desc: "解析小红书文章的封面、标题、简介",
+    url: "/tools/wemedia/xhs/article",
+    img: "/preview/weixin_article.jpg",
+    tag: ["小红书", "文章解析"],
+    new: true,
+    developing: false,
+  }
 ];
 
 export default function Home() {
   return (
-    <article className={"flex flex-col md:flex-wrap gap-4 py-24 px-4"}>
+    <article className={"flex flex-col md:flex-row md:flex-wrap gap-4 py-24 px-4 w-full"}>
       {toolbox.map((item) => (
-        <Link href={item.url} className="no-underline" key={item.name}>
-          <div className="card md:w-96 bg-base-100 card-bordered hover:shadow-md transition-shadow">
+        <Link href={item.url} className="no-underline md:w-96" key={item.name}>
+          <div className="card bg-base-100 card-bordered hover:shadow-md transition-shadow">
           <figure>
             <Image
               src={item.img}

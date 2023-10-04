@@ -52,10 +52,10 @@ const toolbox = [
 
 export default function Home() {
   return (
-    <article className={"grid sm:grid-cols-2 gap-4 py-24 px-4 w-full"}>
+    <article className={"flex flex-col items-center gap-4 py-24 px-4 w-full"}>
       {toolbox.map((item) => (
-        <Link href={item.url} className="no-underline w-full flex flex-row items-center justify-center" key={item.name}>
-          <div className="card w-full md:w-96 sm:h-80 bg-base-100 card-bordered border-primary hover:shadow-md transition-shadow">
+        <Link href={item.url} className="no-underline w-full md:w-96 flex flex-row items-center justify-center" key={item.name}>
+          <div className="card w-full sm:h-80 bg-base-100 card-bordered border-primary hover:shadow-md transition-shadow">
           <figure>
             <Image
               src={item.img}

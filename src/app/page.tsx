@@ -49,7 +49,6 @@ export const ability = [
         icon: "i-logos-unocss",
         name: "UnoCSS",
       },
-    
     ],
   },
   {
@@ -130,57 +129,92 @@ export const ability = [
       },
     ],
   },
+];
 
-]
+const links = [
+  {
+    name: "Android x86 下载",
+    url: "https://www.android-x86.org/download",
+  },
+  {
+    name: "Windows 下载",
+    url: "https://msdn.itellyou.cn/",
+  },
+  {
+    name: "Manjaro 下载",
+    url: "https://manjaro.org/download/",
+  },
+
+];
 
 export default function Home() {
   return (
-    <article className={"text-base prose py-24 px-4"}>
-      <div className="flex flex-row items-start gap-4">
-        <div className="avatar">
-          <div className="w-16 rounded-full">
-            <Image
-              src="https://upload.jianshu.io/users/upload_avatars/8761709/3101d25e-1917-47dd-bdee-58bbda3352ac.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/300/format/webp"
-              alt={"Head"}
-              className="avatar avatar-circle"
-              width={256}
-              height={256}
-            />
+    <article className={"text-base prose py-24 px-4 md:max-w-5xl"}>
+      <div className="flex flex-col md:flex-row">
+       
+        {/* 左侧 */}
+        <div className="flex flex-row items-start gap-4">
+          <div className="avatar">
+            <div className="w-16 rounded-full">
+              <Image
+                src="https://upload.jianshu.io/users/upload_avatars/8761709/3101d25e-1917-47dd-bdee-58bbda3352ac.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/300/format/webp"
+                alt={"Head"}
+                className="avatar avatar-circle"
+                width={256}
+                height={256}
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className="w-fit text-3xl font-medium text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+              一块小板子
+            </h1>
+            <p>
+              计算机专业大二在读 (全栈开发)
+              <br />
+              下面是我的能力👇
+              {ability.map((item) => (
+                <div key={item.name} className="flex flex-col gap-2">
+                  <h2 className="text-xl font-medium">{item.name}</h2>
+                  <p>{item.description}</p>
+                  <div className="flex flex-row flex-wrap gap-2">
+                    {item.children.map((child) => (
+                      <div
+                        key={child.name}
+                        className="flex flex-row items-center gap-2"
+                      >
+                        <i className={child.icon}></i>
+                        <span>{child.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </p>
           </div>
         </div>
-        <div>
-          <h1 className="w-fit text-3xl font-medium text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-            一块小板子
-          </h1>
-          <p>
-            计算机专业大二在读 (全栈开发)
-            <br />
-            下面是我的能力👇
-           {
-            ability.map((item) => (
-              <div key={item.name} className="flex flex-col gap-2">
-                <h2 className="text-xl font-medium">{item.name}</h2>
-                <p>{item.description}</p>
-                <div className="flex flex-row flex-wrap gap-2">
-                  {item.children.map((child) => (
-                    <div key={child.name} className="flex flex-row items-center gap-2">
-                      <i className={child.icon}></i>
-                      <span>{child.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))
-           }
-          </p>
+
+         {/* 右侧 */}
+         <div className="flex flex-col gap-4 min-w-12  justify-center">
+          {/* 网址导航 */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-2xl font-medium">网址导航</h2>
+            <div className="flex flex-col gap-2">
+              {links.map((item) => (
+                <Link href={item.url} key={item.name} className="flex flex-row items-center gap-2">
+                    <i className="i-tabler-link"></i>
+                    <span>{item.name} {item.url}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
+
       </div>
 
       <p className="text-center text-gray-500 dark:text-gray-400">
         © 2023 oboard. All Rights Reserved.
       </p>
-
-
     </article>
   );
 }

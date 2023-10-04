@@ -195,7 +195,7 @@ export default function Home() {
         </div>
 
          {/* 右侧 */}
-         <div className="flex flex-col gap-4 min-w-12  justify-center">
+         <div className="flex flex-col gap-4 min-w-12  justify-start">
           {/* 网址导航 */}
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-medium">网址导航</h2>

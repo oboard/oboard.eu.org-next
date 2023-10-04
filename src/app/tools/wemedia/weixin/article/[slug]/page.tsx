@@ -106,11 +106,11 @@ async function getPosts(link: string) {
     const template = await res.text();
     // 匹配template中的<img src=\"//img.xiumi.us/xmi/ua/4rI8R/i/56954313b2edfd3aeb64880d793e3c2b-sz_7503622.jpg?x-oss-process=style/xmwebp\" 中的图片链接不一定是jpg，可能是gif等
     // 有多处匹配
-    let imageLinks = template.match(/(\/\/|\/\/)[^\s]+\"/g);
-    imageLinks = imageLinks.map(link => {
+    let imageRegs = template.match(/(\/\/|\/\/)[^\s]+\"/g);
+    let imageLinks = imageRegs?.map(link => {
       // \\"//
       return "https://" + link.replace(/\\\\\"\/\//g, '').replace(/\\\"\/\//g, '').replace(/\\\\\"\/\//g, '')
-    })
+    }) ?? [];
     meta["imageLinks"] = imageLinks;
   }  else {
 

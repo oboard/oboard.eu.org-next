@@ -381,7 +381,8 @@ export default function Chat() {
     let now = new Date().getTime();
     let diff = now - time;
     if (diff < 1000 * 60) {
-      return `${Math.floor(diff / 1000)}秒前`;
+      // return `${Math.floor(diff / 1000)}秒前`;
+      return '刚刚';
     } else if (diff < 1000 * 60 * 60) {
       return `${Math.floor(diff / (1000 * 60))}分钟前`;
     } else if (diff < 1000 * 60 * 60 * 24) {

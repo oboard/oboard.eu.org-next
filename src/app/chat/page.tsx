@@ -123,6 +123,9 @@ const genUuid = () => {
   return uuid;
 };
 
+
+const sendingList: MessageInfo[] = [];
+
 // 上面是api的代码，下面是页面的代码
 export default function Chat() {
   // 使用daisyUI和tailwindcss
@@ -172,12 +175,23 @@ export default function Chat() {
             let temp = [...messages];
             // 如果data不是空的
             if (data !== undefined && data !== null) {
+              // data中去除掉自己的
+              // let data2 = data.filter((item: MessageInfo) => item.userId !== userId);
               temp = [...data, ...temp];
               // 去重
               temp = temp.filter(
                 (item, index, array) =>
-                  array.findIndex((item2) => item.id === item2.id) === index && item.status !== MessageStatus.Sending
+                  array.findIndex((item2) => item.id === item2.id) === index && item.status !== MessageStatus.Sending && item.time != undefined
               );
+
+              sendingList.forEach((item: MessageInfo) => {
+                // 如果信息里没有正准备发的信息，就加入
+                if (
+                  temp.findIndex((item2) => item.id === item2.id) === -1
+                ) {
+                  temp.push(item);
+                }
+              });
 
               // 过滤掉空信息
               temp = temp.filter((item) => {
@@ -299,6 +313,7 @@ export default function Chat() {
     };
     // 直接插入到数组中
     setMessages([...messages, msg]);
+    sendingList.push(msg);
     // 发送信息
     fetch("/api/chat", {
       method: "POST",
@@ -306,6 +321,11 @@ export default function Chat() {
       headers: {
         "Content-Type": "application/json",
       },
+    }).then(() => {
+      // 发送成功
+      msg.status = MessageStatus.Sent;
+      setMessages([...messages, msg]);
+      sendingList.splice(sendingList.indexOf(msg), 1);
     });
     // 清空输入框
     setInput("");

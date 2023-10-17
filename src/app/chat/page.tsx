@@ -1,10 +1,12 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { MessageInfo, MessageStatus } from "../models/chat/message";
+import { MessageInfo, MessageStatus } from "../../models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Content } from "next/font/google";
@@ -141,6 +143,7 @@ export default function Chat() {
   }
 
   // 检查userId是否可用
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function checkUserIdAvalible() {
     if (userId == undefined || userId == null || userId.length < 5) {
       setUserId(genUuid());
@@ -173,7 +176,7 @@ export default function Chat() {
               // 去重
               temp = temp.filter(
                 (item, index, array) =>
-                  array.findIndex((item2) => item.id === item2.id) === index
+                  array.findIndex((item2) => item.id === item2.id) === index && item.status !== MessageStatus.Sending
               );
 
               // 过滤掉空信息
@@ -185,7 +188,7 @@ export default function Chat() {
               });
 
               temp.forEach((item) => {
-                if (typeof item.time === "string" || item.time == undefined) {
+                if (item.time == undefined) {
                   // 时间戳
                   item.time = new Date().getTime();
                 }
@@ -234,7 +237,7 @@ export default function Chat() {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [checkUserIdAvalible, messages, setMessages, userId]);
 
   // 发送图片
   const sendPicture = () => {

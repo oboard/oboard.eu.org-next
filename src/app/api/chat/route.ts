@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
-import { MessageInfo, MessageStatus } from "../../models/chat/message";
+import { MessageInfo, MessageStatus } from "../../../models/chat/message";
 import { NextResponse } from "next/server";
 
 let messages: MessageInfo[] = [];

@@ -123,8 +123,8 @@ const genUuid = () => {
   return uuid;
 };
 
-
-const sendingList: MessageInfo[] = [];
+// 用于防吞信息
+const sendedList: MessageInfo[] = [];
 
 // 上面是api的代码，下面是页面的代码
 export default function Chat() {
@@ -181,15 +181,27 @@ export default function Chat() {
               // 去重
               temp = temp.filter(
                 (item, index, array) =>
-                  array.findIndex((item2) => item.id === item2.id) === index && item.status !== MessageStatus.Sending && item.time != undefined
+                  array.findIndex((item2) => item.id === item2.id) === index
               );
 
-              sendingList.forEach((item: MessageInfo) => {
-                // 如果信息里没有正准备发的信息，就加入
+              sendedList.forEach((item: MessageInfo) => {
+                // 如果信息里没有正准备发的信息，就加入，并发送
                 if (
                   temp.findIndex((item2) => item.id === item2.id) === -1
                 ) {
                   temp.push(item);
+                  // 发送信息
+                  fetch("/api/chat", {
+                    method: "POST",
+                    body: JSON.stringify([item]),
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }).then(() => {
+                    // 发送成功
+                    item.status = MessageStatus.Sent;
+                    setMessages([...messages, item]);
+                  });
                 }
               });
 
@@ -313,7 +325,7 @@ export default function Chat() {
     };
     // 直接插入到数组中
     setMessages([...messages, msg]);
-    sendingList.push(msg);
+    sendedList.push(msg);
     // 发送信息
     fetch("/api/chat", {
       method: "POST",
@@ -325,7 +337,6 @@ export default function Chat() {
       // 发送成功
       msg.status = MessageStatus.Sent;
       setMessages([...messages, msg]);
-      sendingList.splice(sendingList.indexOf(msg), 1);
     });
     // 清空输入框
     setInput("");
@@ -397,7 +408,7 @@ export default function Chat() {
 
   // 通过时间戳获取时间，如果时间不是很久，就显示多久之前，否则显示具体时间
   function getTime(time: number | undefined) {
-    if (time == undefined) return "";
+    if (time == undefined) return "发送中";
     let now = new Date().getTime();
     let diff = now - time;
     if (diff < 1000 * 60) {
@@ -564,7 +575,7 @@ export default function Chat() {
                     </ReactMarkdown>
                     {/* {item.content} */}
                   </div>
-                  <div className="chat-footer opacity-50">
+                  {/* <div className="chat-footer opacity-50">
                     {(() => {
                       switch (item.status) {
                         case MessageStatus.Sending:
@@ -577,7 +588,7 @@ export default function Chat() {
                           return "";
                       }
                     })()}
-                  </div>
+                  </div> */}
                 </div>
               )
             )}

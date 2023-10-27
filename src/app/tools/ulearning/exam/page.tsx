@@ -129,8 +129,11 @@ export default function Home() {
       </div>
 
       <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
+        <div className="modal-box relative">
           <h3 className="text-lg">选择试卷</h3>
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
           <p className="py-4">
             <table className="table table-xs">
               <thead>
@@ -146,7 +149,7 @@ export default function Home() {
                   .map((item: string, index: number) =>
                     item ? (
                       <tr key={item}>
-                        <td>{index + 1}</td>
+                        <td>{index}</td>
                         <td>{item}</td>
                         <td>
                           <form method="dialog">
@@ -169,17 +172,20 @@ export default function Home() {
               <button className="btn">关闭</button>
             </form>
           </div>
-
-          <form method="dialog" className="modal-backdrop">
-            <button>close</button>
-          </form>
         </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
       </dialog>
 
       <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
-          <p className="py-4">
+        <div className="modal-box w-11/12 max-w-5xl relative">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <p className="py-4 flex flex-col items-center">
             <h3 className="text-lg">查看试卷</h3>
+
             {selectedPaper == undefined && (
               // loading
               <div className="flex flex-col items-center justify-center space-y-4 py-4">
@@ -195,7 +201,7 @@ export default function Home() {
                     {/* <div className="text-2xl text-center">
                       {selectedPaper.score}分
                     </div> */}
-                    {selectedPaper.part.map((part, index) =>
+                    {selectedPaper.part.map((part) =>
                       part.children.map((question, queIndex) => {
                         return (
                           <div
@@ -205,17 +211,22 @@ export default function Home() {
                             {/* <div className="text-2xl text-center">
                               {question.score}分
                             </div> */}
-                            <div className="text-2xl text-center">
-                              {question.title}
-                            </div>
-                            <div className="text-2xl text-center">
+                            {/* 序号 */}
+
+                            <div
+                              className="text-2xl"
+                              dangerouslySetInnerHTML={{
+                                __html: queIndex + 1 + "、" + question.title,
+                              }}
+                            ></div>
+                            <div className="text-xl text-center">
                               {question.item?.map((item, itemIndex) => (
                                 // 选项
                                 <div
                                   key={itemIndex}
                                   className="flex flex-row items-center gap-2"
                                 >
-                                  <div className="text-2xl text-left">
+                                  <div>
                                     {
                                       [
                                         "A",
@@ -230,7 +241,12 @@ export default function Home() {
                                         "J",
                                       ][itemIndex]
                                     }
-                                    、{item.title}
+                                    、
+                                    <span
+                                      dangerouslySetInnerHTML={{
+                                        __html: item.title,
+                                      }}
+                                    />
                                   </div>
                                 </div>
                               ))}
@@ -249,11 +265,10 @@ export default function Home() {
               <button className="btn">关闭</button>
             </form>
           </div>
-
-          <form method="dialog" className="modal-backdrop">
-            <button>close</button>
-          </form>
         </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
       </dialog>
     </main>
   );

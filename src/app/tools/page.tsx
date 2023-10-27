@@ -2,10 +2,31 @@ import React, { PropsWithChildren } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+interface Colors {
+  [key: string]: string;
+}
+
 const Tag: React.FC<PropsWithChildren> = (props) => {
+
+  const colors: Colors = {
+    '优学院': 'bg-red',
+    '题库': 'bg-blue-500',
+    '导出': 'bg-pink-500',
+    '学习记录': 'bg-yellow-500',
+    '转换': 'bg-indigo-500',
+    '微信公众号': 'bg-green-500',
+    '文章解析': 'bg-purple-500',
+    '小红书': 'bg-red-500',
+  }
+
+
   return (
-    <span className="inline-block rounded border bg-amber-500/10 text-amber-900 border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-500 px-2 py-1 text-xs leading-none">
+    // <span className="inline-block rounded border bg-amber-500/10 text-amber-900 border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-500 px-2 py-1 text-xs leading-none">
+    <span className="inline-block rounded-full border text-[12px] px-1 flex flex-row gap-1 items-center">
       {props.children}
+      {/* 圆圈 */}
+      <div className={`w-2 h-2 rounded-full ${colors[props.children?.toString()??'']}`}></div>
+
     </span>
   );
 };
@@ -17,8 +38,7 @@ const toolbox = [
     url: "https://uexport.oboard.eu.org/",
     img: "/preview/uexport.jpg",
     tag: ["优学院", "题库", "导出"],
-    new: false,
-    developing: false,
+    avalible: true,
   },
   {
     name: "优学院学习记录转换助手",
@@ -26,8 +46,15 @@ const toolbox = [
     url: "tools/ulearning/fakeRecord",
     img: "/preview/fakeRecord.jpg",
     tag: ["优学院", "学习记录", "转换"],
-    new: true,
-    developing: false,
+    avalible: true,
+  },
+  {
+    name: "优学院试卷导出助手",
+    desc: "导出考试试题",
+    url: "tools/ulearning/exam",
+    img: "/preview/ulearningExam.jpg",
+    tag: ["优学院", "转换"],
+    avalible: true,
   },
   {
 
@@ -36,8 +63,7 @@ const toolbox = [
     url: "tools/wemedia/weixin/article",
     img: "/preview/weixin_article.jpg",
     tag: ["微信公众号", "文章解析"],
-    new: true,
-    developing: true,
+    avalible: true,
   },
   {
     name: "小红书文章解析助手",
@@ -45,17 +71,16 @@ const toolbox = [
     url: "tools/wemedia/xhs/article",
     img: "/preview/xhs_article.jpg",
     tag: ["小红书", "文章解析"],
-    new: true,
-    developing: false,
+    avalible: true,
   }
 ];
 
 export default function Home() {
   return (
-    <article className={"flex flex-col items-center gap-4 py-24 px-4 w-full"}>
+    <article className={"flex flex-wrap justify-center items-center gap-4 py-24 px-4 w-full"}>
       {toolbox.map((item) => (
-        <Link href={item.url} className="no-underline w-full md:w-96 flex flex-row items-center justify-center" key={item.name}>
-          <div className="card w-full sm:h-80 bg-base-100 card-bordered border-primary hover:shadow-md transition-shadow">
+        <Link href={item.url} className="no-underline w-full sm:w-96 flex flex-row items-center justify-center" key={item.name}>
+          <div className="card relative w-full h-80 bg-base-100 shadow-xl hover:scale-102 active:scale-90 ease-out duration-300 transition-all">
           <figure>
             <Image
               src={item.img}
@@ -66,11 +91,11 @@ export default function Home() {
               height={300}
             />
           </figure>
-          <div className="card-body">
-            <h2 className="card-title">
+          <div className="card-body px-4 pt-8 pb-4">
+            <h2 className="card-title font-normal text-primary">
               {item.name}
-              { item.new && <div className="badge badge-primary">NEW</div> }
-              { item.developing && <div className="badge badge-secondary">Developing</div> }
+              { item.avalible && <i className="i-tabler-circle-check text-green-500"></i>}
+              { !item.avalible && <i className="i-tabler-circle-x text-red-500"></i>}
             </h2>
             <p>{item.desc}</p>
             <div className="card-actions justify-end">

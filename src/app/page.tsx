@@ -196,9 +196,9 @@ export default function Home() {
 
          {/* 右侧 */}
          <div className="flex flex-col gap-4 min-w-12  justify-start">
-          {/* 网址导航 */}
+          {/* 资源导航 */}
           <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-medium">网址导航</h2>
+            <h2 className="text-xl font-medium">资源导航</h2>
             <div className="flex flex-col gap-2">
               {links.map((item) => (
                 <Link href={item.url} key={item.name} className="flex flex-row items-center gap-2">

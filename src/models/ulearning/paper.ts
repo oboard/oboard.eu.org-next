@@ -37,23 +37,23 @@
 
 // 生成实体类
 
-export interface Paper {
+export interface UlearningPaper {
     score: number;
-    part: Part[];
+    part: PaperPart[];
 }
 
-export interface Part {
+export interface PaperPart {
     paperpartid: number;
     partname: string;
     score: number;
     orderindex: number;
-    children: Child[];
+    children: Question[];
 }
 
-export interface Child {
+export interface Question {
     score: number;
     correctreply: string;
-    item: Item[];
+    item: ChooseItem[];
     questionid: number;
     blackOrder: number;
     lisCount: number;
@@ -61,7 +61,7 @@ export interface Child {
     type: number;
 }
 
-export interface Item {
+export interface ChooseItem {
     choiceId: number;
     title: string;
 }

@@ -1,6 +1,7 @@
 "use client";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { ExamItem } from "@/models/ulearning/examItem";
+import { UlearningPaper } from "@/models/ulearning/paper";
 import { useState } from "react";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
 
   const [list, setList] = useLocalStorage("ulearning_list", []);
   const [selectedExamItem, setSelectedExamItem] = useState<ExamItem>();
+  const [selectedPaper, setSelectedPaper] = useState<UlearningPaper>();
 
   const config: any = {
     headers: {
@@ -54,17 +56,20 @@ export default function Home() {
   };
 
   const exportPaper = (examItem: ExamItem, paperID: string) => async () => {
-    const listResponse = await fetch(
+    const modal = document?.getElementById("my_modal_2") as HTMLDialogElement;
+    modal?.showModal();
+
+    const paperResponse = await fetch(
       `/utestapi/exams/user/study/getPaperForStudent?paperId=${paperID}&examId=${examItem.examID}`,
       config
     );
+    const p = (await paperResponse.json()).result as UlearningPaper;
+    setSelectedPaper(p);
   };
-
-
 
   return (
     <main className={"py-24 px-4 flex flex-col items-center gap-4 w-full"}>
-      <div className="text-2xl font-bold text-center">
+      <div className="text-2xl text-center">
         优学院试卷导出助手
         <br />
         <span className="text-sm font-normal">一键导出优学院试卷</span>
@@ -110,8 +115,11 @@ export default function Home() {
                 <td>{item.currentState}</td>
                 <td>{item.paperID.split(";").length - 2}</td>
                 <td>
-                  <button className="btn btn-xs" onClick={() => showPaperDialog(item)}>
-                    导出
+                  <button
+                    className="btn btn-xs"
+                    onClick={() => showPaperDialog(item)}
+                  >
+                    查看
                   </button>
                 </td>
               </tr>
@@ -122,7 +130,7 @@ export default function Home() {
 
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
+          <h3 className="text-lg">选择试卷</h3>
           <p className="py-4">
             <table className="table table-xs">
               <thead>
@@ -133,17 +141,26 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {selectedExamItem?.paperID.split(";").map((item: string, index: number) => (item)?(
-                  <tr key={item}>
-                    <td>{index + 1}</td>
-                    <td>{item}</td>
-                    <td>
-                      <form method="dialog">
-                        <button className="btn btn-xs" onClick={exportPaper(selectedExamItem,item)}>导出</button>
-                      </form>
-                    </td>
-                  </tr>
-                ):null)}
+                {selectedExamItem?.paperID
+                  .split(";")
+                  .map((item: string, index: number) =>
+                    item ? (
+                      <tr key={item}>
+                        <td>{index + 1}</td>
+                        <td>{item}</td>
+                        <td>
+                          <form method="dialog">
+                            <button
+                              className="btn btn-xs"
+                              onClick={exportPaper(selectedExamItem, item)}
+                            >
+                              查看
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                    ) : null
+                  )}
               </tbody>
             </table>
           </p>
@@ -152,42 +169,90 @@ export default function Home() {
               <button className="btn">关闭</button>
             </form>
           </div>
+
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
         </div>
       </dialog>
 
-      
       <dialog id="my_modal_2" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
           <p className="py-4">
-            <table className="table table-xs">
-              <thead>
-                <tr>
-                  <th>序号</th>
-                  <th>试卷ID</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedExamItem?.paperID.split(";").map((item: string, index: number) => (item)?(
-                  <tr key={item}>
-                    <td>{index + 1}</td>
-                    <td>{item}</td>
-                    <td>
-                      <form method="dialog">
-                        <button className="btn btn-xs" onClick={exportPaper(item)}>导出</button>
-                      </form>
-                    </td>
-                  </tr>
-                ):null)}
-              </tbody>
-            </table>
+            <h3 className="text-lg">查看试卷</h3>
+            {selectedPaper == undefined && (
+              // loading
+              <div className="flex flex-col items-center justify-center space-y-4 py-4">
+                <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+              </div>
+            )}
+
+            {selectedPaper && (
+              <>
+                <div>
+                  {/* 试卷主体 */}
+                  <article className="prose flex flex-col items-center justify-center space-y-4 py-4">
+                    {/* <div className="text-2xl text-center">
+                      {selectedPaper.score}分
+                    </div> */}
+                    {selectedPaper.part.map((part, index) =>
+                      part.children.map((question, queIndex) => {
+                        return (
+                          <div
+                            key={queIndex}
+                            className="flex flex-col items-center justify-center space-y-4 py-4"
+                          >
+                            {/* <div className="text-2xl text-center">
+                              {question.score}分
+                            </div> */}
+                            <div className="text-2xl text-center">
+                              {question.title}
+                            </div>
+                            <div className="text-2xl text-center">
+                              {question.item?.map((item, itemIndex) => (
+                                // 选项
+                                <div
+                                  key={itemIndex}
+                                  className="flex flex-row items-center gap-2"
+                                >
+                                  <div className="text-2xl text-left">
+                                    {
+                                      [
+                                        "A",
+                                        "B",
+                                        "C",
+                                        "D",
+                                        "E",
+                                        "F",
+                                        "G",
+                                        "H",
+                                        "I",
+                                        "J",
+                                      ][itemIndex]
+                                    }
+                                    、{item.title}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </article>
+                </div>
+              </>
+            )}
           </p>
           <div className="modal-action">
             <form method="dialog">
               <button className="btn">关闭</button>
             </form>
           </div>
+
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
         </div>
       </dialog>
     </main>

@@ -3,7 +3,8 @@ export type MessageInfo = {
     id: string;
     userId: string;
     content: string;
-    time: number | undefined;
+    time?: number | undefined;
+    type?: string | undefined;
     status: MessageStatus;
 };
 

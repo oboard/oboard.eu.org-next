@@ -4,12 +4,12 @@
 
 import { Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import SyntaxHighlighter from "react-syntax-highlighter";
+// import SyntaxHighlighter from "react-syntax-highlighter";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { MessageInfo, MessageStatus } from "../../models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { Content } from "next/font/google";
 import toast from "react-hot-toast";
 
 const CodeBlock = ({
@@ -31,69 +31,6 @@ const CodeBlock = ({
     </SyntaxHighlighter>
   );
 };
-
-// export let messages = [];
-
-// export default function handler(req, res) {
-//   // 如果是get
-//   if (req.method === "GET") {
-//     // 返回数据
-//     res
-//       .status(200)
-//       .setHeader("Access-Control-Allow-Origin", "*")
-//       .json({ message: "success", data: messages });
-//     return;
-//   } else if (req.method === "POST") {
-//     // 如果是post
-//     // 把信息存入内存
-//     if (req.body !== undefined || req.body !== null) messages.push(req.body);
-
-//     // 返回成功
-//     res
-//       .status(200)
-//       .setHeader("Access-Control-Allow-Origin", "*")
-//       .json({ message: "success" });
-//   }
-// }
-
-// // 使用http协议上传图片和读取图片
-// import { MessageInfo, MessageStatus } from "../../../models/chat/message";
-// import { NextResponse } from "next/server";
-
-// let files: Map<string, Uint8Array> = new Map();
-
-// export async function GET(request: Request) {
-
-//     const { searchParams } = new URL(request.url);
-//     const key = searchParams.get("key") ?? "";
-
-//     const result = files.get(key);
-
-//     return NextResponse.json(result,
-//         {
-//             headers: {
-//                 "Access-Control-Allow-Origin": "*",
-//             },
-//             status: 200,
-//         });
-// }
-
-// export async function POST(request: Request) {
-//     const body = await request.arrayBuffer();
-
-//     const { searchParams } = new URL(request.url);
-//     const key = searchParams.get("key") ?? "";
-
-//     files.set(key, new Uint8Array(body));
-
-//     // 返回成功
-//     return NextResponse.json({ message: "success" }, {
-//         headers: {
-//             "Access-Control-Allow-Origin": "*",
-//         },
-//         status: 200,
-//     });
-// }
 
 const upload = async (file: File) => {
   // Uint8Array
@@ -138,8 +75,9 @@ export default function Chat() {
   const [userId, setUserId] = useLocalStorage("userId", genUuid());
   const [following, setFollowing] = useState(true);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function toBottom(quick?: boolean) {
-    if(!following) return;
+    if (!following) return;
     const chatbox = document?.querySelector("html");
     chatbox?.scrollTo({
       top: chatbox?.scrollHeight,
@@ -153,7 +91,7 @@ export default function Chat() {
     if (userId == undefined || userId == null || userId.length < 5) {
       setUserId(genUuid());
       // 刷新页面
-      if(typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         window.location.reload();
         return false;
       }
@@ -164,10 +102,8 @@ export default function Chat() {
   // 设置定时拉去信息
   useEffect(() => {
     let first = true;
-
     let timer = setInterval(() => {
       console.log(`userId: ${userId}`);
-
       checkUserIdAvalible();
 
       try {
@@ -188,9 +124,7 @@ export default function Chat() {
 
               sendedList.forEach((item: MessageInfo) => {
                 // 如果信息里没有正准备发的信息，就加入，并发送
-                if (
-                  temp.findIndex((item2) => item.id === item2.id) === -1
-                ) {
+                if (temp.findIndex((item2) => item.id === item2.id) === -1) {
                   temp.push(item);
                   // 发送信息
                   fetch("/api/chat", {
@@ -254,7 +188,7 @@ export default function Chat() {
             setMessages(temp);
             if (first) {
               // 等待页面更新后，页面自动滚动到底部
-              toBottom(true);
+              // toBottom(true);
               first = false;
             }
           });
@@ -265,7 +199,7 @@ export default function Chat() {
     return () => {
       clearInterval(timer);
     };
-  }, [checkUserIdAvalible, messages, setMessages, toBottom, userId]);
+  }, [checkUserIdAvalible, messages, setMessages, userId]);
 
   // 发送图片
   const sendPicture = () => {
@@ -293,6 +227,7 @@ export default function Chat() {
               ? `![${file.name}](${url})`
               : `[${file.name}](${url})`,
             time: undefined,
+            type: isImage ? "image" : "file",
             status: MessageStatus.Sending,
           };
           // 直接插入到数组中
@@ -313,7 +248,7 @@ export default function Chat() {
 
   // 发送信息
   let sendMessage = () => {
-    if (input.length == 0|| input.trim().length == 0) {
+    if (input.length == 0 || input.trim().length == 0) {
       toast.error("请输入内容");
       return;
     }
@@ -325,7 +260,6 @@ export default function Chat() {
       id: genUuid(),
       userId: userId,
       content: input,
-      time: undefined,
       status: MessageStatus.Sending,
     };
     // 直接插入到数组中
@@ -365,34 +299,38 @@ export default function Chat() {
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
     const chatbox = document?.querySelector("html");
-    if(typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       window?.addEventListener("scroll", (e) => {
-      // 如果滑动到底部或者超过底部，就设置following为true，否则为false
-      if (
-        (chatbox?.scrollHeight ?? 0) - (chatbox?.scrollTop ?? 0) <=
-        (chatbox?.clientHeight ?? 0)
-      ) {
-        setFollowing(true);
-        // 定时滚动到底部
-        if (scrollTimer.current) {
+        // 如果滑动到底部或者超过底部，就设置following为true，否则为false
+        if (
+          (chatbox?.scrollHeight ?? 0) - (chatbox?.scrollTop ?? 0) <=
+          (chatbox?.clientHeight ?? 0)
+        ) {
+          setFollowing(true);
+          // 定时滚动到底部
+          if (scrollTimer.current) {
+            clearTimeout(scrollTimer.current);
+          }
+          scrollTimer.current = setInterval(() => {
+            toBottom();
+          }, 500);
+        } else {
+          setFollowing(false);
+          // 取消定时
           clearTimeout(scrollTimer.current);
         }
-        scrollTimer.current = setInterval(() => {
-          toBottom();
-        }, 500);
-      } else {
-        setFollowing(false);
-        // 取消定时
-        clearTimeout(scrollTimer.current);
-      }
-    });
-  }
+      });
+    }
+
+    toBottom();
 
     return () => {
       chatbox?.removeEventListener("scroll", (e) => {});
       clearTimeout(scrollTimer.current);
     };
-  }, []);
+  }, [toBottom]);
+
+  // 页面启动的时候，滚动到底部
 
   // uuid作为种子，生成随机数，然后取1-7数字，作为颜色
   function genColor(uuid: string) {
@@ -420,7 +358,7 @@ export default function Chat() {
     let diff = now - time;
     if (diff < 1000 * 60) {
       // return `${Math.floor(diff / 1000)}秒前`;
-      return '刚刚';
+      return "刚刚";
     } else if (diff < 1000 * 60 * 60) {
       return `${Math.floor(diff / (1000 * 60))}分钟前`;
     } else if (diff < 1000 * 60 * 60 * 24) {
@@ -473,9 +411,7 @@ export default function Chat() {
               p-id="5074"
             ></path>
           </svg>
-          <span className="hidden md:ml-2 md:inline-block">
-            返回底部
-          </span>
+          <span className="hidden md:ml-2 md:inline-block">返回底部</span>
         </button>
       </div>
       <div className="flex flex-col w-full">
@@ -506,9 +442,16 @@ export default function Chat() {
                     </time>
                   </div>
                   <div
-                    className={"animate-duration-500 animate-ease-out max-w-sm chat-bubble " + genColor(item.userId)
-                    +
-                    (item.userId === userId ? " animate-fade-in-right" : " animate-fade-in-left")}
+                    className={
+                      "animate-duration-500 animate-ease-out chat-bubble " +
+                      genColor(item.userId) +
+                      (item.userId === userId
+                        ? " animate-fade-in-right"
+                        : " animate-fade-in-left") + 
+                      (item.type === 'image'
+                        ? "  max-w-sm"
+                        : "")
+                    }
                   >
                     <ReactMarkdown
                       // 图片可以点击放大
@@ -518,7 +461,7 @@ export default function Chat() {
                             className="min-w-8 min-h-8 w-full my-2 rounded hover:shadow-xl cursor-pointer transition-all scale-100 hover:scale-110 hover:rounded-xl"
                             src={props.src}
                             onClick={() => {
-                              if(typeof window !== 'undefined') {
+                              if (typeof window !== "undefined") {
                                 window.open(props.src);
                               }
                             }}
@@ -536,10 +479,11 @@ export default function Chat() {
                             <CodeBlock language={match[1]}>
                               {String(children).replace(/\n$/, "")}
                             </CodeBlock>
-                          ) : (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
+                          ) 
+                          : (
+                            <CodeBlock language={"js"}>
+                              {String(children).replace(/\n$/, "")}
+                            </CodeBlock>
                           );
                         },
                         a: ({
@@ -575,7 +519,10 @@ export default function Chat() {
                                 className="link-hover"
                                 target="_blank"
                                 // 下载
-                                download={(item.content.indexOf('api/chat/file')>0) && children}
+                                download={
+                                  item.content.indexOf("api/chat/file") > 0 &&
+                                  children
+                                }
                                 {...props}
                               >
                                 {children}
@@ -643,7 +590,7 @@ export default function Chat() {
           {/* 更多 */}
           {!input && (
             <details className="dropdown dropdown-end dropdown-top">
-              <summary className="m-1 btn">
+              <summary className="btn btn-circle">
                 <i className="i-tabler-plus text-xl" />
               </summary>
               <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">

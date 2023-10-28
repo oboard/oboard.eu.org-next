@@ -11,3 +11,7 @@
 i {
     margin: 4px;
 }
+
+:root {
+    overflow-x: hidden;
+}

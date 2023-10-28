@@ -14,13 +14,16 @@ export default function MouseTracker() {
     borderRadius: "1rem",
   });
 
-  window.addEventListener("mousemove", (e) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
-  });
+  if(typeof window !== 'undefined') {
+    window.addEventListener("mousemove", (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    });
+  }
 
+  if (typeof document !== "undefined") {
   const elements = document.querySelectorAll(".hoverable");
 
-  elements.forEach((element) => {
+  elements?.forEach((element) => {
     const rect = element.getBoundingClientRect();
     element.addEventListener("mouseover", () => {
       element.classList.add("hovered");
@@ -55,7 +58,7 @@ export default function MouseTracker() {
       }
     });
   });
-
+  }
   return (
     <div
       className="fixed z-100 rounded-full pointer-events-none bg-blue bg-opacity-10 filter-blur transform -translate-x-1/2 -translate-y-1/2"

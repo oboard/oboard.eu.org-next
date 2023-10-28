@@ -140,7 +140,7 @@ export default function Chat() {
 
   function toBottom(quick?: boolean) {
     if(!following) return;
-    const chatbox = document.querySelector("html");
+    const chatbox = document?.querySelector("html");
     chatbox?.scrollTo({
       top: chatbox?.scrollHeight,
       behavior: quick ? "auto" : "smooth",
@@ -153,7 +153,7 @@ export default function Chat() {
     if (userId == undefined || userId == null || userId.length < 5) {
       setUserId(genUuid());
       // 刷新页面
-      if (window) {
+      if(typeof window !== 'undefined') {
         window.location.reload();
         return false;
       }
@@ -265,12 +265,12 @@ export default function Chat() {
     return () => {
       clearInterval(timer);
     };
-  }, [checkUserIdAvalible, messages, setMessages, userId]);
+  }, [checkUserIdAvalible, messages, setMessages, toBottom, userId]);
 
   // 发送图片
   const sendPicture = () => {
     // 读取图片
-    let input = document.createElement("input");
+    let input = document?.createElement("input");
     input.type = "file";
 
     input.onchange = () => {
@@ -364,8 +364,9 @@ export default function Chat() {
 
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
-    const chatbox = document.querySelector("html");
-    window?.addEventListener("scroll", (e) => {
+    const chatbox = document?.querySelector("html");
+    if(typeof window !== 'undefined') {
+      window?.addEventListener("scroll", (e) => {
       // 如果滑动到底部或者超过底部，就设置following为true，否则为false
       if (
         (chatbox?.scrollHeight ?? 0) - (chatbox?.scrollTop ?? 0) <=
@@ -385,6 +386,7 @@ export default function Chat() {
         clearTimeout(scrollTimer.current);
       }
     });
+  }
 
     return () => {
       chatbox?.removeEventListener("scroll", (e) => {});
@@ -445,7 +447,7 @@ export default function Chat() {
             "btn rounded-full btn-accent flex items-center justify-center"
           }
           onClick={() => {
-            const chatbox = document.querySelector("html");
+            const chatbox = document?.querySelector("html");
             chatbox?.scrollTo({
               top: chatbox?.scrollHeight,
               behavior: "smooth",
@@ -516,7 +518,9 @@ export default function Chat() {
                             className="min-w-8 min-h-8 w-full my-2 rounded hover:shadow-xl cursor-pointer transition-all scale-100 hover:scale-110 hover:rounded-xl"
                             src={props.src}
                             onClick={() => {
-                              window.open(props.src);
+                              if(typeof window !== 'undefined') {
+                                window.open(props.src);
+                              }
                             }}
                           />
                         ),

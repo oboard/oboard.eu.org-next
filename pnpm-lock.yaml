@@ -62,8 +62,8 @@ devDependencies:
     specifier: ^0.55.7
     version: 0.55.7
   '@unocss/transformer-attributify-jsx':
-    specifier: ^0.55.7
-    version: 0.55.7
+    specifier: ^0.57.1
+    version: 0.57.1
   daisyui:
     specifier: ^3.7.3
     version: 3.7.3
@@ -86,7 +86,7 @@ devDependencies:
     specifier: 5.2.2
     version: 5.2.2
   unocss:
-    specifier: latest
+    specifier: ^0.57.1
     version: 0.57.1(postcss@8.4.28)(vite@4.5.0)
 
 packages:
@@ -948,12 +948,6 @@ packages:
     resolution: {integrity: sha512-EOCPB8OGmhroAuFU0i0W5p6GmJpx6mAkP4KmsqVLd4QMgw+8aXkG7SKyLnxQZnekM0/dSo0TcpVGeGrZaUNgvQ==}
     dependencies:
       '@unocss/core': 0.57.1
-    dev: true
-
-  /@unocss/transformer-attributify-jsx@0.55.7:
-    resolution: {integrity: sha512-ZyUBc0wguBhd+nbIlcrSYpmzKtqBi+8BII8SK4lIB/Ol1wBboByPTjBENsQkxRyffp5K9VTuZZ/LamFgPGOWDg==}
-    dependencies:
-      '@unocss/core': 0.55.7
     dev: true
 
   /@unocss/transformer-attributify-jsx@0.57.1:

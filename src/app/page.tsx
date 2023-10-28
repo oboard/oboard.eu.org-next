@@ -149,9 +149,17 @@ const links = [
 
 const friendLinks = [
   {
-    name: "一块小板子",
-    url: "https://oboard.vercel.app/",
+    name: "XRZ",
+    url: "https://www.xrzyun.top",
   },
+  {
+    name: "XXS",
+    url: "https://xxs2.cn",
+  },
+  {
+    name: "棍之勇者",
+    url: "https://lsyxiaopang.github.io",
+  }
 ];
 
 export default function Home() {

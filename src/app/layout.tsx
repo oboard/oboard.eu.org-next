@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 
 import { Toaster } from "react-hot-toast";
+import MouseTracker from "@/components/MouseTracker";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className="flex flex-col justify-center items-center">
+        <MouseTracker />
         <Toaster />
         {children}
         <LinkCard />

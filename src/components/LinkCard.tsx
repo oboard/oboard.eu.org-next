@@ -120,7 +120,7 @@ export default function LinkCard() {
             {routes.map((route) => (
               <li key={route.path}>
                 <Link
-                  className={`relative block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
+                  className={`relative hoverable block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
                     pathname === route.path ? "text-primary" : ""
                   }`}
                   href={route.path}

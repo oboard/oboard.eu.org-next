@@ -11,12 +11,12 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
   const colors: Colors = {
     '优学院': 'bg-red',
     '题库': 'bg-blue-500',
-    '导出': 'bg-pink-500',
     '学习记录': 'bg-yellow-500',
     '转换': 'bg-indigo-500',
     '微信公众号': 'bg-green-500',
     '文章解析': 'bg-purple-500',
     '小红书': 'bg-red-500',
+    '青年大学习': 'bg-red-500',
   }
 
 
@@ -37,7 +37,7 @@ const toolbox = [
     desc: "导出优学院题库到 Word",
     url: "https://uexport.oboard.eu.org/",
     img: "/preview/uexport.jpg",
-    tag: ["优学院", "题库", "导出"],
+    tag: ["优学院", "题库"],
     avalible: true,
   },
   {
@@ -69,8 +69,16 @@ const toolbox = [
     name: "小红书文章解析助手",
     desc: "解析小红书文章的封面、标题、简介",
     url: "tools/wemedia/xhs/article",
-    img: "/preview/xhs_article.jpg",
+    img: "/preview/xhs_article.png",
     tag: ["小红书", "文章解析"],
+    avalible: true,
+  },
+  {
+    name: "青年大学习参学率报告生成器",
+    desc: "生成青年大学习参学率报告",
+    url: "https://young.oboard.eu.org/",
+    img: "/preview/young_maker.png",
+    tag: ["青年大学习"],
     avalible: true,
   }
 ];
@@ -81,7 +89,7 @@ export default function Home() {
       {toolbox.map((item) => (
         <Link href={item.url} className="no-underline w-full sm:w-96 flex flex-row items-center justify-center" key={item.name}>
           <div className="card relative w-full h-80 bg-base-100 shadow-xl hover:scale-102 active:scale-90 ease-out duration-300 transition-all">
-          <figure>
+          <figure className="h-40">
             <Image
               src={item.img}
               alt="preview"

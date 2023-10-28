@@ -10,6 +10,7 @@ import { MessageInfo, MessageStatus } from "../../models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Content } from "next/font/google";
+import toast from "react-hot-toast";
 
 const CodeBlock = ({
   language,
@@ -137,11 +138,12 @@ export default function Chat() {
   const [userId, setUserId] = useLocalStorage("userId", genUuid());
   const [following, setFollowing] = useState(true);
 
-  function toBottom() {
+  function toBottom(quick?: boolean) {
+    if(!following) return;
     const chatbox = document.querySelector("html");
     chatbox?.scrollTo({
       top: chatbox?.scrollHeight,
-      behavior: "smooth",
+      behavior: quick ? "auto" : "smooth",
     });
   }
 
@@ -252,7 +254,7 @@ export default function Chat() {
             setMessages(temp);
             if (first) {
               // 等待页面更新后，页面自动滚动到底部
-              toBottom();
+              toBottom(true);
               first = false;
             }
           });
@@ -311,7 +313,10 @@ export default function Chat() {
 
   // 发送信息
   let sendMessage = () => {
-    if (input.length == 0) return;
+    if (input.length == 0|| input.trim().length == 0) {
+      toast.error("请输入内容");
+      return;
+    }
 
     if (!checkUserIdAvalible()) return;
 
@@ -360,7 +365,7 @@ export default function Chat() {
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
     const chatbox = document.querySelector("html");
-    chatbox?.addEventListener("scroll", (e) => {
+    window?.addEventListener("scroll", (e) => {
       // 如果滑动到底部或者超过底部，就设置following为true，否则为false
       if (
         (chatbox?.scrollHeight ?? 0) - (chatbox?.scrollTop ?? 0) <=
@@ -437,7 +442,7 @@ export default function Chat() {
       >
         <button
           className={
-            "btn btn-circle btn-accent flex items-center justify-center"
+            "btn rounded-full btn-accent flex items-center justify-center"
           }
           onClick={() => {
             const chatbox = document.querySelector("html");
@@ -466,6 +471,9 @@ export default function Chat() {
               p-id="5074"
             ></path>
           </svg>
+          <span className="hidden md:ml-2 md:inline-block">
+            返回底部
+          </span>
         </button>
       </div>
       <div className="flex flex-col w-full">
@@ -496,7 +504,9 @@ export default function Chat() {
                     </time>
                   </div>
                   <div
-                    className={"max-w-sm chat-bubble " + genColor(item.userId)}
+                    className={"animate-duration-500 animate-ease-out max-w-sm chat-bubble " + genColor(item.userId)
+                    +
+                    (item.userId === userId ? " animate-fade-in-right" : " animate-fade-in-left")}
                   >
                     <ReactMarkdown
                       // 图片可以点击放大

@@ -3,6 +3,7 @@ import style from "./styles.module.scss";
 // import clsx from 'clsx'
 import Link from "next/link";
 import Image from "next/image";
+import InterestingAvatar from "@/components/InterestingAvatar";
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   return (
@@ -144,27 +145,22 @@ const links = [
     name: "Manjaro 下载",
     url: "https://manjaro.org/download/",
   },
+];
 
+const friendLinks = [
+  {
+    name: "一块小板子",
+    url: "https://oboard.vercel.app/",
+  },
 ];
 
 export default function Home() {
   return (
     <article className={"text-base prose py-24 px-4 md:max-w-5xl"}>
       <div className="flex flex-col md:flex-row">
-       
         {/* 左侧 */}
         <div className="flex flex-row items-start gap-4">
-          <div className="avatar">
-            <div className="w-16 rounded-full">
-              <Image
-                src="https://upload.jianshu.io/users/upload_avatars/8761709/3101d25e-1917-47dd-bdee-58bbda3352ac.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/300/format/webp"
-                alt={"Head"}
-                className="avatar avatar-circle"
-                width={256}
-                height={256}
-              />
-            </div>
-          </div>
+          <InterestingAvatar />
           <div>
             <h1 className="w-fit text-3xl font-medium text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
               一块小板子
@@ -194,22 +190,46 @@ export default function Home() {
           </div>
         </div>
 
-         {/* 右侧 */}
-         <div className="flex flex-col gap-4 min-w-12  justify-start">
+        {/* 右侧 */}
+        <div className="flex flex-col gap-4 min-w-12  justify-start">
+          {/* 友谊链接 */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-xl font-medium">友谊链接</h2>
+            <div className="flex flex-col gap-2">
+              {friendLinks.map((item) => (
+                <Link
+                  href={item.url}
+                  key={item.name}
+                  className="flex flex-row items-center gap-2"
+                >
+                  <i className="i-tabler-link"></i>
+                  <span>
+                    {item.name} {item.url}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* 资源导航 */}
           <div className="flex flex-col gap-2">
             <h2 className="text-xl font-medium">资源导航</h2>
             <div className="flex flex-col gap-2">
               {links.map((item) => (
-                <Link href={item.url} key={item.name} className="flex flex-row items-center gap-2">
-                    <i className="i-tabler-link"></i>
-                    <span>{item.name} {item.url}</span>
+                <Link
+                  href={item.url}
+                  key={item.name}
+                  className="flex flex-row items-center gap-2"
+                >
+                  <i className="i-tabler-link"></i>
+                  <span>
+                    {item.name} {item.url}
+                  </span>
                 </Link>
               ))}
             </div>
           </div>
         </div>
-
       </div>
 
       <p className="text-center text-gray-500 dark:text-gray-400">

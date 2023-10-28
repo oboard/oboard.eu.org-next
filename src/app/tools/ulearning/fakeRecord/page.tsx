@@ -2,6 +2,7 @@
 
 import React from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import toast from "react-hot-toast";
 
 export default function FakeRecord() {
   const [uid, setUid] = useLocalStorage("fakeRecord-uid", "");
@@ -13,6 +14,15 @@ export default function FakeRecord() {
 
   const convert = () => {
     let obj: any = {};
+    if (content === "" || content === undefined || content === null || content.length === 0) {
+      toast.error("请输入内容");
+      return;
+    }
+    if (uid === "" || uid === undefined || uid === null || uid.length === 0) {
+      toast.error("请输入UID");
+      return;
+    }
+
     const data = JSON.parse(content);
     data.chapters.forEach((item: any) => {
       item.items.forEach((item1: any) => {

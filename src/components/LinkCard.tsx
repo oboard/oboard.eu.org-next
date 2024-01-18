@@ -21,7 +21,7 @@ const routes = [
     icon: "i-tabler-robot",
   },
   {
-    name: "工具箱",
+    name: "工具",
     path: "/tools",
     icon: "i-tabler-tools",
   },
@@ -63,17 +63,17 @@ export default function LinkCard() {
 
   return (
     <>
-      <ul className="md:hidden fixed bottom-0 left-0 right-0 menu h-16 menu-lg menu-horizontal bg-base-200 gap-2">
+      <ul className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row bg-base-200">
         {routes.map((route) => (
-          <li key={route.path} className="flex-1">
+          <li key={route.path} className="flex-1 m-auto">
             <Link
-              className={`flex flex-row justify-center menu-item ${
-                pathname === route.path ? "active" : ""
+              className={`transition-all mx-1 active:scale-90 hover:bg-primary hover:text-primary-content rounded flex flex-col sm:flex-row justify-center items-center ${
+                pathname === route.path ? "bg-primary text-primary-content" : ""
               }`}
               href={route.path}
             >
-              <i className={route.icon}></i>
-              <div className="hidden sm:block">{route.name}</div>
+              <i className={route.icon + ' text-xl'}></i>
+              <div>{route.name}</div>
             </Link>
           </li>
         ))}

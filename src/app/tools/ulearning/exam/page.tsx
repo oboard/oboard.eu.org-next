@@ -1,8 +1,8 @@
 "use client";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { ExamItem } from "@/models/ulearning/examItem";
-import { UlearningPaper } from "@/models/ulearning/paper";
-import { useState } from "react";
+import {ExamItem} from "@/models/ulearning/examItem";
+import {UlearningPaper} from "@/models/ulearning/paper";
+import {useState} from "react";
 
 export default function Home() {
   const [authorization, setAuthorization] = useLocalStorage(

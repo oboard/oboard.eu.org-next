@@ -1,10 +1,7 @@
 "use client";
 
-import React, { PropsWithChildren } from "react";
-import style from "./styles.module.scss";
+import React from "react";
 // import clsx from 'clsx'
-import Link from "next/link";
-import Image from "next/image";
 
 export default function FakeRecord() {
   return (

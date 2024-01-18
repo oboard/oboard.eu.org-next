@@ -1,8 +1,7 @@
-import React, { PropsWithChildren } from "react";
-import style from "./styles.module.scss";
+import React, {PropsWithChildren} from "react";
 // import clsx from 'clsx'
 import Link from "next/link";
-import { ability } from "../page";
+import {ability} from "../page";
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   return (

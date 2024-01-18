@@ -1,8 +1,6 @@
-import React, { PropsWithChildren } from "react";
-import style from "./styles.module.scss";
+import React, {PropsWithChildren} from "react";
 // import clsx from 'clsx'
 import Link from "next/link";
-import Image from "next/image";
 import InterestingAvatar from "@/components/InterestingAvatar";
 import EmojiJumper from "@/components/EmojiJumper";
 

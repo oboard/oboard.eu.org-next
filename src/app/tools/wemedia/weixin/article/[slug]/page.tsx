@@ -1,4 +1,4 @@
-import { JSDOM } from "jsdom";
+import {JSDOM} from "jsdom";
 import Image from "next/image";
 import ShareLinkBox from "./shareLinkBox";
 import DownloadButton from "@/components/DownloadButton";

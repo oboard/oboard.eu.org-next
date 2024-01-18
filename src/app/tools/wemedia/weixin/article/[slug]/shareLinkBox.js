@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 export default function ShareLinkBox(props) {
   const [shareText, setShareText] = useState(props.shareText?decodeURIComponent(props.shareText) : "");

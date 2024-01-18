@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEventHandler } from "react";
+import {ChangeEventHandler} from "react";
 import "./NightToggle.css";
 
 interface NightToggleInterface {

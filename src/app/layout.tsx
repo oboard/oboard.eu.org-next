@@ -1,8 +1,7 @@
 import LinkCard from "@/components/LinkCard";
 import "./globals.css";
-import { Inter } from "next/font/google";
 
-import { Toaster } from "react-hot-toast";
+import {Toaster} from "react-hot-toast";
 import MouseTracker from "@/components/MouseTracker";
 
 export const metadata = {

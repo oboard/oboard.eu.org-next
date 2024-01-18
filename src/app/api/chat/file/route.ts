@@ -1,5 +1,5 @@
 // 使用http协议上传图片和读取图片
-import { NextResponse } from "next/server";
+import {NextResponse} from "next/server";
 
 let files: Map<string, Uint8Array> = new Map();
 

@@ -2,12 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Key, useEffect, useRef, useState } from "react";
+import {Key, useEffect, useRef, useState} from "react";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { MessageInfo, MessageStatus } from "../../models/chat/message";
+import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
+import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
+import {MessageInfo, MessageStatus} from "../../models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";

@@ -1,8 +1,8 @@
-import {JSDOM} from "jsdom";
+import { JSDOM } from "jsdom";
 import Image from "next/image";
 import ShareLinkBox from "./shareLinkBox";
 import DownloadButton from "@/components/DownloadButton";
-import Copyer from "@/components/Copyer";
+import CopyButton from "@/components/CopyButton";
 import OpenableImage from "./openableImage";
 
 async function getPosts(link: string) {
@@ -43,20 +43,23 @@ async function getPosts(link: string) {
   const metas = dom.head.getElementsByTagName("meta");
   const meta = {} as any;
   for (let i = 0; i < metas.length; i++) {
-    const key = metas[i].getAttribute("property") || metas[i].getAttribute("name") ||  metas[i].getAttribute("itemprop");
+    const key =
+      metas[i].getAttribute("property") ||
+      metas[i].getAttribute("name") ||
+      metas[i].getAttribute("itemprop");
     const value = metas[i].getAttribute("content");
     if (key && value) {
       meta[key] = value;
     }
   }
-  if(meta['image']) {
-    meta['og:image'] = meta['image']
+  if (meta["image"]) {
+    meta["og:image"] = meta["image"];
   }
-  if(meta['description']) {
-    meta['og:description'] = meta['description']
+  if (meta["description"]) {
+    meta["og:description"] = meta["description"];
   }
-  if(meta['name']) {
-    meta['og:title'] = meta['name']
+  if (meta["name"]) {
+    meta["og:title"] = meta["name"];
     isXiumi = true;
   }
   console.log(meta);
@@ -76,8 +79,12 @@ async function getPosts(link: string) {
   //   'twitter:description': '面试无从下手？心理学支招来帮助你！'
   // }
 
-  if(isXiumi) {
-    const dataUrl = 'https://' + dom.head.outerHTML.split("show_data_url%22%3A%22%2F%2F")[1].split('%22%2C%22show_url')[0];
+  if (isXiumi) {
+    const dataUrl =
+      "https://" +
+      dom.head.outerHTML
+        .split("show_data_url%22%3A%22%2F%2F")[1]
+        .split("%22%2C%22show_url")[0];
     const res = await fetch(decodeURIComponent(dataUrl), {
       method: "GET",
       mode: "cors",
@@ -107,32 +114,39 @@ async function getPosts(link: string) {
     // 匹配template中的<img src=\"//img.xiumi.us/xmi/ua/4rI8R/i/56954313b2edfd3aeb64880d793e3c2b-sz_7503622.jpg?x-oss-process=style/xmwebp\" 中的图片链接不一定是jpg，可能是gif等
     // 有多处匹配
     let imageRegs = template.match(/(\/\/|\/\/)[^\s]+\"/g);
-    let imageLinks = imageRegs?.map(link => {
-      // \\"//
-      return "https://" + link.replace(/\\\\\"\/\//g, '').replace(/\\\"\/\//g, '').replace(/\\\\\"\/\//g, '')
-    }) ?? [];
+    let imageLinks =
+      imageRegs?.map((link) => {
+        // \\"//
+        return (
+          "https://" +
+          link
+            .replace(/\\\\\"\/\//g, "")
+            .replace(/\\\"\/\//g, "")
+            .replace(/\\\\\"\/\//g, "")
+        );
+      }) ?? [];
     meta["imageLinks"] = imageLinks;
-  }  else {
+  } else {
+    // 获取图片
+    const imageElements = dom.querySelectorAll("img");
 
-  // 获取图片
-  const imageElements = dom.querySelectorAll("img");
+    // 创建一个数组来存储所有图片链接
+    const imageLinks: string[] = [];
 
-  // 创建一个数组来存储所有图片链接
-  const imageLinks: string[] = [];
+    imageElements.forEach((element: any) => {
+      const src =
+        element.getAttribute("data-src") || element.getAttribute("src");
 
-  imageElements.forEach((element: any) => {
-    const src = element.getAttribute("data-src") || element.getAttribute("src");
+      // 如果匹配成功，将 URL 添加到 imageLinks 数组中
+      if (src && src.length > 1) {
+        const imageUrl = src;
+        imageLinks.push(imageUrl);
+      }
+    });
 
-    // 如果匹配成功，将 URL 添加到 imageLinks 数组中
-    if (src && src.length > 1) {
-      const imageUrl = src;
-      imageLinks.push(imageUrl);
-    }
-  });
-
-  // 现在 imageLinks 数组包含了所有图片链接
-  meta["imageLinks"] = imageLinks;
-}
+    // 现在 imageLinks 数组包含了所有图片链接
+    meta["imageLinks"] = imageLinks;
+  }
 
   return meta;
 }
@@ -183,22 +197,33 @@ export default async function WeixinArticle({ params }: any) {
               <div className="card-body">
                 <h2 className="card-title">{data["og:title"]}</h2>
                 <p>{data["description"]}</p>
-                <p className="text-sm text-opacity-50">{data["og:article:author"]}</p>
+                <p className="text-sm text-opacity-50">
+                  {data["og:article:author"]}
+                </p>
                 <a className="link text-blue" href={data["og:url"]}>
                   原文链接
                 </a>
-                
+
                 <div className="card-actions justify-end">
                   {/* 复制按钮 */}
-                  {data["og:description"] && <Copyer body={data["og:description"]}>复制标题</Copyer>}
-                  {data["og:article:author"] && <Copyer body={data["og:article:author"]}>复制作者</Copyer>}
-                  {data["og:url"] && <Copyer body={data["og:url"]}>复制链接</Copyer>}
-                  {data["og:image"] && <><Copyer body={data["og:image"]}>复制图片链接</Copyer>
-                  <DownloadButton
-                    link={data["og:image"]}
-                    name={data["og:title"]}
-                  />
-                  </>}
+                  {data["og:description"] && (
+                    <CopyButton body={data["og:description"]}>复制标题</CopyButton>
+                  )}
+                  {data["og:article:author"] && (
+                    <CopyButton body={data["og:article:author"]}>复制作者</CopyButton>
+                  )}
+                  {data["og:url"] && (
+                    <CopyButton body={data["og:url"]}>复制链接</CopyButton>
+                  )}
+                  {data["og:image"] && (
+                    <>
+                      <CopyButton body={data["og:image"]}>复制图片链接</CopyButton>
+                      <DownloadButton
+                        link={data["og:image"]}
+                        name={data["og:title"]}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -209,7 +234,10 @@ export default async function WeixinArticle({ params }: any) {
               className={`grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 mt-8`}
             >
               {data["imageLinks"].map((link: string, index: number) => (
-                <div className="cursor-pointer flex flex-col items-center" key={link}>
+                <div
+                  className="cursor-pointer flex flex-col items-center"
+                  key={link}
+                >
                   <div className="flex flex-col justify-center flex-1">
                     <OpenableImage src={link} data={data} />
                   </div>

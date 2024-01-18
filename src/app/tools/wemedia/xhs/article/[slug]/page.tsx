@@ -1,8 +1,8 @@
-import {JSDOM} from "jsdom";
+import { JSDOM } from "jsdom";
 import Image from "next/image";
 import ShareLinkBox from "./shareLinkBox";
 import DownloadButton from "@/components/DownloadButton";
-import Copyer from "@/components/Copyer";
+import CopyButton from "@/components/CopyButton";
 
 async function getPosts(link: string) {
   if (decodeURIComponent(link).indexOf("://") < 0) return undefined;
@@ -135,10 +135,10 @@ export default async function XHSArticle({ params }: any) {
                 {/* 展示关键词 */}
                 <p>{data["keywords"]}</p>
                 <div className="card-actions justify-end">
-                  <Copyer body={data["og:title"]}>复制标题</Copyer>
-                  <Copyer body={data["og:title"]}>复制文案</Copyer>
-                  <Copyer body={data["keywords"]}>复制关键词</Copyer>
-                  <Copyer body={data["og:url"]}>复制链接</Copyer>
+                  <CopyButton body={data["og:title"]}>复制标题</CopyButton>
+                  <CopyButton body={data["og:title"]}>复制文案</CopyButton>
+                  <CopyButton body={data["keywords"]}>复制关键词</CopyButton>
+                  <CopyButton body={data["og:url"]}>复制链接</CopyButton>
                 </div>
               </div>
             </div>

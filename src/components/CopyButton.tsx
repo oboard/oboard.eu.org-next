@@ -2,7 +2,7 @@
 
 import toast from "react-hot-toast";
 
-export default function Copyer({
+export default function CopyButton({
   body,
   children,
 }: {

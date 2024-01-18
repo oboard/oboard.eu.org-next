@@ -16,7 +16,7 @@ export default function NightToggle(props: NightToggleInterface) {
         className="theme-switch__checkbox"
         onChange={props.onChange}
       />
-      <div className="theme-switch__container">
+      <div className="theme-switch__container shadow-lg">
         <div className="theme-switch__clouds"></div>
         <div className="theme-switch__stars-container">
           <svg

@@ -2,7 +2,13 @@
 
 import toast from "react-hot-toast";
 
-export default function copyer({ body, children }: { body: string, children?: React.ReactNode }) {
+export default function Copyer({
+  body,
+  children,
+}: {
+  body: string;
+  children?: React.ReactNode;
+}) {
   return (
     <button
       className="btn btn-primary"

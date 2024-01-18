@@ -1,11 +1,11 @@
 import { JSDOM } from "jsdom";
 import Image from "next/image";
 import ShareLinkBox from "./shareLinkBox";
-import DownloadButton from "../../../../../../components/DownloadButton";
+import DownloadButton from "@/components/DownloadButton";
 import Copyer from "@/components/Copyer";
 
 async function getPosts(link: string) {
-  if(decodeURIComponent(link).indexOf('://')<0) return undefined;
+  if (decodeURIComponent(link).indexOf("://") < 0) return undefined;
   const res = await fetch(decodeURIComponent(link), {
     method: "GET",
     mode: "cors",
@@ -125,7 +125,9 @@ export default async function XHSArticle({ params }: any) {
           <>
             <div className="card sm:w-96 bg-base-100 shadow-xl">
               <figure>
-                {data["og:image"] && <img src={data["og:image"]} alt={data["og:title"]} />}
+                {data["og:image"] && (
+                  <img src={data["og:image"]} alt={data["og:title"]} />
+                )}
               </figure>
               <div className="card-body">
                 <h2 className="card-title">{data["og:title"]}</h2>
@@ -133,18 +135,10 @@ export default async function XHSArticle({ params }: any) {
                 {/* 展示关键词 */}
                 <p>{data["keywords"]}</p>
                 <div className="card-actions justify-end">
-                  <Copyer body={data["og:title"]}>
-                    复制标题
-                  </Copyer>
-                  <Copyer body={data["og:title"]}>
-                    复制文案
-                  </Copyer>
-                  <Copyer body={data["keywords"]}>
-                    复制关键词
-                  </Copyer>
-                  <Copyer body={data["og:url"]}>
-                    复制链接
-                  </Copyer>
+                  <Copyer body={data["og:title"]}>复制标题</Copyer>
+                  <Copyer body={data["og:title"]}>复制文案</Copyer>
+                  <Copyer body={data["keywords"]}>复制关键词</Copyer>
+                  <Copyer body={data["og:url"]}>复制链接</Copyer>
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import Image from "next/image";
 import ShareLinkBox from "./shareLinkBox";
-import DownloadButton from "../../../../../../components/DownloadButton";
+import DownloadButton from "@/components/DownloadButton";
 import Copyer from "@/components/Copyer";
 import OpenableImage from "./openableImage";
 

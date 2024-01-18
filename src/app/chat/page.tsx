@@ -5,7 +5,7 @@
 import { Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { MessageInfo, MessageStatus } from "../../models/chat/message";
 import NoSSR from "@/components/NoSSR";
@@ -428,7 +428,7 @@ export default function Chat() {
                     "chat " +
                     (item.userId === userId ? " chat-end" : "chat-start")
                   }
-                  key={index}
+                  key={item.id}
                 >
                   {/* <div className="chat-image avatar">
     <div className="w-10 rounded-full">
@@ -447,25 +447,34 @@ export default function Chat() {
                       genColor(item.userId) +
                       (item.userId === userId
                         ? " animate-fade-in-right"
-                        : " animate-fade-in-left") + 
-                      (item.type === 'image'
-                        ? "  max-w-sm"
-                        : "")
+                        : " animate-fade-in-left") +
+                      (item.type === "image" ? "  max-w-sm" : "")
                     }
                   >
                     <ReactMarkdown
                       // 图片可以点击放大
                       components={{
                         img: ({ node, ...props }) => (
-                          <img
-                            className="min-w-8 min-h-8 w-full my-2 rounded hover:shadow-xl cursor-pointer transition-all scale-100 hover:scale-110 hover:rounded-xl"
-                            src={props.src}
+                          <div
+                            className="gap-1 flex flex-row items-center link link-hover"
                             onClick={() => {
                               if (typeof window !== "undefined") {
                                 window.open(props.src);
                               }
                             }}
-                          />
+                          >
+                            <i className="i-tabler-photo" />
+                            查看图片
+                          </div>
+                          // <img
+                          //   className="min-w-8 min-h-8 w-full my-2 rounded hover:shadow-xl cursor-pointer transition-all scale-100 hover:scale-110 hover:rounded-xl"
+                          //   src={props.src}
+                          //   onClick={() => {
+                          //     if (typeof window !== "undefined") {
+                          //       window.open(props.src);
+                          //     }
+                          //   }}
+                          // />
                         ),
                         code: ({
                           node,
@@ -479,8 +488,7 @@ export default function Chat() {
                             <CodeBlock language={match[1]}>
                               {String(children).replace(/\n$/, "")}
                             </CodeBlock>
-                          ) 
-                          : (
+                          ) : (
                             <CodeBlock language={"js"}>
                               {String(children).replace(/\n$/, "")}
                             </CodeBlock>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import "./EmojiJumper.css";
 
-function generateRandomEmoji(emojiList: string[]) {
+function generateRandomEmoji(emojiList: any[]) {
   //   // 开始的 Emoji 编码
   //   var emojiStart = 0x1f600;
   //   var emojiStart2 = 0x1f900;
@@ -27,7 +27,7 @@ export default function EmojiJumper({
   emojiList,
 }: {
   className?: string;
-  emojiList: string[];
+  emojiList: any[];
 }) {
   const [emoji, setEmoji] = useState("");
   useEffect(() => {
@@ -66,16 +66,16 @@ export default function EmojiJumper({
 
   return (
     <div className={"g-container fall " + className}>
-      <div
-        className="g-emoji"
-        style={{
-          // @ts-ignore
-          "--emoji": `"${emoji}"`,
-        }}
-      >
-        <div className="g-foo"></div>
-        <div className="g-bar"></div>
-        <div className="g-baz"></div>
+      <div className="g-emoji">
+        <div className="g-foo-a">{emoji}</div>
+        <div className="g-foo">{emoji}</div>
+        <div className="g-foo-b">{emoji}</div>
+        <div className="g-bar-a">{emoji}</div>
+        <div className="g-bar">{emoji}</div>
+        <div className="g-bar-b">{emoji}</div>
+        <div className="g-baz-a">{emoji}</div>
+        <div className="g-baz">{emoji}</div>
+        <div className="g-baz-b">{emoji}</div>
       </div>
     </div>
   );

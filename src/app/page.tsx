@@ -179,25 +179,23 @@ export default function Home() {
               一块小板子
             </h1>
             <div>
-              计算机专业大二在读 (全栈开发)
-              <br />
-              <div className="flex justify-evenly p-4">
+              <div className="flex justify-between">
+                计算机专业大二在读 (全栈开发)
                 <EmojiJumper emojiList={["🤣", "🥲", "😊", "😇", "🙂"]} />
-                <EmojiJumper
-                  className="hidden sm:block"
-                  emojiList={["💻", "📱", "📺", "🎙️", "🎵"]}
-                />
-                <EmojiJumper
-                  className="hidden sm:block"
-                  emojiList={["🐵", "🐶", "🐱", "🐭", "🐠"]}
-                />
-                <EmojiJumper emojiList={["🍿", "🍱", "🍙", "🍰", "🍭"]} />
               </div>
               <br />
               下面是我的能力👇
               {ability.map((item) => (
                 <div key={item.name} className="flex flex-col gap-2">
-                  <h2 className="text-xl font-medium">{item.name}</h2>
+                  <div className="flex flex-row justify-between">
+                    <h2 className="text-xl font-medium">{item.name}</h2>
+                    <EmojiJumper
+                      className="hidden sm:block"
+                      emojiList={item.children.map((v) => (
+                        <i key={v.name} className={v.icon} />
+                      ))}
+                    />
+                  </div>
                   <p>{item.description}</p>
                   <div className="flex flex-row flex-wrap gap-2">
                     {item.children.map((child) => (
@@ -226,7 +224,7 @@ export default function Home() {
                 <Link
                   href={item.url}
                   key={item.name}
-                  className="link link-neutral link-hover flex flex-row items-center gap-2"
+                  className="link link-primary link-hover flex flex-row items-center gap-2"
                 >
                   <i className="i-tabler-link"></i>
                   <span>
@@ -245,7 +243,7 @@ export default function Home() {
                 <Link
                   href={item.url}
                   key={item.name}
-                  className="link link-neutral link-hover flex flex-row items-center gap-2"
+                  className="link link-primary link-hover flex flex-row items-center gap-2"
                 >
                   <i className="i-tabler-link"></i>
                   <span>

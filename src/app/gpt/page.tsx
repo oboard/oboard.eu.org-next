@@ -134,11 +134,11 @@ export default function Chat() {
         const reader = res.body?.getReader();
         if (reader == null || reader == undefined) return;
         let data = "";
+        robot_msg.time = new Date().getTime();
         function processResult(result: any): any {
-          data += new TextDecoder().decode(result.value);
+          data += new TextDecoder().decode(result.value, { stream: true });
           console.log(data);
           robot_msg.content = data + "...";
-          robot_msg.time = new Date().getTime();
           setMessages(
             [...messages, robot_msg, msg]
               .filter(
@@ -152,7 +152,7 @@ export default function Chat() {
 
           if (result.done) {
             robot_msg.content = data;
-            robot_msg.time = new Date().getTime();
+            // robot_msg.time = new Date().getTime();
             robot_msg.status = MessageStatus.Sent;
             // 发送成功
             setMessages(
@@ -352,9 +352,9 @@ export default function Chat() {
                       // 图片可以点击放大
                       components={{
                         img: ({ node, ...props }) => (
-                          <img
-                            className="min-w-8 min-h-8 w-full my-2 rounded hover:shadow-xl cursor-pointer transition-all scale-100 hover:scale-110 hover:rounded-xl"
-                            src={props.src}
+                          // 换成图片图标
+                          <i
+                            className="i-tabler-photo"
                             onClick={() => {
                               if (typeof window !== "undefined") {
                                 window.open(props.src);

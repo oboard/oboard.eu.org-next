@@ -1,8 +1,8 @@
 import { JSDOM } from "jsdom";
 import Image from "next/image";
 import ShareLinkBox from "./shareLinkBox";
-import DownloadButton from "../../../../../../components/downloadButton";
-import Copyer from "@/components/copyer";
+import DownloadButton from "../../../../../../components/DownloadButton";
+import Copyer from "@/components/Copyer";
 
 async function getPosts(link: string) {
   if(decodeURIComponent(link).indexOf('://')<0) return undefined;

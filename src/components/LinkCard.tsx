@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import NightToggle from "./NightToggle";
 
 const routes = [
   {
@@ -37,6 +38,7 @@ const paths = routes.map((route) => route.path);
 export default function LinkCard() {
   const router = useRouter();
   const pathname = usePathname();
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     // 检查颜色模式
@@ -45,8 +47,10 @@ export default function LinkCard() {
       // 使用daisyUI
       const html = document.querySelector("html");
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setIsDark(true);
         html?.setAttribute("data-theme", "night");
       } else {
+        setIsDark(false);
         html?.setAttribute("data-theme", "winter");
       }
     };
@@ -63,16 +67,34 @@ export default function LinkCard() {
 
   return (
     <>
+      <div className="fixed right-4 top-10 z-100">
+        <NightToggle
+          value={isDark}
+          onChange={(e) => {
+            console.log(e)
+            const html = document.querySelector("html");
+            setIsDark(e.target.checked);
+            if (e.target.checked) {
+              html?.setAttribute("data-theme", "night");
+            } else {
+              html?.setAttribute("data-theme", "winter");
+            }
+          }}
+        />
+      </div>
       <ul className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row bg-base-200 gap-1 px-1 sm:px-2">
         {routes.map((route) => (
-          <li key={route.path} className="flex-1 m-auto h-full py-1 sm:py-2">
+          <li
+            key={route.path}
+            className="flex-1 m-auto h-full py-1 sm:py-2 hoverable"
+          >
             <Link
               className={`transition-all active:scale-90 hover:text-primary rounded-full flex flex-col sm:flex-row justify-center items-center ${
                 pathname === route.path ? "text-primary" : ""
               }`}
               href={route.path}
             >
-              <i className={route.icon + ' text-xl'}></i>
+              <i className={route.icon + " text-xl"}></i>
               <div>{route.name}</div>
             </Link>
           </li>
@@ -99,15 +121,15 @@ export default function LinkCard() {
         </li> */}
       </ul>
 
-      <ul className="hidden md:flex fixed top-10 group items-center ring-1 ring-zinc-900/5 dark:ring-zinc-100/10 rounded-full bg-gradient-to-b from-zinc-50/70 to-white/70 dark:from-zinc-900/70 dark:to-zinc-800/70 backdrop-blur backdrop-saturate-200 shadow-lg shadow-zinc-800/5">
-        <div
+      <ul className="hidden md:flex z-100 fixed top-10 group items-center ring-1 ring-base-100 bg-base-100 bg-opacity-10 rounded-full shadow-lg">
+        {/* <div
           className="pointer-events-none absolute -inset-px rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-primary/[0.12]"
           style={{
             background:
               "radial-gradient(99.4481px at 220px 8px, primary 0%, transparent 65%)",
           }}
           aria-hidden="true"
-        ></div>
+        ></div> */}
         <div className="flex flex-row items-center gap-2 transition-width">
           {/* {pathname} */}
           {pathname == "/" ? (

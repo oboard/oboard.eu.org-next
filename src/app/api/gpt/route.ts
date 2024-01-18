@@ -22,8 +22,16 @@ export async function GET(request: Request, response: Response) {
         body: JSON.stringify(payload),
     });
     // 替换binjie为ChatGPT
-    const text = (await res.text()).replace(/binjie/g, 'ChatGPT');
-    return new Response(text, {
+    // const text = (await res.text()).replace(/binjie/g, 'ChatGPT');
+    // return new Response(, {
+    //     headers: {
+    //         "Access-Control-Allow-Origin": "*",
+    //     },
+    //     status: 200,
+    // });
+
+    // 以流的形式返回
+    return new Response(res.body, {
         headers: {
             "Access-Control-Allow-Origin": "*",
         },

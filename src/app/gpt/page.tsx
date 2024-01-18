@@ -116,7 +116,7 @@ export default function Chat() {
     let robot_msg: MessageInfo = {
       id: genUuid(),
       userId: "robot",
-      content: '...',
+      content: "...",
       status: MessageStatus.Sending,
       time: new Date().getTime(),
     };
@@ -129,22 +129,53 @@ export default function Chat() {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => {
-      res.text().then((data) => {
-        robot_msg.content = data;
-        robot_msg.time = new Date().getTime();
-        robot_msg.status = MessageStatus.Sent;
-        // 发送成功
-        setMessages(
-          [...messages, robot_msg, msg].filter(
-            (item, index, array) =>
-              array.findIndex((item2) => item.id === item2.id) === index
-          ).sort((a, b) => {
-            return (a.time ?? 0) - (b.time ?? 0);
-          })
-        );
+    })
+      .then((res) => {
+        const reader = res.body?.getReader();
+        if (reader == null || reader == undefined) return;
+        let data = "";
+        function processResult(result: any): any {
+          data += new TextDecoder().decode(result.value);
+          console.log(data);
+          robot_msg.content = data + '...';
+          robot_msg.time = new Date().getTime();
+          setMessages(
+            [...messages, robot_msg, msg]
+              .filter(
+                (item, index, array) =>
+                  array.findIndex((item2) => item.id === item2.id) === index
+              )
+              .sort((a, b) => {
+                return (a.time ?? 0) - (b.time ?? 0);
+              })
+          );
+
+          if (result.done) {
+            robot_msg.content = data;
+            robot_msg.time = new Date().getTime();
+            robot_msg.status = MessageStatus.Sent;
+            // 发送成功
+            setMessages(
+              [...messages, robot_msg, msg]
+                .filter(
+                  (item, index, array) =>
+                    array.findIndex((item2) => item.id === item2.id) === index
+                )
+                .sort((a, b) => {
+                  return (a.time ?? 0) - (b.time ?? 0);
+                })
+            );
+            return;
+          }
+          return reader!.read().then(processResult);
+        }
+        return reader.read().then((result) => {
+          return reader.read().then(processResult);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
-    });
     // 清空输入框
     setInput("");
 
@@ -216,7 +247,7 @@ export default function Chat() {
     //   "chat-bubble-error",
     // ];
     // let color = colors[seed % 7];
-    return uuid == 'robot' ? "chat-bubble-warning" :"chat-bubble-primary";
+    return uuid == "robot" ? "chat-bubble-warning" : "chat-bubble-primary";
   }
 
   // 通过时间戳获取时间，如果时间不是很久，就显示多久之前，否则显示具体时间

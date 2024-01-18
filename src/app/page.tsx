@@ -169,10 +169,10 @@ const friendLinks = [
 
 export default function Home() {
   return (
-    <article className={"text-base prose py-24 px-4 md:max-w-5xl"}>
+    <article className={"py-24 px-4 md:max-w-5xl"}>
       <div className="flex flex-col md:flex-row">
         {/* 左侧 */}
-        <div className="flex flex-row items-start gap-4">
+        <div className="flex flex-row items-start gap-4 text-base prose ">
           <InterestingAvatar />
           <div>
             <h1 className="w-fit text-3xl font-medium text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
@@ -183,8 +183,14 @@ export default function Home() {
               <br />
               <div className="flex justify-evenly p-4">
                 <EmojiJumper emojiList={["🤣", "🥲", "😊", "😇", "🙂"]} />
-                <EmojiJumper emojiList={["💻", "📱", "📺", "🎙️", "🎵"]} />
-                <EmojiJumper emojiList={["🐵", "🐶", "🐱", "🐭", "🐠"]} />
+                <EmojiJumper
+                  className="hidden sm:block"
+                  emojiList={["💻", "📱", "📺", "🎙️", "🎵"]}
+                />
+                <EmojiJumper
+                  className="hidden sm:block"
+                  emojiList={["🐵", "🐶", "🐱", "🐭", "🐠"]}
+                />
                 <EmojiJumper emojiList={["🍿", "🍱", "🍙", "🍰", "🍭"]} />
               </div>
               <br />
@@ -211,7 +217,7 @@ export default function Home() {
         </div>
 
         {/* 右侧 */}
-        <div className="flex flex-col gap-4 min-w-12  justify-start">
+        <div className="flex flex-col gap-4 min-w-12 justify-start p-8 lg:p-0">
           {/* 友谊链接 */}
           <div className="flex flex-col gap-2">
             <h2 className="text-xl font-medium">友谊链接</h2>
@@ -220,7 +226,7 @@ export default function Home() {
                 <Link
                   href={item.url}
                   key={item.name}
-                  className="link link-primary link-hover flex flex-row items-center gap-2"
+                  className="link link-neutral link-hover flex flex-row items-center gap-2"
                 >
                   <i className="i-tabler-link"></i>
                   <span>
@@ -232,14 +238,14 @@ export default function Home() {
           </div>
 
           {/* 资源导航 */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 line-height-1.5rem">
             <h2 className="text-xl font-medium">资源导航</h2>
             <div className="flex flex-col gap-2">
               {links.map((item) => (
                 <Link
                   href={item.url}
                   key={item.name}
-                  className="flex flex-row items-center gap-2"
+                  className="link link-neutral link-hover flex flex-row items-center gap-2"
                 >
                   <i className="i-tabler-link"></i>
                   <span>

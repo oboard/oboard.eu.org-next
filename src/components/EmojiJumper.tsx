@@ -22,7 +22,13 @@ function generateRandomEmoji(emojiList: string[]) {
 
   return emoji;
 }
-export default function EmojiJumper({ emojiList }: { emojiList: string[] }) {
+export default function EmojiJumper({
+  className,
+  emojiList,
+}: {
+  className?: string;
+  emojiList: string[];
+}) {
   const [emoji, setEmoji] = useState("");
   useEffect(() => {
     // const emoji = document.querySelectorAll(".g-emoji")[0] as HTMLElement;
@@ -34,13 +40,12 @@ export default function EmojiJumper({ emojiList }: { emojiList: string[] }) {
     let diff = 0;
 
     function aniFun() {
+      const element = document.querySelectorAll(".g-emoji")[0];
+      if (typeof element === "undefined") return;
       curTranslate =
         Number(
           window
-            .getComputedStyle(
-              document.querySelectorAll(".g-emoji")[0] as HTMLElement,
-              null
-            )
+            .getComputedStyle(element as HTMLElement, null)
             .getPropertyValue("translate")
             .split(" ")[1]
             .slice(0, -2)
@@ -60,7 +65,7 @@ export default function EmojiJumper({ emojiList }: { emojiList: string[] }) {
   }, []);
 
   return (
-    <div className="g-container fall">
+    <div className={"g-container fall " + className}>
       <div
         className="g-emoji"
         style={{

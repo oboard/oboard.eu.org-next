@@ -63,12 +63,12 @@ export default function LinkCard() {
 
   return (
     <>
-      <ul className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row bg-base-200">
+      <ul className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row bg-base-200 gap-1 px-1 sm:px-2">
         {routes.map((route) => (
-          <li key={route.path} className="flex-1 m-auto">
+          <li key={route.path} className="flex-1 m-auto h-full py-1 sm:py-2">
             <Link
-              className={`transition-all mx-1 active:scale-90 hover:bg-primary hover:text-primary-content rounded flex flex-col sm:flex-row justify-center items-center ${
-                pathname === route.path ? "bg-primary text-primary-content" : ""
+              className={`transition-all active:scale-90 hover:text-primary rounded-full flex flex-col sm:flex-row justify-center items-center ${
+                pathname === route.path ? "text-primary" : ""
               }`}
               href={route.path}
             >

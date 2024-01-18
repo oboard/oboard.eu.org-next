@@ -3,7 +3,7 @@
     margin: 0;
     width: 100px;
     height: 100px;
-    transform: translate(0, -150px);
+    transform: translate(0, -100px);
     transform-style: preserve-3d;
     z-index: 1;
     line-height: normal;
@@ -137,7 +137,7 @@
 @keyframes fall {
     0% {
         scale: 1.25 0.75;
-        translate: 0 150px;
+        translate: 0 100px;
     }
 
     25% {

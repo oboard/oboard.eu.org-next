@@ -137,7 +137,7 @@ export default function Chat() {
         function processResult(result: any): any {
           data += new TextDecoder().decode(result.value);
           console.log(data);
-          robot_msg.content = data + '...';
+          robot_msg.content = data + "...";
           robot_msg.time = new Date().getTime();
           setMessages(
             [...messages, robot_msg, msg]
@@ -169,9 +169,7 @@ export default function Chat() {
           }
           return reader!.read().then(processResult);
         }
-        return reader.read().then((result) => {
-          return reader.read().then(processResult);
-        });
+        return reader.read().then(processResult);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

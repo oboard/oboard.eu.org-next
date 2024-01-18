@@ -4,6 +4,7 @@ import style from "./styles.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import InterestingAvatar from "@/components/InterestingAvatar";
+import EmojiJumper from "@/components/EmojiJumper";
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   return (
@@ -153,13 +154,17 @@ const friendLinks = [
     url: "https://www.xrzyun.top",
   },
   {
+    name: "Opacity",
+    url: "https://opacity.ink",
+  },
+  {
     name: "XXS",
     url: "https://xxs2.cn",
   },
   {
     name: "棍之勇者",
     url: "https://lsyxiaopang.github.io",
-  }
+  },
 ];
 
 export default function Home() {
@@ -175,6 +180,13 @@ export default function Home() {
             </h1>
             <div>
               计算机专业大二在读 (全栈开发)
+              <br />
+              <div className="flex justify-evenly p-4">
+                <EmojiJumper emojiList={["🤣", "🥲", "😊", "😇", "🙂"]} />
+                <EmojiJumper emojiList={["💻", "📱", "📺", "🎙️", "🎵"]} />
+                <EmojiJumper emojiList={["🐵", "🐶", "🐱", "🐭", "🐠"]} />
+                <EmojiJumper emojiList={["🍿", "🍱", "🍙", "🍰", "🍭"]} />
+              </div>
               <br />
               下面是我的能力👇
               {ability.map((item) => (
@@ -208,7 +220,7 @@ export default function Home() {
                 <Link
                   href={item.url}
                   key={item.name}
-                  className="flex flex-row items-center gap-2"
+                  className="link link-primary link-hover flex flex-row items-center gap-2"
                 >
                   <i className="i-tabler-link"></i>
                   <span>

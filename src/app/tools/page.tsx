@@ -32,30 +32,30 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
 };
 
 const toolbox = [
-  {
-    name: "优学院题库导出助手",
-    desc: "导出优学院题库到 Word",
-    url: "https://uexport.oboard.eu.org/",
-    img: "/preview/uexport.jpg",
-    tag: ["优学院", "题库"],
-    avalible: true,
-  },
-  {
-    name: "优学院学习记录转换助手",
-    desc: "转换学习目录为failureRecord",
-    url: "tools/ulearning/fakeRecord",
-    img: "/preview/fakeRecord.jpg",
-    tag: ["优学院", "学习记录", "转换"],
-    avalible: true,
-  },
-  {
-    name: "优学院试卷导出助手",
-    desc: "导出考试试题",
-    url: "tools/ulearning/exam",
-    img: "/preview/ulearningExam.jpg",
-    tag: ["优学院", "转换"],
-    avalible: true,
-  },
+  // {
+  //   name: "优学院题库导出助手",
+  //   desc: "导出优学院题库到 Word",
+  //   url: "https://uexport.oboard.eu.org/",
+  //   img: "/preview/uexport.jpg",
+  //   tag: ["优学院", "题库"],
+  //   avalible: true,
+  // },
+  // {
+  //   name: "优学院学习记录转换助手",
+  //   desc: "转换学习目录为failureRecord",
+  //   url: "tools/ulearning/fakeRecord",
+  //   img: "/preview/fakeRecord.jpg",
+  //   tag: ["优学院", "学习记录", "转换"],
+  //   avalible: true,
+  // },
+  // {
+  //   name: "优学院试卷导出助手",
+  //   desc: "导出考试试题",
+  //   url: "tools/ulearning/exam",
+  //   img: "/preview/ulearningExam.jpg",
+  //   tag: ["优学院", "转换"],
+  //   avalible: true,
+  // },
   {
 
     name: "微信公众号文章解析助手",

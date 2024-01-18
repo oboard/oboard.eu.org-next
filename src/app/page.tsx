@@ -173,7 +173,7 @@ export default function Home() {
             <h1 className="w-fit text-3xl font-medium text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
               一块小板子
             </h1>
-            <p>
+            <div>
               计算机专业大二在读 (全栈开发)
               <br />
               下面是我的能力👇
@@ -194,7 +194,7 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-            </p>
+            </div>
           </div>
         </div>
 

@@ -30,7 +30,7 @@
     "@unocss/preset-icons": "^0.55.7",
     "@unocss/preset-typography": "^0.55.7",
     "@unocss/transformer-attributify-jsx": "^0.57.1",
-    "daisyui": "^3.7.3",
+    "daisyui": "^4.6.0",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "postcss": "8.4.28",

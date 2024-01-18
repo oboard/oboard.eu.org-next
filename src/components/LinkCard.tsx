@@ -16,6 +16,11 @@ const routes = [
     icon: "i-tabler-message",
   },
   {
+    name: "GPT",
+    path: "/gpt",
+    icon: "i-tabler-robot",
+  },
+  {
     name: "工具箱",
     path: "/tools",
     icon: "i-tabler-tools",

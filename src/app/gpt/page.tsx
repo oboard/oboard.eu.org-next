@@ -134,9 +134,10 @@ export default function Chat() {
         const reader = res.body?.getReader();
         if (reader == null || reader == undefined) return;
         let data = "";
+        const decoder = new TextDecoder();
         robot_msg.time = new Date().getTime();
         function processResult(result: any): any {
-          data += new TextDecoder().decode(result.value, { stream: true });
+          data += decoder.decode(result.value, { stream: true });
           console.log(data);
           robot_msg.content = data + "...";
           setMessages(

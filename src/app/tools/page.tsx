@@ -73,14 +73,14 @@ const toolbox = [
     tag: ["小红书", "文章解析"],
     avalible: true,
   },
-  {
-    name: "青年大学习参学率报告生成器",
-    desc: "生成青年大学习参学率报告",
-    url: "https://young.oboard.eu.org/",
-    img: "/preview/young_maker.png",
-    tag: ["青年大学习"],
-    avalible: true,
-  }
+  // {
+  //   name: "青年大学习参学率报告生成器",
+  //   desc: "生成青年大学习参学率报告",
+  //   url: "https://young.oboard.eu.org/",
+  //   img: "/preview/young_maker.png",
+  //   tag: ["青年大学习"],
+  //   avalible: true,
+  // }
 ];
 
 export default function Home() {

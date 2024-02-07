@@ -62,7 +62,7 @@ export default function EmojiJumper({
     }
 
     window.requestAnimationFrame(aniFun);
-  }, []);
+  }, [emojiList]);
 
   return (
     <div className={"g-container fall " + className}>

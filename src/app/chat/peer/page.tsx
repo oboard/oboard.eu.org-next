@@ -62,7 +62,13 @@ function Chat() {
 
   // 检查peer是否连接
   function checkPeer() {
-    if (peer == undefined || peer == null || myIdRef.current == undefined || myIdRef.current == null) {
+    if (
+      peer == undefined ||
+      peer == null ||
+      myIdRef.current == undefined ||
+      myIdRef.current == null ||
+      myIdRef.current === ""
+    ) {
       init();
       return false;
     }
@@ -71,7 +77,8 @@ function Chat() {
 
   // 设置定时拉去信息
   useEffect(() => {
-    let first = true;
+    checkPeer();
+    checkUserIdAvalible();
     let timer = setInterval(() => {
       console.log(`userId: ${userId}`);
       checkPeer();
@@ -104,6 +111,7 @@ function Chat() {
         setMyId(id);
         myIdRef.current = id;
         setPeer(peer);
+        console.log("My ID: " + id);
       });
       peer.on("connection", (conn) => {
         conn.on("data", (data: any) => {

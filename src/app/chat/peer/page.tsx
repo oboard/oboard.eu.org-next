@@ -60,11 +60,21 @@ function Chat() {
     return true;
   }
 
+  // 检查peer是否连接
+  function checkPeer() {
+    if (peer == undefined || peer == null || myIdRef.current == undefined || myIdRef.current == null) {
+      init();
+      return false;
+    }
+    return true;
+  }
+
   // 设置定时拉去信息
   useEffect(() => {
     let first = true;
     let timer = setInterval(() => {
       console.log(`userId: ${userId}`);
+      checkPeer();
       checkUserIdAvalible();
 
       try {

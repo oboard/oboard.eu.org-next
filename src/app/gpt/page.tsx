@@ -2,12 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import {Key, useEffect, useRef, useState} from "react";
+import { Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
-import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
-import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import {MessageInfo, MessageStatus} from "@/models/chat/message";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { MessageInfo, MessageStatus } from "@/models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
@@ -50,7 +50,8 @@ const genUuid = () => {
 };
 
 // 上面是api的代码，下面是页面的代码
-export default function Chat() {
+export default function GPTChat() {
+  const isFirst = useRef(true);
   // 使用daisyUI和tailwindcss
   const [messages, setMessages] = useLocalStorage("gpt_messages", []) as [
     MessageInfo[],
@@ -220,7 +221,12 @@ export default function Chat() {
       });
     }
 
-    toBottom();
+    if (isFirst.current) {
+      toBottom(true);
+      isFirst.current = false;
+    } else {
+      toBottom();
+    }
 
     return () => {
       chatbox?.removeEventListener("scroll", (e) => {});

@@ -73,6 +73,14 @@ const toolbox = [
     tag: ["小红书", "文章解析"],
     avalible: true,
   },
+  {
+    name: "P2P聊天",
+    desc: "通过PeerJS实现P2P聊天",
+    url: "chat/peer",
+    img: "/preview/peer.jpg",
+    tag: ["P2P", "聊天"],
+    avalible: true,
+  },
   // {
   //   name: "青年大学习参学率报告生成器",
   //   desc: "生成青年大学习参学率报告",

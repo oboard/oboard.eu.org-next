@@ -9,9 +9,10 @@ interface Colors {
 const Tag: React.FC<PropsWithChildren> = (props) => {
 
   const colors: Colors = {
-    '优学院': 'bg-red',
-    '题库': 'bg-blue-500',
-    '学习记录': 'bg-yellow-500',
+    '图床': 'bg-red',
+    'P2P': 'bg-blue',
+    '聊天': 'bg-blue-500',
+    '爬虫': 'bg-yellow-500',
     '转换': 'bg-indigo-500',
     '微信公众号': 'bg-green-500',
     '文章解析': 'bg-purple-500',
@@ -81,6 +82,22 @@ const toolbox = [
     tag: ["P2P", "聊天"],
     avalible: true,
   },
+  {
+    name: "优图床",
+    desc: "使用ulearning的obs储存图片",
+    url: "https://pan.oboard.eu.org/pic ",
+    img: "/preview/upic.jpg",
+    tag: ["图床"],
+    avalible: true,
+  },
+  {
+    name: "站点扫描工具",
+    desc: "根据网站链接发生链式反应，形成sitemap",
+    url: "https://site.oboard.eu.org/ ",
+    img: "/preview/site.jpg",
+    tag: ["爬虫"],
+    avalible: true,
+  },
   // {
   //   name: "青年大学习参学率报告生成器",
   //   desc: "生成青年大学习参学率报告",
@@ -96,7 +113,7 @@ export default function Home() {
     <article className={"flex flex-wrap justify-center items-center gap-4 py-24 px-4 w-full"}>
       {toolbox.map((item) => (
         <Link href={item.url} className="no-underline w-full sm:w-96 flex flex-row items-center justify-center" key={item.name}>
-          <div className="card relative w-full h-80 bg-base-100 shadow-xl hover:scale-102 active:scale-90 ease-out duration-300 transition-all">
+          <div className="card relative w-full h-80 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all">
           <figure className="h-40">
             <Image
               src={item.img}

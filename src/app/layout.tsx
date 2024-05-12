@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className="flex flex-col justify-center items-center">
-        <MouseTracker />
+        {/* <MouseTracker /> */}
         <Toaster />
         {children}
         <LinkCard />

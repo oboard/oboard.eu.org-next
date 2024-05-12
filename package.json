@@ -16,6 +16,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
+    "tailwindcss": "^3.4.3",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -32,7 +33,7 @@
     "@unocss/preset-icons": "^0.55.7",
     "@unocss/preset-typography": "^0.55.7",
     "@unocss/transformer-attributify-jsx": "^0.57.7",
-    "daisyui": "^4.6.2",
+    "daisyui": "^4.11.1",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "postcss": "8.4.28",

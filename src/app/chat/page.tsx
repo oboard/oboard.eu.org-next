@@ -2,12 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import {Key, useEffect, useRef, useState} from "react";
+import { type Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
-import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
-import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import {MessageInfo, MessageStatus} from "../../models/chat/message";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { type MessageInfo, MessageStatus } from "../../models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
@@ -34,30 +34,30 @@ const CodeBlock = ({
 
 const upload = async (file: File) => {
   // Uint8Array
-  let arrayBuffer = await file.arrayBuffer();
+  const arrayBuffer = await file.arrayBuffer();
 
-  let res = await fetch("/api/chat/file", {
+  const res = await fetch("/api/chat/file", {
     method: "POST",
     body: arrayBuffer,
   });
-  let data = await res.json();
+  const data = await res.json();
   return data.url;
 };
 
 // 生成uuid
 const genUuid = () => {
-  let s: any[] = [];
-  let hexDigits = "0123456789abcdef";
+  const s: any[] = [];
+  const hexDigits = "0123456789abcdef";
   for (let i = 0; i < 36; i++) {
-    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
   }
   // bits 12-15 of the time_hi_and_version field to 0010
   s[14] = "4";
   // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+  s[19] = hexDigits.substring((s[19] & 0x3) | 0x8, 1);
   // bits 6-7 of the clock_seq_hi_and_reserved to 01
   s[8] = s[13] = s[18] = s[23] = "-";
-  let uuid = s.join("");
+  const uuid = s.join("");
   return uuid;
 };
 
@@ -88,7 +88,7 @@ export default function Chat() {
   // 检查userId是否可用
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function checkUserIdAvalible() {
-    if (userId == undefined || userId == null || userId.length < 5) {
+    if (userId === undefined || userId == null || userId.length < 5) {
       setUserId(genUuid());
       // 刷新页面
       if (typeof window !== "undefined") {
@@ -102,7 +102,7 @@ export default function Chat() {
   // 设置定时拉去信息
   useEffect(() => {
     let first = true;
-    let timer = setInterval(() => {
+    const timer = setInterval(() => {
       console.log(`userId: ${userId}`);
       checkUserIdAvalible();
 
@@ -216,11 +216,11 @@ export default function Chat() {
 
       const isImage = file.type.startsWith("image");
 
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.readAsArrayBuffer(file);
       reader.onload = () => {
         upload(file).then((url) => {
-          let msg: MessageInfo = {
+          const msg: MessageInfo = {
             id: genUuid(),
             userId: userId,
             content: isImage
@@ -337,7 +337,7 @@ export default function Chat() {
     if (uuid == undefined || uuid == null || uuid.length < 5) {
       return "";
     }
-    let seed = parseInt(uuid.replace(/-/g, "").slice(0, 8), 16);
+    const seed = Number.parseInt(uuid.replace(/-/g, "").slice(0, 8), 16);
     const colors = [
       "chat-bubble-primary",
       "chat-bubble-secondary",
@@ -353,21 +353,22 @@ export default function Chat() {
 
   // 通过时间戳获取时间，如果时间不是很久，就显示多久之前，否则显示具体时间
   function getTime(time: number | undefined) {
-    if (time == undefined) return "发送中";
-    let now = new Date().getTime();
-    let diff = now - time;
+    if (time === undefined) return "发送中";
+    const now = new Date().getTime();
+    const diff = now - time;
     if (diff < 1000 * 60) {
       // return `${Math.floor(diff / 1000)}秒前`;
       return "刚刚";
-    } else if (diff < 1000 * 60 * 60) {
+    }
+    if (diff < 1000 * 60 * 60) {
       return `${Math.floor(diff / (1000 * 60))}分钟前`;
-    } else if (diff < 1000 * 60 * 60 * 24) {
+    }
+    if (diff < 1000 * 60 * 60 * 24) {
       return `${Math.floor(diff / (1000 * 60 * 60))}小时前`;
       // } else if (diff < 1000 * 60 * 60 * 24 * 30) {
       //   return `${Math.floor(diff / (1000 * 60 * 60 * 24))}天前`;
-    } else {
-      return new Date(time).toLocaleString();
     }
+    return new Date(time).toLocaleString();
   }
 
   return (

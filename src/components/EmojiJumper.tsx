@@ -18,7 +18,7 @@ function generateRandomEmoji(emojiList: any[]) {
   //   var emoji = String.fromCodePoint(randomCode);
 
   //   const emojiList = ["🤣", "🥲", "😊", "😇", "🙂"];
-  var emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+  const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
 
   return emoji;
 }
@@ -45,9 +45,9 @@ export default function EmojiJumper({
       curTranslate =
         Number(
           window
-            .getComputedStyle(element as HTMLElement, null)
-            .getPropertyValue("translate")
-            .split(" ")[1]
+            ?.getComputedStyle(element as HTMLElement, null)
+            ?.getPropertyValue("translate")
+            ?.split(" ")[1]
             .slice(0, -2)
         ) - 0;
 
@@ -65,7 +65,7 @@ export default function EmojiJumper({
   }, [emojiList]);
 
   return (
-    <div className={"g-container fall " + className}>
+    <div className={`g-container fall ${className}`}>
       <div className="g-emoji">
         <div className="g-foo-a">{emoji}</div>
         <div className="g-foo">{emoji}</div>

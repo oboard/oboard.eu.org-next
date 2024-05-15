@@ -13,8 +13,8 @@ function align(
 ) {
   let offset = 0;
   let rest = 0;
-  let i = 0,
-    j = 0;
+  let i = 0;
+  let j = 0;
   const mask = (1 << tWidth) - 1;
   while (i < input.length) {
     const char = input[i] - sOffset;
@@ -38,13 +38,16 @@ export function toUint8Array(source: string) {
 }
 
 export function encode(input: string | Uint8Array) {
+  let inputArray: Uint8Array;
   if (typeof input === "string") {
-    input = toUint8Array(input);
+    inputArray = toUint8Array(input);
+  } else {
+    inputArray = input;
   }
 
-  const output = new Uint16Array(Math.ceil((input.length * 4) / 7) + 1);
-  align(input, output, 8, 14, 0, 0x4e00);
-  output[output.length - 1] = (input.length % 7) + 0x3d00;
+  const output = new Uint16Array(Math.ceil((inputArray.length * 4) / 7) + 1);
+  align(inputArray, output, 8, 14, 0, 0x4e00);
+  output[output.length - 1] = (inputArray.length % 7) + 0x3d00;
   return output;
 }
 
@@ -61,14 +64,17 @@ export function toSource(input: Uint16Array): string {
 }
 
 export function decode(input: string | Uint16Array) {
+  let inputArray: Uint16Array;
   if (typeof input === "string") {
-    input = toUint16Array(input);
+    inputArray = toUint16Array(input);
+  } else {
+    inputArray = input;
   }
 
-  const length = input.length - 1;
-  const residue = input[length] - 0x3d00 || 7;
+  const length = inputArray.length - 1;
+  const residue = inputArray[length] - 0x3d00 || 7;
   const output = new Uint8Array(Math.floor((length - 1) / 4) * 7 + residue);
-  align(input, output, 14, 8, 0x4e00, 0);
+  align(inputArray, output, 14, 8, 0x4e00, 0);
   return output;
 }
 
@@ -80,8 +86,13 @@ export default function Base16384() {
     <div>
       <h1 className="mt-16">Base16384</h1>
       <textarea value={input} onChange={(e) => setInput(e.target.value)} />
-      <button onClick={() => setOutput(toSource(encode(input)))}>Encode</button>
-      <button onClick={() => setOutput(decode(output).toString())}>
+      <button type="button" onClick={() => setOutput(toSource(encode(input)))}>
+        Encode
+      </button>
+      <button
+        type="button"
+        onClick={() => setOutput(decode(output).toString())}
+      >
         Decode
       </button>
       <textarea value={output} readOnly />

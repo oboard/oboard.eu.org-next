@@ -1,8 +1,12 @@
-import React, {PropsWithChildren} from "react";
+import type React from "react";
+import { type PropsWithChildren } from "react";
 // import clsx from 'clsx'
 import Link from "next/link";
 import InterestingAvatar from "@/components/InterestingAvatar";
-import EmojiJumper from "@/components/EmojiJumper";
+import FeedItem, {
+  FeedBodyInfo,
+  FeedItemInfo,
+} from "@/components/feed/FeedItem";
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   return (
@@ -160,18 +164,33 @@ const friendLinks = [
     url: "https://xxs2.cn",
   },
   {
-    name: "棍之勇者",
+    name: "Songyuli",
     url: "https://lsyxiaopang.github.io",
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const blogJson = (await (
+    await fetch("https://oboard.xlog.app/feed?format=json")
+  ).json()) as FeedBodyInfo;
   return (
     <article className={"py-24 px-4 md:max-w-5xl"}>
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col">
         {/* 左侧 */}
         <div className="flex flex-row items-start gap-4 text-base prose ">
           <InterestingAvatar />
+          {/* <EmojiJumper
+            emojiList={[
+              <div key={1} className="rounded-full overflow-clip">
+                <Image
+                  src="https://upload.jianshu.io/users/upload_avatars/8761709/3101d25e-1917-47dd-bdee-58bbda3352ac.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/300/format/webp"
+                  alt={"Head"}
+                  width={256}
+                  height={256}
+                />
+              </div>,
+            ]}
+          /> */}
           <div>
             <h1 className="w-fit text-3xl font-medium text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
               一块小板子
@@ -179,11 +198,11 @@ export default function Home() {
             <div>
               <div className="flex justify-between">
                 计算机专业大二在读 (全栈开发)
-                <EmojiJumper emojiList={["🤣", "🥲", "😊", "😇", "🙂"]} />
+                {/* <EmojiJumper emojiList={["🤣", "🥲", "😊", "😇", "🙂"]} /> */}
               </div>
-              <br />
-              下面是我的能力👇
-              {ability.map((item) => (
+              {/* {JSON.stringify(blogJson)} */}
+              {/* 下面是我的能力👇 */}
+              {/* {ability.map((item) => (
                 <div key={item.name} className="flex flex-col gap-2">
                   <div className="flex flex-row justify-between">
                     <h2 className="text-xl font-medium">{item.name}</h2>
@@ -201,19 +220,26 @@ export default function Home() {
                         key={child.name}
                         className="flex flex-row items-center gap-2"
                       >
-                        <i className={child.icon}></i>
+                        <i className={child.icon} />
                         <span>{child.name}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
 
-        {/* 右侧 */}
-        <div className="flex flex-col gap-4 min-w-12 justify-start p-8 lg:p-0">
+        {/* blog */}
+        <div className="w-full py-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          {blogJson.items.map((item) => (
+            <FeedItem key={item.id} item={item} />
+          ))}
+        </div>
+
+        {/* 底部 */}
+        <div className="flex flex-col gap-4 justify-start py-8">
           {/* 友谊链接 */}
           <div className="flex flex-col gap-2">
             <h2 className="text-xl font-medium">友谊链接</h2>
@@ -222,11 +248,12 @@ export default function Home() {
                 <Link
                   href={item.url}
                   key={item.name}
-                  className="link link-primary link-hover flex flex-row items-center gap-2"
+                  className="link link-primary link-hover flex flex-row items-center gap-1"
                 >
-                  <i className="i-tabler-link"></i>
+                  <i className="i-tabler-link" />
                   <span>
-                    {item.name} {item.url}
+                    {item.name}
+                    {/* {item.url} */}
                   </span>
                 </Link>
               ))}
@@ -241,11 +268,12 @@ export default function Home() {
                 <Link
                   href={item.url}
                   key={item.name}
-                  className="link link-primary link-hover flex flex-row items-center gap-2"
+                  className="link link-primary link-hover flex flex-row items-center gap-1"
                 >
-                  <i className="i-tabler-link"></i>
+                  <i className="i-tabler-link" />
                   <span>
-                    {item.name} {item.url}
+                    {item.name}
+                    {/* {item.url} */}
                   </span>
                 </Link>
               ))}
@@ -255,7 +283,7 @@ export default function Home() {
       </div>
 
       <p className="text-center text-gray-500 dark:text-gray-400">
-        © 2023 oboard. All Rights Reserved.
+        © 2024 oboard. All Rights Reserved.
       </p>
     </article>
   );

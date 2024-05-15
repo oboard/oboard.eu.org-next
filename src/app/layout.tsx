@@ -1,8 +1,10 @@
 import LinkCard from "@/components/LinkCard";
 import "./globals.css";
 
-import {Toaster} from "react-hot-toast";
-import MouseTracker from "@/components/MouseTracker";
+import { Toaster } from "react-hot-toast";
+
+import { motion } from "framer-motion";
+import Template from "./template";
 
 export const metadata = {
   title: "一块小板子",

@@ -33,11 +33,11 @@ function align(
   }
 }
 
-export function toUint8Array(source: string) {
+function toUint8Array(source: string) {
   return new TextEncoder().encode(source);
 }
 
-export function encode(input: string | Uint8Array) {
+function encode(input: string | Uint8Array) {
   let inputArray: Uint8Array;
   if (typeof input === "string") {
     inputArray = toUint8Array(input);
@@ -51,7 +51,7 @@ export function encode(input: string | Uint8Array) {
   return output;
 }
 
-export function toUint16Array(source: string) {
+function toUint16Array(source: string) {
   const input = new Uint16Array(source.length);
   for (let i = 0; i < source.length; i++) {
     input[i] = source.charCodeAt(i);
@@ -59,11 +59,11 @@ export function toUint16Array(source: string) {
   return input;
 }
 
-export function toSource(input: Uint16Array): string {
+function toSource(input: Uint16Array): string {
   return String.fromCharCode(...input);
 }
 
-export function decode(input: string | Uint16Array) {
+function decode(input: string | Uint16Array) {
   let inputArray: Uint16Array;
   if (typeof input === "string") {
     inputArray = toUint16Array(input);

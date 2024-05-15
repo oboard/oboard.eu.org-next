@@ -1,7 +1,6 @@
 @import "daisyui/dist/full.css";
 @unocss all;
 
-
 /* Track */
 ::-webkit-scrollbar-track {
     background: transparent;

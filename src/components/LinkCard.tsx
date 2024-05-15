@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import {usePathname, useRouter} from "next/navigation";
-import React, {useEffect, useState} from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import NightToggle from "./NightToggle";
 
 const routes = [
@@ -42,7 +42,7 @@ export default function LinkCard() {
 
   useEffect(() => {
     // 检查颜色模式
-    let checkColorScheme = () => {
+    const checkColorScheme = () => {
       // 根据系统主题切换浅色和深色模式
       // 使用daisyUI
       const html = document.querySelector("html");
@@ -71,7 +71,7 @@ export default function LinkCard() {
         <NightToggle
           value={isDark}
           onChange={(e) => {
-            console.log(e)
+            console.log(e);
             const html = document.querySelector("html");
             setIsDark(e.target.checked);
             if (e.target.checked) {
@@ -82,11 +82,13 @@ export default function LinkCard() {
           }}
         />
       </div>
-      <ul 
-      style={{
-        backgroundColor:"var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))"
-      }}
-      className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row backdrop-blur bg-opacity-50 gap-1 px-1 sm:px-2">
+      <ul
+        style={{
+          backgroundColor:
+            "var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))",
+        }}
+        className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row backdrop-blur bg-opacity-50 gap-1 px-1 sm:px-2"
+      >
         {routes.map((route) => (
           <li
             key={route.path}
@@ -125,7 +127,13 @@ export default function LinkCard() {
         </li> */}
       </ul>
 
-      <ul className="hidden md:flex z-100 fixed top-10 group items-center ring-1 ring-base-100 bg-base-100 bg-opacity-10 rounded-full shadow">
+      <ul
+        style={{
+          backgroundColor:
+            "var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))",
+        }}
+        className="hidden md:flex z-100 fixed top-10 group items-center backdrop-blur bg-opacity-50 ring-1 ring-base-100 rounded-full shadow"
+      >
         {/* <div
           className="pointer-events-none absolute -inset-px rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-primary/[0.12]"
           style={{

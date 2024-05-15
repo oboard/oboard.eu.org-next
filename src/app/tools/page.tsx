@@ -1,7 +1,9 @@
+"use client";
 import type React from "react";
 import type { PropsWithChildren } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface Colors {
   [key: string]: string;
@@ -12,6 +14,7 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
     图床: "bg-red",
     P2P: "bg-blue",
     聊天: "bg-blue-500",
+    加密: "bg-yellow-500",
     爬虫: "bg-yellow-500",
     转换: "bg-indigo-500",
     微信公众号: "bg-green-500",
@@ -61,9 +64,9 @@ const toolbox = [
   // },
   {
     name: "微信公众号文章解析助手",
-    desc: "解析微信公众号文章的封面、标题、简介，支持秀米！",
+    desc: "解析文章的封面、标题、简介，支持秀米！",
     url: "tools/wemedia/weixin/article",
-    img: "/preview/weixin_article.jpg",
+    img: "/preview/weixin_article.png",
     tag: ["微信公众号", "文章解析"],
     avalible: true,
   },
@@ -79,7 +82,7 @@ const toolbox = [
     name: "P2P聊天",
     desc: "通过PeerJS实现P2P聊天",
     url: "chat/peer",
-    img: "/preview/peer.jpg",
+    img: "/preview/peer.png",
     tag: ["P2P", "聊天"],
     avalible: true,
   },
@@ -87,7 +90,7 @@ const toolbox = [
     name: "优图床",
     desc: "使用ulearning的obs储存图片",
     url: "https://pan.oboard.eu.org/pic ",
-    img: "/preview/upic.jpg",
+    img: "/preview/upic.png",
     tag: ["图床"],
     avalible: true,
   },
@@ -95,8 +98,16 @@ const toolbox = [
     name: "站点扫描工具",
     desc: "根据网站链接发生链式反应，形成sitemap",
     url: "https://site.oboard.eu.org/ ",
-    img: "/preview/site.jpg",
+    img: "/preview/sitemap.png",
     tag: ["爬虫"],
+    avalible: true,
+  },
+  {
+    name: "base16384",
+    desc: "base16384加密解密工具",
+    url: "tools/base16384",
+    img: "/preview/base16384.png",
+    tag: ["加密"],
     avalible: true,
   },
   // {
@@ -116,43 +127,65 @@ export default function Home() {
         "flex flex-wrap justify-center items-center gap-4 py-24 px-4 w-full"
       }
     >
-      {toolbox.map((item) => (
+      {toolbox.map((item, index) => (
         <Link
           href={item.url}
           className="no-underline w-full sm:w-96 flex flex-row items-center justify-center"
           key={item.name}
         >
-          <div className="card relative w-full h-80 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all">
-            <figure className="h-40">
-              <Image
-                src={item.img}
-                alt="preview"
-                sizes="100vw"
-                layout="responsive"
-                width={500}
-                height={300}
-              />
-            </figure>
-            <div className="card-body px-4 pt-8 pb-4">
-              <h2 className="card-title font-normal text-primary">
-                {item.name}
-                {item.avalible && (
-                  <i className="i-tabler-circle-check text-green-500" />
-                )}
-                {!item.avalible && (
-                  <i className="i-tabler-circle-x text-red-500" />
-                )}
-              </h2>
-              <p>{item.desc}</p>
-              <div className="card-actions justify-end">
-                {/* <div className="badge badge-outline">Fashion</div> 
+          <motion.div
+            initial={{ scale: 0, y: "100%", filter: "blur(20px)" }}
+            animate={{ scale: 1, y: 0, filter: "blur(0px)" }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 17,
+              delay: index / 10,
+            }}
+          >
+            <motion.div
+              className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 17,
+              }}
+            >
+              {/* <div className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all"> */}
+              <figure className="sm:h-40">
+                <Image
+                  src={item.img}
+                  alt="preview"
+                  sizes="100vw"
+                  layout="responsive"
+                  width={500}
+                  height={300}
+                />
+              </figure>
+              <div className="card-body px-4 pt-4 pb-4">
+                <div className="card-title font-normal text-primary">
+                  {item.name}
+                  {item.avalible && (
+                    <i className="i-tabler-circle-check text-green-500" />
+                  )}
+                  {!item.avalible && (
+                    <i className="i-tabler-circle-x text-red-500" />
+                  )}
+                </div>
+                <p>{item.desc}</p>
+                <div className="card-actions justify-end">
+                  {/* <div className="badge badge-outline">Fashion</div> 
             <div className="badge badge-outline">Products</div> */}
-                {item.tag.map((tag) => (
-                  <Tag key={tag}>{tag}</Tag>
-                ))}
+                  {item.tag.map((tag) => (
+                    <Tag key={tag}>{tag}</Tag>
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
+              {/* </div> */}
+            </motion.div>
+          </motion.div>
         </Link>
         // <div className="card w-96 bg-base-100 shadow-xl image-full">
         //   <figure>

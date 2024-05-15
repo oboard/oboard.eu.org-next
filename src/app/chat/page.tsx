@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import type React from "react";
 import { type Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
@@ -17,7 +18,7 @@ const CodeBlock = ({
   children,
 }: {
   language: string | undefined;
-  children: any;
+  children: React.ReactNode;
 }) => {
   return (
     <SyntaxHighlighter
@@ -46,7 +47,7 @@ const upload = async (file: File) => {
 
 // 生成uuid
 const genUuid = () => {
-  const s: any[] = [];
+  const s = [];
   const hexDigits = "0123456789abcdef";
   for (let i = 0; i < 36; i++) {
     s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
@@ -122,7 +123,7 @@ export default function Chat() {
                   array.findIndex((item2) => item.id === item2.id) === index
               );
 
-              sendedList.forEach((item: MessageInfo) => {
+              for (const item of sendedList) {
                 // 如果信息里没有正准备发的信息，就加入，并发送
                 if (temp.findIndex((item2) => item.id === item2.id) === -1) {
                   temp.push(item);
@@ -139,22 +140,22 @@ export default function Chat() {
                     setMessages([...messages, item]);
                   });
                 }
-              });
+              }
 
               // 过滤掉空信息
               temp = temp.filter((item) => {
-                if (item.content == undefined || item.content == null) {
+                if (item.content === undefined || item.content == null) {
                   return false;
                 }
                 return item.content.trim() !== "";
               });
 
-              temp.forEach((item) => {
-                if (item.time == undefined) {
+              for (let i = 0; i < temp.length; i++) {
+                if (temp[i].time === undefined) {
                   // 时间戳
-                  item.time = new Date().getTime();
+                  temp[i].time = new Date().getTime();
                 }
-              });
+              }
 
               // 按照时间戳排序
               temp.sort((a, b) => {
@@ -204,7 +205,7 @@ export default function Chat() {
   // 发送图片
   const sendPicture = () => {
     // 读取图片
-    let input = document?.createElement("input");
+    const input = document?.createElement("input");
     input.type = "file";
 
     input.onchange = () => {
@@ -212,7 +213,7 @@ export default function Chat() {
 
       if (!checkUserIdAvalible()) return;
 
-      let file = input.files[0];
+      const file = input.files[0];
 
       const isImage = file.type.startsWith("image");
 
@@ -247,8 +248,8 @@ export default function Chat() {
   };
 
   // 发送信息
-  let sendMessage = () => {
-    if (input.length == 0 || input.trim().length == 0) {
+  const sendMessage = () => {
+    if (input.length === 0 || input.trim().length === 0) {
       toast.error("请输入内容");
       return;
     }
@@ -256,7 +257,7 @@ export default function Chat() {
     if (!checkUserIdAvalible()) return;
 
     // let time = new Date().toLocaleString();
-    let msg: MessageInfo = {
+    const msg: MessageInfo = {
       id: genUuid(),
       userId: userId,
       content: input,
@@ -294,7 +295,7 @@ export default function Chat() {
   //     time: "time",
   // }
 
-  let scrollTimer = useRef<NodeJS.Timeout | undefined>();
+  const scrollTimer = useRef<NodeJS.Timeout | undefined>();
 
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
@@ -347,7 +348,7 @@ export default function Chat() {
       "chat-bubble-warning",
       "chat-bubble-error",
     ];
-    let color = colors[seed % 7];
+    const color = colors[seed % 7];
     return color;
   }
 
@@ -382,6 +383,7 @@ export default function Chat() {
         }}
       >
         <button
+          type="button"
           className={
             "btn rounded-full btn-accent flex items-center justify-center"
           }
@@ -418,17 +420,16 @@ export default function Chat() {
       <div className="flex flex-col w-full">
         {/* 底部需要空出一些距离 */}
         <div className="flex-grow flex flex-col w-full">
-          <div className="chatbox w-full flex-grow flex flex-col p-4 pb-48">
+          <div className="chatbox w-full flex-grow flex flex-col p-4 py-48">
             {messages.map(
               (item: MessageInfo, index: Key | null | undefined) => (
                 // 模仿微信的样式,有气泡的感觉，要显示时间
                 // 要根据uuid判断是否是自己发的，如果是自己发的靠右，别人发的靠左
 
                 <div
-                  className={
-                    "chat " +
-                    (item.userId === userId ? " chat-end" : "chat-start")
-                  }
+                  className={`chat  chat-${
+                    item.userId === userId ? "end" : "start"
+                  }`}
                   key={item.id}
                 >
                   {/* <div className="chat-image avatar">
@@ -443,20 +444,18 @@ export default function Chat() {
                     </time>
                   </div>
                   <div
-                    className={
-                      "animate-duration-500 animate-ease-out chat-bubble " +
-                      genColor(item.userId) +
-                      (item.userId === userId
-                        ? " animate-fade-in-right"
-                        : " animate-fade-in-left") +
-                      (item.type === "image" ? "  max-w-sm" : "")
-                    }
+                    className={`animate-duration-500 animate-ease-out chat-bubble ${genColor(
+                      item.userId
+                    )} animate-fade-in-${
+                      item.userId === userId ? "right" : "left"
+                    }${item.type === "image" ? "  max-w-sm" : ""}`}
                   >
                     <ReactMarkdown
                       // 图片可以点击放大
                       components={{
                         img: ({ node, ...props }) => (
-                          <div
+                          <button
+                            type="button"
                             className="gap-1 flex flex-row items-center link link-hover"
                             onClick={() => {
                               if (typeof window !== "undefined") {
@@ -466,7 +465,7 @@ export default function Chat() {
                           >
                             <i className="i-tabler-photo" />
                             查看图片
-                          </div>
+                          </button>
                           // <img
                           //   className="min-w-8 min-h-8 w-full my-2 rounded hover:shadow-xl cursor-pointer transition-all scale-100 hover:scale-110 hover:rounded-xl"
                           //   src={props.src}
@@ -571,7 +570,7 @@ export default function Chat() {
             value={input}
             onKeyDown={(e) => {
               if (e.key === "Enter" && (e.ctrlKey || e.shiftKey)) {
-                setInput(input + "\n");
+                setInput(`${input}\n`);
               } else if (e.key === "Enter") {
                 sendMessage();
                 e.preventDefault();
@@ -580,11 +579,12 @@ export default function Chat() {
             onChange={(e) => {
               setInput(e.target.value);
             }}
-          ></input>
+          />
 
           {/* 发送按钮 */}
           {input && (
             <button
+              type="button"
               className="btn btn-circle btn-primary"
               // 字数限制10000字
               disabled={input.length > 10000}
@@ -604,7 +604,8 @@ export default function Chat() {
               </summary>
               <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
                 <li>
-                  <a
+                  <button
+                    type="button"
                     onClick={() =>
                       (
                         document?.getElementById(
@@ -614,10 +615,10 @@ export default function Chat() {
                     }
                   >
                     长文本
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a onClick={sendPicture}>图片/文件</a>
+                  <button type="button" onClick={sendPicture}>图片/文件</button>
                 </li>
               </ul>
             </details>
@@ -632,14 +633,16 @@ export default function Chat() {
             placeholder="输入信息"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-          ></textarea>
+          />
           <div className="modal-action">
             <form method="dialog">
               <div className="flex flex-row gap-2">
-                <button className="btn" onClick={sendMessage}>
+                <button type="button" className="btn" onClick={sendMessage}>
                   发送
                 </button>
-                <button className="btn">取消</button>
+                <button type="button" className="btn">
+                  取消
+                </button>
               </div>
             </form>
           </div>

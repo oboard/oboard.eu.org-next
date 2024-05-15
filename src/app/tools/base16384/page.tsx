@@ -85,17 +85,37 @@ export default function Base16384() {
   return (
     <div>
       <h1 className="mt-16">Base16384</h1>
-      <textarea value={input} onChange={(e) => setInput(e.target.value)} />
-      <button type="button" onClick={() => setOutput(toSource(encode(input)))}>
-        Encode
-      </button>
-      <button
-        type="button"
-        onClick={() => setOutput(decode(output).toString())}
-      >
-        Decode
-      </button>
-      <textarea value={output} readOnly />
+      <div className="flex flex-col">
+        <label className="label">Input</label>
+        <textarea
+          value={input}
+          placeholder="Enter text to encode or decode"
+          className="textarea textarea-bordered"
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <label className="label">Output</label>
+        <textarea
+          value={output}
+          className="textarea textarea-bordered"
+          readOnly
+        />
+      </div>
+      <div className="flex flex-row gap-4 mt-8">
+        <button
+          type="button"
+          className="mt-4 btn"
+          onClick={() => setOutput(toSource(encode(input)))}
+        >
+          Encode
+        </button>
+        <button
+          type="button"
+          className="mt-4 btn"
+          onClick={() => setOutput(String.fromCharCode(...decode(output)))}
+        >
+          Decode
+        </button>
+      </div>
     </div>
   );
 }

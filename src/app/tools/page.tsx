@@ -130,10 +130,11 @@ export default function Home() {
       {toolbox.map((item, index) => (
         <Link
           href={item.url}
-          className="no-underline w-full sm:w-96 flex flex-row items-center justify-center"
+          className="no-underline w-full max-w-96 sm:w-96 flex flex-row items-center justify-center"
           key={item.name}
         >
           <motion.div
+            className="w-full"
             initial={{ scale: 0, y: "100%", filter: "blur(20px)" }}
             animate={{ scale: 1, y: 0, filter: "blur(0px)" }}
             transition={{

@@ -23,7 +23,7 @@ export interface FeedItemInfo {
   author: string;
 }
 
-export default function FeedItem({ item }: { item: FeedItemInfo }) {
+export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
   const { title, summary, url, date_published, tags, author } = item;
   return (
     <motion.div
@@ -34,12 +34,10 @@ export default function FeedItem({ item }: { item: FeedItemInfo }) {
         stiffness: 100,
         damping: 17,
       }}
+      className="w-full"
     >
-      <motion.button
-        type="button"
-        onClick={() => {
-          window.location.href = url;
-        }}
+      <motion.a
+        href={url}
         className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary flex flex-col p-6 justify-between cursor-pointer"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.9 }}
@@ -53,11 +51,11 @@ export default function FeedItem({ item }: { item: FeedItemInfo }) {
             {new Date(date_published).toLocaleString()}
           </time>
         </p>
-        <a href="#" className="block">
-          <h3 className="mt-2 text-xl leading-7 font-semibold text-primary">
-            {title}
-          </h3>
-        </a>
+
+        <h3 className="mt-2 text-xl leading-7 font-semibold text-primary">
+          {title}
+        </h3>
+
         <p className="mt-3 text-sm leading-6 text-ellipsis h-0 flex-1 overflow-hidden text-left">
           {summary}
         </p>
@@ -71,7 +69,7 @@ export default function FeedItem({ item }: { item: FeedItemInfo }) {
             {author}
           </span>
         </div>
-      </motion.button>
+      </motion.a>
     </motion.div>
   );
 }

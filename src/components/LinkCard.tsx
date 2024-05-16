@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import NightToggle from "./NightToggle";
+import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
 
 const routes = [
   {
@@ -82,6 +83,8 @@ export default function LinkCard() {
           }}
         />
       </div>
+
+      {/* 移动端 */}
       <ul
         style={{
           backgroundColor:
@@ -100,7 +103,7 @@ export default function LinkCard() {
               }`}
               href={route.path}
             >
-              <i className={route.icon + " text-xl"}></i>
+              <i className={`${route.icon} text-xl`} />
               <div>{route.name}</div>
             </Link>
           </li>
@@ -127,37 +130,48 @@ export default function LinkCard() {
         </li> */}
       </ul>
 
-      <ul
+      {/* 桌面端 */}
+
+      <motion.div
         style={{
           backgroundColor:
             "var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))",
         }}
-        className="hidden md:flex z-100 fixed top-10 group items-center backdrop-blur bg-opacity-50 ring-1 ring-base-100 rounded-full shadow"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0 }}
+        className="flex-row items-center px-1 hidden md:flex z-100 fixed top-10 backdrop-blur bg-opacity-50 ring-1 ring-base-100 rounded-full shadow"
+        layout
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 30,
+        }}
       >
-        {/* <div
-          className="pointer-events-none absolute -inset-px rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-primary/[0.12]"
-          style={{
-            background:
-              "radial-gradient(99.4481px at 220px 8px, primary 0%, transparent 65%)",
-          }}
-          aria-hidden="true"
-        ></div> */}
-        <div className="flex flex-row items-center gap-2 transition-width">
-          {/* {pathname} */}
-          {pathname == "/" ? (
-            <div className="w-2" />
-          ) : (
-            <button
-              className="btn btn-ghost btn-sm rounded-full"
-              onClick={() => router.back()}
-            >
-              <i className="i-tabler-arrow-left"></i>
-            </button>
-          )}
+        {/* {pathname} */}
+        {pathname === "/" ? (
+          <div className="w-2" />
+        ) : (
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm rounded-full"
+            onClick={() => router.back()}
+          >
+            <i className="i-tabler-arrow-left" />
+          </button>
+        )}
 
-          <div className="flex flex-row items-center gap-2 pr-2">
+        <AnimatePresence>
+          <ol className="flex flex-row items-center gap-2 pr-2">
             {routes.map((route) => (
-              <li key={route.path}>
+              <motion.li
+                animate
+                key={route.path}
+                whileHover={{
+                  scale: 1.1,
+                }}
+                whileTap={{ scale: 0.9 }}
+              >
                 <Link
                   className={`relative hoverable block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
                     pathname === route.path ? "text-primary" : ""
@@ -165,13 +179,25 @@ export default function LinkCard() {
                   href={route.path}
                 >
                   {route.name}
-                  <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0"></span>
+                  <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0" />
+
+                  {pathname === route.path && (
+                    <motion.div
+                      layoutId="underline"
+                      className="absolute bottom-1 left-1 right-1 bg-primary h-0.5 rounded-full"
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                      }}
+                    />
+                  )}
                 </Link>
-              </li>
+              </motion.li>
             ))}
-          </div>
-        </div>
-      </ul>
+          </ol>
+        </AnimatePresence>
+      </motion.div>
     </>
   );
 }

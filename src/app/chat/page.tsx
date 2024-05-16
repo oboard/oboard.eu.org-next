@@ -564,7 +564,13 @@ export default function Chat() {
             )}
           </div>
         </div>
-        <div className="px-4 py-2 bg-base-200 fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row items-center pr-2 gap-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-base-100">
+        <div
+          style={{
+            backgroundColor:
+              "var(--fallback-b2,oklch(var(--b3) / var(--un-bg-opacity)))",
+          }}
+          className="px-4 py-2 fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row items-center pr-2 gap-2 backdrop-filter backdrop-blur-lg bg-opacity-30"
+        >
           {/* // 要支持多行输入，按Shift+Enter 或者Ctrl+Enter换行 */}
           <input
             className="input flex-grow focus:outline-0 transition-all duration-200"
@@ -619,7 +625,9 @@ export default function Chat() {
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={sendPicture}>图片/文件</button>
+                  <button type="button" onClick={sendPicture}>
+                    图片/文件
+                  </button>
                 </li>
               </ul>
             </details>

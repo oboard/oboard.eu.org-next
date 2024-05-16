@@ -6,11 +6,25 @@
     background: transparent;
 }
 
-i {
+/* i {
     margin: 4px;
-}
+} */
 
 :root {
     overflow-x: hidden;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+body {
+    margin-right: calc(100% - 100vw);
+    padding: 17px;
+}

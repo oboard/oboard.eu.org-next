@@ -12,8 +12,6 @@ export default function FeedPreviewCard({ item }: { item: FeedItemInfo }) {
         <div className="card">
           <div
             className="card-body"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-            dangerouslySetInnerHTML={item.content_html}
           />
         </div>
       </motion.div>

@@ -199,7 +199,7 @@ export default async function Home() {
             ]}
           /> */}
           <div>
-            <h1 className="w-fit text-3xl font-medium">
+            <h1 className="w-fit text-3xl font-medium sm:block flex flex-col items-start gap-1">
               <span>Hello，这里是</span>
               <span className=" text-primary bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
                 一块小板子
@@ -243,7 +243,7 @@ export default async function Home() {
         </div>
 
         {/* blog */}
-        <div className="w-full py-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="w-full py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {blogJson.items.map((item) => (
             <FeedItemCard key={item.id} item={item} />
           ))}

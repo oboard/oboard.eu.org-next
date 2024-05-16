@@ -2,12 +2,15 @@ import LinkCard from "@/components/LinkCard";
 import "./globals.css";
 
 import { Toaster } from "react-hot-toast";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = {
+  themeColor: "#0069ff",
+};
 
 export const metadata: Metadata = {
   title: "一块小板子",
   description: "一个隐蔽的网站捏QAQ",
-  themeColor: "#000000",
   openGraph: {
     type: "website",
     url: "https://oboard.eu.org",

@@ -77,7 +77,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
     >
       <motion.a
         href={url}
-        className="rounded-xl bg-base-100 hover:bg-base-200 overflow-clip relative w-full sm:h-72 ring-1 ring-primary flex flex-col justify-between cursor-pointer"
+        className="rounded-xl bg-base-100 hover:bg-base-200 overflow-clip relative h-full w-full ring-1 ring-primary flex flex-col justify-between cursor-pointer"
         whileTap={{ scale: 0.9 }}
         whileHover={{ scale: 1.02 }}
         transition={{
@@ -89,7 +89,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
           <img
             src={getCrossbellImageUrl(image)}
             alt={title}
-            className="w-full object-cover aspect-16/9 max-h-32"
+            className="w-full object-cover aspect-900/383"
           />
         }
         {/* <p className="text-sm leading-5 opacity-80 text-base-content">
@@ -97,13 +97,26 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
             {new Date(date_published).toLocaleString()}
           </time>
         </p> */}
-        <div className="p-4 flex flex-col gap-3">
-          <h3 className="text-xl leading-7 font-semibold text-ellipsis overflow-hidden w-full inline-block text-nowrap whitespace-nowrap">{title}</h3>
+        <div className="p-4 flex flex-col gap-3 flex-1">
+          <h3 className="text-xl leading-7 font-semibold text-ellipsis overflow-hidden w-full inline-block text-nowrap whitespace-nowrap">
+            {title}
+          </h3>
 
           <p className="flex-1 text-sm leading-6 text-left max-h-14">
             {summaryShort}
           </p>
 
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <div
+                key={tag}
+                className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
+              >
+                <i className="i-tabler-tag" />
+                <span>{tag}</span>
+              </div>
+            ))}
+          </div>
           <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
             {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-success text-success-content">
     {tags.join(", ")}
@@ -120,16 +133,12 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
               {author}
             </span>
             <span>·</span>
-            <time dateTime={date_published} className="overflow-hidden text-ellipsis">{formatDate(date_published)}</time>
-            {tags.map((tag) => (
-              <div
-                key={tag}
-                className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
-              >
-                <i className="i-tabler-tag" />
-                <span>{tag}</span>
-              </div>
-            ))}
+            <time
+              dateTime={date_published}
+              className="overflow-hidden text-ellipsis"
+            >
+              {formatDate(date_published)}
+            </time>
           </div>
         </div>
       </motion.a>

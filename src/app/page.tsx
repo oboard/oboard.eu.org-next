@@ -165,6 +165,10 @@ const links = [
         url: "https://opacity.ink",
       },
       {
+        name: "Yorkin",
+        url: "https://yoorkin.github.io/",
+      },
+      {
         name: "XXS",
         url: "https://xxs2.cn",
       },
@@ -182,7 +186,11 @@ export default async function Home() {
   ).json()) as FeedBodyInfo;
   return (
     <article className={"py-24 px-4 md:max-w-5xl"}>
-      <script defer src="https://cloud.umami.is/script.js" data-website-id="5f4911ab-c548-457f-9b3e-d1ed01fb29c0" />
+      <script
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="5f4911ab-c548-457f-9b3e-d1ed01fb29c0"
+      />
       <div className="flex flex-col">
         {/* 左侧 */}
         <div className="flex flex-row items-start gap-4 text-base prose ">

@@ -11,19 +11,18 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "一块小板子",
   description: "一个隐蔽的网站捏QAQ",
+  metadataBase: new URL('https://oboard.eu.org'),
   openGraph: {
     type: "website",
     url: "https://oboard.eu.org",
     title: "一块小板子",
     description: "一个隐蔽的网站捏QAQ",
-    images: [
-      {
-        url: "https://obscloud.ulearning.cn/resources/web/1715838718885.png",
-        alt: "一块小板子",
-        width: 1280,
-        height: 720,
-      },
-    ],
+    images: {
+      url: "https://obscloud.ulearning.cn/resources/web/1715838718885.png",
+      alt: "一块小板子",
+      width: 720,
+      height: 720,
+    },
   },
   other: {
     name: "一块小板子",

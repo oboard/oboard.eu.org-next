@@ -128,13 +128,9 @@ export default function Home() {
       }
     >
       {toolbox.map((item, index) => (
-        <Link
-          href={item.url}
-          className="no-underline w-full max-w-96 sm:w-96 flex flex-row items-center justify-center"
-          key={item.name}
-        >
+        <Link href={item.url} key={item.name}>
           <motion.div
-            className="w-full"
+            className="no-underline w-full max-w-96 sm:w-96 flex flex-row items-center justify-center"
             initial={{ scale: 0, y: "100%", filter: "blur(20px)" }}
             animate={{ scale: 1, y: 0, filter: "blur(0px)" }}
             transition={{
@@ -145,8 +141,8 @@ export default function Home() {
             }}
           >
             <motion.div
-              className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary"
-              whileHover={{ scale: 1.05 }}
+              className="card relative hover:bg-base-200  w-full sm:h-70 bg-base-100 ring-1 ring-primary"
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.9 }}
               transition={{
                 type: "spring",

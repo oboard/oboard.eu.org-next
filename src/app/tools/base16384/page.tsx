@@ -73,7 +73,11 @@ function decode(input: string | Uint16Array) {
 
   const length = inputArray.length - 1;
   const residue = inputArray[length] - 0x3d00 || 7;
-  const output = new Uint8Array(Math.floor((length - 1) / 4) * 7 + residue);
+  const outputLength = Math.floor((length - 1) / 4) * 7 + residue;
+  if (outputLength < 0) {
+    return new Uint8Array(0);
+  }
+  const output = new Uint8Array(outputLength);
   align(inputArray, output, 14, 8, 0x4e00, 0);
   return output;
 }
@@ -111,7 +115,7 @@ export default function Base16384() {
         <button
           type="button"
           className="mt-4 btn"
-          onClick={() => setOutput(String.fromCharCode(...decode(output)))}
+          onClick={() => setOutput(String.fromCharCode(...decode(input)))}
         >
           Decode
         </button>

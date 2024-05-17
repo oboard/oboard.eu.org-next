@@ -44,7 +44,8 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
       return "刚刚";
     }
     if (interval > 24 * 3600 * 365) {
-      return `${Math.round(interval / 24 / 3600 / 365)}年前`;
+      // return `${Math.round(interval / 24 / 3600 / 365)}年前`;
+      return new Date(dateString).toLocaleDateString();
     }
     if (interval > 24 * 3600 * 30) {
       return `${Math.round(interval / 24 / 3600 / 30)}月前`;

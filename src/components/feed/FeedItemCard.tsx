@@ -98,17 +98,17 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
           </time>
         </p> */}
         <div className="p-4 flex flex-col gap-3">
-          <h3 className="text-xl leading-7 font-semibold">{title}</h3>
+          <h3 className="text-xl leading-7 font-semibold text-ellipsis overflow-hidden w-full inline-block text-nowrap whitespace-nowrap">{title}</h3>
 
-          <p className="flex-1 text-sm leading-6 text-ellipsis overflow-hidden text-left max-h-14">
+          <p className="flex-1 text-sm leading-6 text-left max-h-14">
             {summaryShort}
           </p>
 
-          <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm font-medium leading-5">
+          <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
             {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-success text-success-content">
     {tags.join(", ")}
   </span> */}
-            <span className="inline-flex items-center gap-2 rounded-full">
+            <span className="inline-flex items-center gap-2 rounded-full font-medium">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://obscloud.ulearning.cn/resources/web/1715838718885.png"
@@ -120,7 +120,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
               {author}
             </span>
             <span>·</span>
-            <time dateTime={date_published}>{formatDate(date_published)}</time>
+            <time dateTime={date_published} className="overflow-hidden text-ellipsis">{formatDate(date_published)}</time>
             {tags.map((tag) => (
               <div
                 key={tag}

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import type React from "react";
 import type { PropsWithChildren } from "react";
@@ -25,7 +26,7 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
 
   return (
     // <span className="inline-block rounded border bg-amber-500/10 text-amber-900 border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-500 px-2 py-1 text-xs leading-none">
-    <span className="inline-block rounded-full border text-[12px] px-1 flex flex-row gap-1 items-center">
+    <span className="flex rounded-full border text-[12px] px-1 flex-row gap-1 items-center">
       {props.children}
       {/* 圆圈 */}
       <div
@@ -152,11 +153,9 @@ export default function Home() {
             >
               {/* <div className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all"> */}
               <figure className="sm:h-40">
-                <Image
+                <img
                   src={item.img}
                   alt="preview"
-                  sizes="100vw"
-                  layout="responsive"
                   width={500}
                   height={300}
                 />

@@ -1,13 +1,14 @@
 "use client";
 
-import React, { Component, Key, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { Component, type Key, useEffect, useRef, useState } from "react";
 import type Peer from "peerjs";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { MessageInfo, MessageStatus } from "@/models/chat/message";
+import { type MessageInfo, MessageStatus } from "@/models/chat/message";
 import toast from "react-hot-toast";
 
 const CodeBlock = ({
@@ -29,20 +30,22 @@ const CodeBlock = ({
     </SyntaxHighlighter>
   );
 };
+
 // 生成uuid
 const genUuid = () => {
-  let s: any[] = [];
-  let hexDigits = "0123456789abcdef";
+  const s = [];
+  const hexDigits = "0123456789abcdef";
   for (let i = 0; i < 36; i++) {
-    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
   }
   // bits 12-15 of the time_hi_and_version field to 0010
   s[14] = "4";
   // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+  // @ts-ignore
+  s[19] = hexDigits.substring((s[19] & 0x3) | 0x8, 1);
   // bits 6-7 of the clock_seq_hi_and_reserved to 01
   s[8] = s[13] = s[18] = s[23] = "-";
-  let uuid = s.join("");
+  const uuid = s.join("");
   return uuid;
 };
 
@@ -69,7 +72,7 @@ function P2PChat() {
   // 检查userId是否可用
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function checkUserIdAvalible() {
-    if (userId == undefined || userId == null || userId.length < 5) {
+    if (userId === undefined || userId == null || userId.length < 5) {
       setUserId(genUuid());
       // 刷新页面
       if (typeof window !== "undefined") {
@@ -92,7 +95,7 @@ function P2PChat() {
     });
   }
 
-  let scrollTimer = useRef<NodeJS.Timeout | undefined>();
+  const scrollTimer = useRef<NodeJS.Timeout | undefined>();
 
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
@@ -150,7 +153,7 @@ function P2PChat() {
   useEffect(() => {
     checkPeer();
     checkUserIdAvalible();
-    let timer = setInterval(() => {
+    const timer = setInterval(() => {
       console.log(`userId: ${userId}`);
       checkPeer();
       checkUserIdAvalible();
@@ -172,7 +175,7 @@ function P2PChat() {
     return () => {
       clearInterval(timer);
     };
-  }, [checkUserIdAvalible, userId]);
+  }, [checkPeer, checkUserIdAvalible, userId]);
 
   function init() {
     import("peerjs").then(({ default: Peer }) => {
@@ -183,13 +186,13 @@ function P2PChat() {
         peerRef.current = peer;
       });
       peer.on("connection", (conn) => {
-        conn.on("data", (data: any) => {
+        conn.on("data", (data) => {
           let temp = [...messagesRef.current];
           // 如果data不是空的
           if (data !== undefined && data !== null) {
             // data中去除掉自己的
             // let data2 = data.filter((item: MessageInfo) => item.userId !== userId);
-            temp = [data, ...temp];
+            temp = [data as MessageInfo, ...temp];
             // 去重
             temp = temp.filter(
               (item, index, array) =>
@@ -198,18 +201,18 @@ function P2PChat() {
 
             // 过滤掉空信息
             temp = temp.filter((item) => {
-              if (item.content == undefined || item.content == null) {
+              if (item.content === undefined || item.content == null) {
                 return false;
               }
               return item.content.trim() !== "";
             });
 
-            temp.forEach((item) => {
-              if (item.time == undefined) {
+            for (let item of temp) {
+              if (item.time === undefined) {
                 // 时间戳
                 item.time = new Date().getTime();
               }
-            });
+            }
 
             // 按照时间戳排序
             temp.sort((a, b) => {
@@ -225,10 +228,10 @@ function P2PChat() {
   // init();
 
   function genColor(uuid: string) {
-    if (uuid == undefined || uuid == null || uuid.length < 5) {
+    if (uuid === undefined || uuid == null || uuid.length < 5) {
       return "";
     }
-    let seed = parseInt(uuid.replace(/-/g, "").slice(0, 8), 16);
+    const seed = Number.parseInt(uuid.replace(/-/g, "").slice(0, 8), 16);
     const colors = [
       "chat-bubble-primary",
       "chat-bubble-secondary",
@@ -238,38 +241,39 @@ function P2PChat() {
       "chat-bubble-warning",
       "chat-bubble-error",
     ];
-    let color = colors[seed % 7];
+    const color = colors[seed % 7];
     return color;
   }
 
   // 通过时间戳获取时间，如果时间不是很久，就显示多久之前，否则显示具体时间
   function getTime(time: number | undefined) {
-    if (time == undefined) return "发送中";
-    let now = new Date().getTime();
-    let diff = now - time;
+    if (time === undefined) return "发送中";
+    const now = new Date().getTime();
+    const diff = now - time;
     if (diff < 1000 * 60) {
       // return `${Math.floor(diff / 1000)}秒前`;
       return "刚刚";
-    } else if (diff < 1000 * 60 * 60) {
+    }
+    if (diff < 1000 * 60 * 60) {
       return `${Math.floor(diff / (1000 * 60))}分钟前`;
-    } else if (diff < 1000 * 60 * 60 * 24) {
+    }
+    if (diff < 1000 * 60 * 60 * 24) {
       return `${Math.floor(diff / (1000 * 60 * 60))}小时前`;
       // } else if (diff < 1000 * 60 * 60 * 24 * 30) {
       //   return `${Math.floor(diff / (1000 * 60 * 60 * 24))}天前`;
-    } else {
-      return new Date(time).toLocaleString();
     }
+    return new Date(time).toLocaleString();
   }
 
   const send = () => {
-    if (message.length == 0 || message.trim().length == 0) {
+    if (message.length === 0 || message.trim().length === 0) {
       toast.error("请输入内容");
       return;
     }
     if (!checkUserIdAvalible()) return;
     if (!checkPeer()) return;
 
-    let msg: MessageInfo = {
+    const msg: MessageInfo = {
       id: genUuid(),
       userId: userId,
       content: message,
@@ -306,9 +310,9 @@ function P2PChat() {
       });
     }
 
-    userList.forEach((friendId) => {
-      _send(friendId);
-    });
+    for (let user of userList) {
+      _send(user);
+    }
   };
 
   // const sendTest = () => {
@@ -354,10 +358,9 @@ function P2PChat() {
                   // 要根据uuid判断是否是自己发的，如果是自己发的靠右，别人发的靠左
 
                   <div
-                    className={
-                      "chat " +
-                      (item.userId === userId ? " chat-end" : "chat-start")
-                    }
+                    className={`chat chat-${
+                      item.userId === userId ? "end" : "start"
+                    }`}
                     key={item.id}
                   >
                     <div className="chat-header">
@@ -367,14 +370,11 @@ function P2PChat() {
                       </time>
                     </div>
                     <div
-                      className={
-                        "animate-duration-500 animate-ease-out chat-bubble " +
-                        genColor(item.userId) +
-                        (item.userId === userId
-                          ? " animate-fade-in-right"
-                          : " animate-fade-in-left") +
-                        (item.type === "image" ? "  max-w-sm" : "")
-                      }
+                      className={`animate-duration-500 animate-ease-out chat-bubble ${genColor(
+                        item.userId
+                      )} animate-fade-in-${
+                        item.userId === userId ? "right" : "left"
+                      }${item.type === "image" ? "  max-w-sm" : ""}`}
                     >
                       <ReactMarkdown
                         // 图片可以点击放大
@@ -444,11 +444,11 @@ function P2PChat() {
                                   width="16"
                                   height="16"
                                 >
-                                  <path d="M573.44 640a187.68 187.68 0 0 1-132.8-55.36L416 560l45.28-45.28 24.64 24.64a124.32 124.32 0 0 0 170.08 5.76l1.44-1.28a49.44 49.44 0 0 0 4-3.84l101.28-101.28a124.16 124.16 0 0 0 0-176l-1.92-1.92a124.16 124.16 0 0 0-176 0l-51.68 51.68a49.44 49.44 0 0 0-3.84 4l-20 24.96-49.92-40L480 276.32a108.16 108.16 0 0 1 8.64-9.28l51.68-51.68a188.16 188.16 0 0 1 266.72 0l1.92 1.92a188.16 188.16 0 0 1 0 266.72l-101.28 101.28a112 112 0 0 1-8.48 7.84 190.24 190.24 0 0 1-125.28 48z"></path>
+                                  <path d="M573.44 640a187.68 187.68 0 0 1-132.8-55.36L416 560l45.28-45.28 24.64 24.64a124.32 124.32 0 0 0 170.08 5.76l1.44-1.28a49.44 49.44 0 0 0 4-3.84l101.28-101.28a124.16 124.16 0 0 0 0-176l-1.92-1.92a124.16 124.16 0 0 0-176 0l-51.68 51.68a49.44 49.44 0 0 0-3.84 4l-20 24.96-49.92-40L480 276.32a108.16 108.16 0 0 1 8.64-9.28l51.68-51.68a188.16 188.16 0 0 1 266.72 0l1.92 1.92a188.16 188.16 0 0 1 0 266.72l-101.28 101.28a112 112 0 0 1-8.48 7.84 190.24 190.24 0 0 1-125.28 48z" />
                                   <path
                                     d="M350.72 864a187.36 187.36 0 0 1-133.28-55.36l-1.92-1.92a188.16 188.16 0 0 1 0-266.72l101.28-101.28a112 112 0 0 1 8.48-7.84 188.32 188.32 0 0 1 258.08 7.84L608 464l-45.28 45.28-24.64-24.64A124.32 124.32 0 0 0 368 478.88l-1.44 1.28a49.44 49.44 0 0 0-4 3.84l-101.28 101.28a124.16 124.16 0 0 0 0 176l1.92 1.92a124.16 124.16 0 0 0 176 0l51.68-51.68a49.44 49.44 0 0 0 3.84-4l20-24.96 50.08 40-20.8 25.12a108.16 108.16 0 0 1-8.64 9.28l-51.68 51.68A187.36 187.36 0 0 1 350.72 864z"
                                     p-id="4051"
-                                  ></path>
+                                  />
                                 </svg>
                                 <a
                                   className="link-hover"

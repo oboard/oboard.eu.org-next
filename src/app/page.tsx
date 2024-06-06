@@ -7,7 +7,12 @@ import FeedItemCard, {
   type FeedBodyInfo,
   FeedItemInfo,
 } from "@/components/feed/FeedItemCard";
-import Live2D from "@/components/live2d";
+// import Live2D from "@/components/live2d";
+import dynamic from "next/dynamic";
+
+const Live2D = dynamic(() => import("@/components/live2d"), {
+  ssr: false,
+});
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   return (

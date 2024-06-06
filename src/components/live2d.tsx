@@ -44,7 +44,7 @@ export default function Live2D() {
 
 						document
 							.getElementById("oml2d-canvas")
-							.addEventListener("click", () => {
+							?.addEventListener("click", () => {
 								oml2d.stageSlideOut();
 								oml2d.statusBarOpen("显示看板娘");
 								oml2d.clearTips();

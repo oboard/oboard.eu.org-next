@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { JSDOM } from "jsdom";
 import Image from "next/image";
 import ShareLinkBox from "./shareLinkBox";
@@ -95,11 +96,15 @@ async function getPosts(link: string) {
   return meta;
 }
 
-export default async function XHSArticle({ params }: any) {
+export default async function XHSArticle({
+  params,
+}: {
+  params?: { slug: string };
+}) {
   //   if (params.slug) {
   let data: any = {};
   // 判断是否是url
-  if (params && params.slug) {
+  if (params?.slug) {
     data = await getPosts(params.slug);
   } else {
     data = undefined;
@@ -111,7 +116,7 @@ export default async function XHSArticle({ params }: any) {
       <main className="py-24 px-4 flex flex-col gap-4 justify-center items-center">
         <h1 className="text-4xl font-bold">小红书</h1>
 
-        <ShareLinkBox shareText={params && params.slug} />
+        <ShareLinkBox shareText={params?.slug} />
 
         {/* 展示数据
         description: '苹果总部基地太帅了！        ',
@@ -161,7 +166,7 @@ export default async function XHSArticle({ params }: any) {
                 {/* 下载按钮 */}
                 <DownloadButton
                   link={link}
-                  name={index + 1 + "-" + data["og:title"]}
+                  name={`${index + 1}-${data["og:title"]}`}
                 />
               </div>
             ))}

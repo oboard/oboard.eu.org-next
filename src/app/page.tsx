@@ -175,6 +175,10 @@ const links = [
         url: "https://yoorkin.github.io/",
       },
       {
+        name: "9BIE",
+        url: "https://9bie.org/",
+      },
+      {
         name: "XXS",
         url: "https://xxs2.cn",
       },

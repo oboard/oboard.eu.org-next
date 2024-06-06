@@ -7,6 +7,7 @@ import FeedItemCard, {
   type FeedBodyInfo,
   FeedItemInfo,
 } from "@/components/feed/FeedItemCard";
+import Live2D from "@/components/live2d";
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   return (
@@ -289,6 +290,7 @@ export default async function Home() {
       <p className="text-center text-gray-500 dark:text-gray-400">
         © 2024 oboard. All Rights Reserved.
       </p>
+      <Live2D />
     </article>
   );
 }

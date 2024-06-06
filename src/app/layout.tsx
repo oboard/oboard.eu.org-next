@@ -1,4 +1,5 @@
 import LinkCard from "@/components/LinkCard";
+import useLive2D from "@/components/live2d";
 import "./globals.css";
 
 import { Toaster } from "react-hot-toast";
@@ -11,7 +12,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "一块小板子",
   description: "一个隐蔽的网站捏QAQ",
-  metadataBase: new URL('https://oboard.eu.org'),
+  metadataBase: new URL("https://oboard.eu.org"),
   openGraph: {
     type: "website",
     url: "https://oboard.eu.org",
@@ -39,6 +40,7 @@ export default function RootLayout({
     <html lang="zh-CN">
       <link rel="icon" href="/avatar.png" sizes="any" />
       <link rel="apple-touch-icon" href="/avatar.png" />
+
       <body className="flex flex-col justify-center items-center">
         {/* <MouseTracker /> */}
         <Toaster />

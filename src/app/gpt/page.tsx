@@ -2,12 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Key, useEffect, useRef, useState } from "react";
+import { type Key, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { MessageInfo, MessageStatus } from "@/models/chat/message";
+import { type MessageInfo, MessageStatus } from "@/models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
@@ -114,7 +114,7 @@ export default function GPTChat() {
       status: MessageStatus.Sent,
       time: new Date().getTime(),
     };
-    let robot_msg: MessageInfo = {
+    const robot_msg: MessageInfo = {
       id: genUuid(),
       userId: "robot",
       content: "...",

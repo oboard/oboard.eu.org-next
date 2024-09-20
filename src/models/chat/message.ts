@@ -9,8 +9,8 @@ export type MessageInfo = {
 };
 
 export enum MessageStatus {
-    Sending,
-    Sent,
+    Sending = 0,
+    Sent = 1,
     // Received,
     // Seen,
 }

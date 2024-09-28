@@ -67,8 +67,8 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
   }
   return (
     <motion.div
-      initial={{ scale: 0, y: "100%", filter: "blur(20px)" }}
-      animate={{ scale: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{
         type: "spring",
         stiffness: 100,
@@ -108,15 +108,17 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
           </p>
 
           <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <div
-                key={tag}
-                className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
-              >
-                <i className="i-tabler-tag" />
-                <span>{tag}</span>
-              </div>
-            ))}
+            {tags
+              .map((tag) => (tag === "post" ? "文章" : tag))
+              .map((tag) => (
+                <div
+                  key={tag}
+                  className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
+                >
+                  <i className="i-tabler-tag" />
+                  <span>{tag}</span>
+                </div>
+              ))}
           </div>
           <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
             {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-success text-success-content">

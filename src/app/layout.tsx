@@ -38,8 +38,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <link rel="icon" href="/avatar.png" sizes="any" />
-      <link rel="apple-touch-icon" href="/avatar.png" />
+      <link rel="icon" href="/avatar.jpg" sizes="any" />
+      <link rel="apple-touch-icon" href="/avatar.jpg" />
 
       <body className="flex flex-col justify-center items-center">
         {/* <MouseTracker /> */}

@@ -1,5 +1,8 @@
-@import "daisyui/dist/full.css";
 @unocss all;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Track */
 ::-webkit-scrollbar-track {

@@ -133,14 +133,14 @@ export default function LinkCard() {
       {/* 桌面端 */}
 
       <motion.div
-        style={{
-          backgroundColor:
-            "var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))",
-        }}
+        // style={{
+        //   backgroundColor:
+        //     "var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))",
+        // }}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0 }}
-        className="flex-row items-center px-1 hidden md:flex z-100 fixed top-10 backdrop-blur bg-opacity-50 ring-1 ring-base-100 rounded-full shadow"
+        className="flex-row items-center px-1 hidden md:flex z-100 fixed top-10 backdrop-blur bg-base-200 bg-opacity-50 ring-1 ring-base-100 ring-opacity-50 rounded-full shadow"
         layout
         transition={{
           type: "spring",

@@ -27,7 +27,11 @@ html {
     overflow-x: hidden;
 }
 
-body {
+/* body {
     margin-right: calc(100% - 100vw);
     padding: 17px;
+} */
+body {
+    margin-right: calc(-1 * (100vw - 100%));
+    overflow-x: hidden;
 }

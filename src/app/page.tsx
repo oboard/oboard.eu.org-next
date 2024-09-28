@@ -14,14 +14,6 @@ const Live2D = dynamic(() => import("@/components/live2d"), {
   ssr: false,
 });
 
-const Tag: React.FC<PropsWithChildren> = (props) => {
-  return (
-    <span className="inline-block rounded border bg-amber-500/10 text-amber-900 border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-500 px-2 py-1 text-xs leading-none">
-      {props.children}
-    </span>
-  );
-};
-
 export const ability = [
   {
     name: "Web",
@@ -163,8 +155,8 @@ const links = [
     name: "友谊链接",
     children: [
       {
-        name: "XRZ",
-        url: "https://www.xrzyun.top",
+        name: "Rinne",
+        url: "https://www.rinne.in/",
       },
       {
         name: "Opacity",
@@ -227,7 +219,7 @@ export default async function Home() {
             </h1>
             <div>
               <div className="flex justify-between">
-                计算机专业大二在读 (全栈开发)
+                计算机专业大三在读 (全栈开发)
                 {/* <EmojiJumper emojiList={["🤣", "🥲", "😊", "😇", "🙂"]} /> */}
               </div>
               {/* {JSON.stringify(blogJson)} */}

@@ -76,15 +76,15 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
       }}
       className="w-full"
     >
-      <motion.a
+      <a
         href={url}
-        className="rounded-xl bg-base-100 hover:bg-base-200 overflow-clip relative h-full w-full ring-1 ring-primary flex flex-col justify-between cursor-pointer"
-        whileTap={{ scale: 0.9 }}
-        whileHover={{ scale: 1.02 }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-        }}
+        className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
+        // whileTap={{ scale: 0.9 }}
+        // whileHover={{ scale: 1.02 }}
+        // transition={{
+        //   type: "spring",
+        //   stiffness: 100,
+        // }}
       >
         {
           <img
@@ -144,7 +144,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
             </time>
           </div>
         </div>
-      </motion.a>
+      </a>
     </motion.div>
   );
 }

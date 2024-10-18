@@ -30,9 +30,8 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
       {props.children}
       {/* 圆圈 */}
       <div
-        className={`w-2 h-2 rounded-full ${
-          colors[props.children?.toString() ?? ""]
-        }`}
+        className={`w-2 h-2 rounded-full ${colors[props.children?.toString() ?? ""]
+          }`}
       />
     </span>
   );
@@ -142,14 +141,7 @@ export default function Home() {
             }}
           >
             <motion.div
-              className="card relative hover:bg-base-200  w-full sm:h-70 bg-base-100 ring-1 ring-primary"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 17,
-              }}
+              className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
             >
               {/* <div className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all"> */}
               <figure className="sm:h-40">

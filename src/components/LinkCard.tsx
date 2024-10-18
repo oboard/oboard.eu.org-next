@@ -98,9 +98,8 @@ export default function LinkCard() {
             className="flex-1 m-auto h-full py-1 sm:py-2 hoverable"
           >
             <Link
-              className={`transition-all active:scale-90 hover:text-primary rounded-full flex flex-col sm:flex-row justify-center items-center ${
-                pathname === route.path ? "text-primary" : ""
-              }`}
+              className={`transition-all active:scale-90 hover:text-primary rounded-full flex flex-col sm:flex-row justify-center items-center ${pathname === route.path ? "text-primary" : ""
+                }`}
               href={route.path}
             >
               <i className={`${route.icon} text-xl`} />
@@ -108,35 +107,11 @@ export default function LinkCard() {
             </Link>
           </li>
         ))}
-        {/* <li>
-          <Link href={""}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            Inbox
-            <span className="badge badge-sm">99+</span>
-          </Link>
-        </li> */}
       </ul>
 
       {/* 桌面端 */}
 
       <motion.div
-        // style={{
-        //   backgroundColor:
-        //     "var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))",
-        // }}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0 }}
@@ -168,14 +143,13 @@ export default function LinkCard() {
                 animate
                 key={route.path}
                 whileHover={{
-                  scale: 1.1,
+                  opacity: 0.8,
                 }}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.9, opacity: 0.6 }}
               >
                 <Link
-                  className={`relative hoverable block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${
-                    pathname === route.path ? "text-primary" : ""
-                  }`}
+                  className={`relative hoverable block py-2 px-3 font-medium text-sm hover:text-primary transition-colors ${pathname === route.path ? "text-primary" : ""
+                    }`}
                   href={route.path}
                 >
                   {route.name}
@@ -184,7 +158,7 @@ export default function LinkCard() {
                   {pathname === route.path && (
                     <motion.div
                       layoutId="underline"
-                      className="absolute bottom-1 left-1 right-1 bg-primary h-0.5 rounded-full"
+                      className="absolute bottom--0.5 left-1 right-1 bg-gradient-to-r from-primary/0 via-primary/40 h-0.5 rounded-full "
                       transition={{
                         type: "spring",
                         stiffness: 300,

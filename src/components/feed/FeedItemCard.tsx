@@ -78,7 +78,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
     >
       <a
         href={url}
-        className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
+        className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
         // whileTap={{ scale: 0.9 }}
         // whileHover={{ scale: 1.02 }}
         // transition={{

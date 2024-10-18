@@ -1,7 +1,7 @@
 import daisyui from "daisyui"
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ["./src/**/*.{tsx,ts}"],
   theme: {
     extend: {},
@@ -10,7 +10,7 @@ module.exports = {
     daisyui
   ],
   daisyui: {
-    themes: ["winter", "dark"],
+    themes: ["winter", "night"],
   },
 }
 

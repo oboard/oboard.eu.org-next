@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@biomejs/biome": "^1.9.4",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.8",
     "@unocss/reset": "^0.58.9",
@@ -26,6 +25,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@iconify-json/logos": "^1.2.0",
     "@iconify-json/lucide": "^1.2.6",
     "@iconify-json/tabler": "^1.2.4",

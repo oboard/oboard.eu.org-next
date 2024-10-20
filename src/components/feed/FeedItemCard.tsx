@@ -66,87 +66,77 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
     return "刚刚";
   }
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 100,
-        damping: 17,
-      }}
-      className="w-full"
+
+    <a
+      href={url}
+      className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
+    // whileTap={{ scale: 0.9 }}
+    // whileHover={{ scale: 1.02 }}
+    // transition={{
+    //   type: "spring",
+    //   stiffness: 100,
+    // }}
     >
-      <a
-        href={url}
-        className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
-        // whileTap={{ scale: 0.9 }}
-        // whileHover={{ scale: 1.02 }}
-        // transition={{
-        //   type: "spring",
-        //   stiffness: 100,
-        // }}
-      >
-        {
-          <Image
-            width={900}
-            height={383}
-            src={getCrossbellImageUrl(image)}
-            alt={title}
-            className="w-full object-cover aspect-900/383"
-          />
-        }
-        {/* <p className="text-sm leading-5 opacity-80 text-base-content">
+      {
+        <Image
+          width={900}
+          height={383}
+          src={getCrossbellImageUrl(image)}
+          alt={title}
+          className="w-full object-cover aspect-900/383"
+        />
+      }
+      {/* <p className="text-sm leading-5 opacity-80 text-base-content">
           <time dateTime={date_published}>
             {new Date(date_published).toLocaleString()}
           </time>
         </p> */}
-        <div className="p-4 flex flex-col gap-3 flex-1">
-          <h3 className="text-xl leading-7 font-semibold text-ellipsis overflow-hidden w-full inline-block text-nowrap whitespace-nowrap">
-            {title}
-          </h3>
+      <div className="p-4 flex flex-col gap-3 flex-1">
+        <h3 className="text-xl leading-7 font-semibold text-ellipsis overflow-hidden w-full inline-block text-nowrap whitespace-nowrap">
+          {title}
+        </h3>
 
-          <p className="flex-1 text-sm leading-6 text-left max-h-14">
-            {summaryShort}
-          </p>
+        <p className="flex-1 text-sm leading-6 text-left max-h-14">
+          {summaryShort}
+        </p>
 
-          <div className="flex flex-wrap gap-2">
-            {tags
-              .map((tag) => (tag === "post" ? "文章" : tag))
-              .map((tag) => (
-                <div
-                  key={tag}
-                  className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
-                >
-                  <i className="i-tabler-tag" />
-                  <span>{tag}</span>
-                </div>
-              ))}
-          </div>
-          <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
-            {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-success text-success-content">
+        <div className="flex flex-wrap gap-2">
+          {tags
+            .map((tag) => (tag === "post" ? "文章" : tag))
+            .map((tag) => (
+              <div
+                key={tag}
+                className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
+              >
+                <i className="i-tabler-tag" />
+                <span>{tag}</span>
+              </div>
+            ))}
+        </div>
+        <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
+          {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-success text-success-content">
     {tags.join(", ")}
   </span> */}
-            <span className="inline-flex items-center gap-2 rounded-full font-medium">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <Image
-                src="https://obscloud.ulearning.cn/resources/web/1715838718885.png"
-                alt={"Head"}
-                className="rounded-full overflow-clip"
-                width={16}
-                height={16}
-              />
-              {author}
-            </span>
-            <span>·</span>
-            <time
-              dateTime={date_published}
-              className="overflow-hidden text-ellipsis"
-            >
-              {formatDate(date_published)}
-            </time>
-          </div>
+          <span className="inline-flex items-center gap-2 rounded-full font-medium">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <Image
+              src="https://obscloud.ulearning.cn/resources/web/1715838718885.png"
+              alt={"Head"}
+              className="rounded-full overflow-clip"
+              width={16}
+              height={16}
+            />
+            {author}
+          </span>
+          <span>·</span>
+          <time
+            dateTime={date_published}
+            className="overflow-hidden text-ellipsis"
+          >
+            {formatDate(date_published)}
+          </time>
         </div>
-      </a>
-    </motion.div>
+      </div>
+    </a>
   );
 }

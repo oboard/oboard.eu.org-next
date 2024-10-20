@@ -1,18 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async rewrites() {
-    return [
-      //接口请求 前缀带上/utestapi/
-      {
-        source: `/utestapi/:path*`,
-        destination: `https://utestapi.ulearning.cn/:path*`,
-      },
-      {
-        source: `/courseapi/:path*`,
-        destination: `https://courseapi.ulearning.cn/:path*`,
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     //接口请求 前缀带上/utestapi/
+  //     {
+  //       source: `/utestapi/:path*`,
+  //       destination: `https://utestapi.ulearning.cn/:path*`,
+  //     },
+  //     {
+  //       source: `/courseapi/:path*`,
+  //       destination: `https://courseapi.ulearning.cn/:path*`,
+  //     },
+  //   ];
+  // },
   images: {
     remotePatterns: [
       {
@@ -46,6 +46,14 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "mmbiz.qpic.cn",
+      },
+      {
+        protocol: "https",
+        hostname: "ipfs.crossbell.io",
+      },
+      {
+        protocol: "https",
+        hostname: "obscloud.ulearning.cn",
       },
     ],
   },

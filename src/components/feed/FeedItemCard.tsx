@@ -87,7 +87,9 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
         // }}
       >
         {
-          <img
+          <Image
+            width={900}
+            height={383}
             src={getCrossbellImageUrl(image)}
             alt={title}
             className="w-full object-cover aspect-900/383"
@@ -126,7 +128,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
   </span> */}
             <span className="inline-flex items-center gap-2 rounded-full font-medium">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="https://obscloud.ulearning.cn/resources/web/1715838718885.png"
                 alt={"Head"}
                 className="rounded-full overflow-clip"

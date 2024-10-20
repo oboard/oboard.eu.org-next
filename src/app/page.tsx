@@ -184,7 +184,7 @@ const links = [
 
 export default async function Home() {
   const blogJson = (await (
-    await fetch("https://oboard.xlog.app/feed?format=json")
+    await fetch("https://oboard.xlog.app/feed?format=json", { next: { revalidate: 60 } })
   ).json()) as FeedBodyInfo;
   return (
     <article className={"py-24 px-4 md:max-w-5xl"}>

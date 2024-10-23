@@ -11,6 +11,7 @@ import { type MessageInfo, MessageStatus } from "@/models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
+import { v7 as uuidv7 } from 'uuid';
 
 const CodeBlock = ({
   language,
@@ -32,23 +33,6 @@ const CodeBlock = ({
   );
 };
 
-// 生成uuid
-const genUuid = () => {
-  let s: any[] = [];
-  let hexDigits = "0123456789abcdef";
-  for (let i = 0; i < 36; i++) {
-    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-  }
-  // bits 12-15 of the time_hi_and_version field to 0010
-  s[14] = "4";
-  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[8] = s[13] = s[18] = s[23] = "-";
-  let uuid = s.join("");
-  return uuid;
-};
-
 // 上面是api的代码，下面是页面的代码
 export default function GPTChat() {
   const isFirst = useRef(true);
@@ -58,7 +42,7 @@ export default function GPTChat() {
     React.Dispatch<React.SetStateAction<MessageInfo[]>>
   ];
   const [input, setInput] = useLocalStorage("input", "");
-  const [userId, setUserId] = useLocalStorage("userId", genUuid());
+  const [userId, setUserId] = useLocalStorage("userId", uuidv7());
   const [following, setFollowing] = useState(true);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,7 +59,7 @@ export default function GPTChat() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function checkUserIdAvalible() {
     if (userId == undefined || userId == null || userId.length < 5) {
-      setUserId(genUuid());
+      setUserId(uuidv7());
       // 刷新页面
       if (typeof window !== "undefined") {
         window.location.reload();
@@ -87,19 +71,18 @@ export default function GPTChat() {
 
   // 设置定时拉去信息
   useEffect(() => {
-    let first = true;
-    let timer = setInterval(() => {
+    const timer = setInterval(() => {
       console.log(`userId: ${userId}`);
       checkUserIdAvalible();
     }, 1000);
     return () => {
       clearInterval(timer);
     };
-  }, [checkUserIdAvalible, messages, setMessages, userId]);
+  }, [messages, setMessages, userId]);
 
   // 发送信息
-  let sendMessage = () => {
-    if (input.length == 0 || input.trim().length == 0) {
+  const sendMessage = () => {
+    if (input.length == 0 || input.trim().length === 0) {
       toast.error("请输入内容");
       return;
     }
@@ -107,15 +90,15 @@ export default function GPTChat() {
     if (!checkUserIdAvalible()) return;
 
     // let time = new Date().toLocaleString();
-    let msg: MessageInfo = {
-      id: genUuid(),
+    const msg: MessageInfo = {
+      id: uuidv7(),
       userId: userId,
       content: input,
       status: MessageStatus.Sent,
       time: new Date().getTime(),
     };
     const robot_msg: MessageInfo = {
-      id: genUuid(),
+      id: uuidv7(),
       userId: "robot",
       content: "...",
       status: MessageStatus.Sending,
@@ -229,7 +212,7 @@ export default function GPTChat() {
     }
 
     return () => {
-      chatbox?.removeEventListener("scroll", (e) => {});
+      chatbox?.removeEventListener("scroll", (e) => { });
       clearTimeout(scrollTimer.current);
     };
   }, [toBottom]);
@@ -252,14 +235,14 @@ export default function GPTChat() {
     //   "chat-bubble-error",
     // ];
     // let color = colors[seed % 7];
-    return uuid == "robot" ? "chat-bubble-warning" : "chat-bubble-primary";
+    return uuid === "robot" ? "chat-bubble-warning" : "chat-bubble-primary";
   }
 
   // 通过时间戳获取时间，如果时间不是很久，就显示多久之前，否则显示具体时间
   function getTime(time: number | undefined) {
-    if (time == undefined) return "发送中";
-    let now = new Date().getTime();
-    let diff = now - time;
+    if (time === undefined) return "发送中";
+    const now = new Date().getTime();
+    const diff = now - time;
     if (diff < 1000 * 60) {
       // return `${Math.floor(diff / 1000)}秒前`;
       return "刚刚";

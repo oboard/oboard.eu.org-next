@@ -12,6 +12,7 @@ import { type MessageInfo, MessageStatus } from "../../models/chat/message";
 import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
+import { v7 as uuidv7 } from 'uuid';
 
 const CodeBlock = ({
   language,
@@ -45,24 +46,6 @@ const upload = async (file: File) => {
   return data.url;
 };
 
-// 生成uuid
-const genUuid = () => {
-  const s = [];
-  const hexDigits = "0123456789abcdef";
-  for (let i = 0; i < 36; i++) {
-    s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
-  }
-  // bits 12-15 of the time_hi_and_version field to 0010
-  s[14] = "4";
-  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  // @ts-ignore
-  s[19] = hexDigits.substring((s[19] & 0x3) | 0x8, 1);
-  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[8] = s[13] = s[18] = s[23] = "-";
-  const uuid = s.join("");
-  return uuid;
-};
-
 // 用于防吞信息
 const sendedList: MessageInfo[] = [];
 
@@ -74,7 +57,7 @@ export default function Chat() {
     React.Dispatch<React.SetStateAction<MessageInfo[]>>
   ];
   const [input, setInput] = useLocalStorage("input", "");
-  const [userId, setUserId] = useLocalStorage("userId", genUuid());
+  const [userId, setUserId] = useLocalStorage("userId", uuidv7());
   const [following, setFollowing] = useState(true);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,7 +74,7 @@ export default function Chat() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function checkUserIdAvalible() {
     if (userId === undefined || userId == null || userId.length < 5) {
-      setUserId(genUuid());
+      setUserId(uuidv7());
       // 刷新页面
       if (typeof window !== "undefined") {
         window.location.reload();
@@ -223,7 +206,7 @@ export default function Chat() {
       reader.onload = () => {
         upload(file).then((url) => {
           const msg: MessageInfo = {
-            id: genUuid(),
+            id: uuidv7(),
             userId: userId,
             content: isImage
               ? `![${file.name}](${url})`
@@ -259,7 +242,7 @@ export default function Chat() {
 
     // let time = new Date().toLocaleString();
     const msg: MessageInfo = {
-      id: genUuid(),
+      id: uuidv7(),
       userId: userId,
       content: input,
       status: MessageStatus.Sending,

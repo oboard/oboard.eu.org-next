@@ -10,6 +10,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { type MessageInfo, MessageStatus } from "@/models/chat/message";
 import toast from "react-hot-toast";
+import { v7 as uuidv7 } from 'uuid';
 
 const CodeBlock = ({
   language,
@@ -31,29 +32,11 @@ const CodeBlock = ({
   );
 };
 
-// 生成uuid
-const genUuid = () => {
-  const s = [];
-  const hexDigits = "0123456789abcdef";
-  for (let i = 0; i < 36; i++) {
-    s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
-  }
-  // bits 12-15 of the time_hi_and_version field to 0010
-  s[14] = "4";
-  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  // @ts-ignore
-  s[19] = hexDigits.substring((s[19] & 0x3) | 0x8, 1);
-  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[8] = s[13] = s[18] = s[23] = "-";
-  const uuid = s.join("");
-  return uuid;
-};
-
 function P2PChat() {
   const isFirst = useRef(true);
   const [myId, setMyId] = useState("");
   const myIdRef = useRef(myId);
-  const [userId, setUserId] = useLocalStorage("userId", genUuid());
+  const [userId, setUserId] = useLocalStorage("userId", uuidv7());
   const [userList, setUserList] = useState<string[]>([]);
   const peerRef = useRef(undefined as Peer | undefined);
   const [mesType, setMesType] = useState(0);
@@ -73,7 +56,7 @@ function P2PChat() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function checkUserIdAvalible() {
     if (userId === undefined || userId == null || userId.length < 5) {
-      setUserId(genUuid());
+      setUserId(uuidv7());
       // 刷新页面
       if (typeof window !== "undefined") {
         window.location.reload();
@@ -129,7 +112,7 @@ function P2PChat() {
       toBottom();
     }
     return () => {
-      chatbox?.removeEventListener("scroll", (e) => {});
+      chatbox?.removeEventListener("scroll", (e) => { });
       clearTimeout(scrollTimer.current);
     };
   }, [toBottom]);
@@ -137,10 +120,10 @@ function P2PChat() {
   // 检查peer是否连接
   function checkPeer() {
     if (
-      peerRef.current == undefined ||
-      peerRef.current == null ||
-      myIdRef.current == undefined ||
-      myIdRef.current == null ||
+      peerRef.current === undefined ||
+      peerRef.current === null ||
+      myIdRef.current === undefined ||
+      myIdRef.current === null ||
       myIdRef.current === ""
     ) {
       init();
@@ -207,7 +190,7 @@ function P2PChat() {
               return item.content.trim() !== "";
             });
 
-            for (let item of temp) {
+            for (const item of temp) {
               if (item.time === undefined) {
                 // 时间戳
                 item.time = new Date().getTime();
@@ -274,7 +257,7 @@ function P2PChat() {
     if (!checkPeer()) return;
 
     const msg: MessageInfo = {
-      id: genUuid(),
+      id: uuidv7(),
       userId: userId,
       content: message,
       status: MessageStatus.Sending,
@@ -310,7 +293,7 @@ function P2PChat() {
       });
     }
 
-    for (let user of userList) {
+    for (const user of userList) {
       _send(user);
     }
   };
@@ -358,9 +341,8 @@ function P2PChat() {
                   // 要根据uuid判断是否是自己发的，如果是自己发的靠右，别人发的靠左
 
                   <div
-                    className={`chat chat-${
-                      item.userId === userId ? "end" : "start"
-                    }`}
+                    className={`chat chat-${item.userId === userId ? "end" : "start"
+                      }`}
                     key={item.id}
                   >
                     <div className="chat-header">
@@ -372,9 +354,8 @@ function P2PChat() {
                     <div
                       className={`animate-duration-500 animate-ease-out chat-bubble ${genColor(
                         item.userId
-                      )} animate-fade-in-${
-                        item.userId === userId ? "right" : "left"
-                      }${item.type === "image" ? "  max-w-sm" : ""}`}
+                      )} animate-fade-in-${item.userId === userId ? "right" : "left"
+                        }${item.type === "image" ? "  max-w-sm" : ""}`}
                     >
                       <ReactMarkdown
                         // 图片可以点击放大
@@ -385,6 +366,14 @@ function P2PChat() {
                               onClick={() => {
                                 if (typeof window !== "undefined") {
                                   window.open(props.src);
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  if (typeof window !== "undefined") {
+                                    window.open(props.src);
+                                    e.preventDefault();
+                                  }
                                 }
                               }}
                             >
@@ -434,9 +423,9 @@ function P2PChat() {
                                 <svg
                                   // 颜色
                                   className={
-                                    (item.userId === userId
+                                    `${item.userId === userId
                                       ? "text-primary-content"
-                                      : "text-base-content") + " fill-current"
+                                      : "text-base-content"} fill-current`
                                   }
                                   viewBox="0 0 1024 1024"
                                   version="1.1"
@@ -444,6 +433,7 @@ function P2PChat() {
                                   width="16"
                                   height="16"
                                 >
+                                  <title>link</title>
                                   <path d="M573.44 640a187.68 187.68 0 0 1-132.8-55.36L416 560l45.28-45.28 24.64 24.64a124.32 124.32 0 0 0 170.08 5.76l1.44-1.28a49.44 49.44 0 0 0 4-3.84l101.28-101.28a124.16 124.16 0 0 0 0-176l-1.92-1.92a124.16 124.16 0 0 0-176 0l-51.68 51.68a49.44 49.44 0 0 0-3.84 4l-20 24.96-49.92-40L480 276.32a108.16 108.16 0 0 1 8.64-9.28l51.68-51.68a188.16 188.16 0 0 1 266.72 0l1.92 1.92a188.16 188.16 0 0 1 0 266.72l-101.28 101.28a112 112 0 0 1-8.48 7.84 190.24 190.24 0 0 1-125.28 48z" />
                                   <path
                                     d="M350.72 864a187.36 187.36 0 0 1-133.28-55.36l-1.92-1.92a188.16 188.16 0 0 1 0-266.72l101.28-101.28a112 112 0 0 1 8.48-7.84 188.32 188.32 0 0 1 258.08 7.84L608 464l-45.28 45.28-24.64-24.64A124.32 124.32 0 0 0 368 478.88l-1.44 1.28a49.44 49.44 0 0 0-4 3.84l-101.28 101.28a124.16 124.16 0 0 0 0 176l1.92 1.92a124.16 124.16 0 0 0 176 0l51.68-51.68a49.44 49.44 0 0 0 3.84-4l20-24.96 50.08 40-20.8 25.12a108.16 108.16 0 0 1-8.64 9.28l-51.68 51.68A187.36 187.36 0 0 1 350.72 864z"
@@ -552,6 +542,7 @@ function P2PChat() {
           className="file-input file-input-bordered w-full max-w-xs"
         /> */}
         <button
+          type="button"
           className="btn btn-circle btn-primary"
           // 字数限制10000字
           disabled={message.length > 10000}

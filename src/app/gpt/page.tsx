@@ -8,7 +8,6 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type MessageInfo, MessageStatus } from "@/models/chat/message";
-import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
 import { v7 as uuidv7 } from 'uuid';
@@ -258,7 +257,7 @@ export default function GPTChat() {
   }
 
   return (
-    <NoSSR>
+    <>
       {/* 一个用于滚动到底部对悬浮按钮，如果following为false则显示 */}
       {/* 底部剧中 */}
       <div
@@ -520,6 +519,6 @@ export default function GPTChat() {
           </div>
         </div>
       </dialog>
-    </NoSSR>
+    </>
   );
 }

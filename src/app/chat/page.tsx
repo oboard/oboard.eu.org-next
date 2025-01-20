@@ -9,7 +9,6 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { type MessageInfo, MessageStatus } from "../../models/chat/message";
-import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
 import { v7 as uuidv7 } from 'uuid';
@@ -310,7 +309,7 @@ export default function Chat() {
     toBottom();
 
     return () => {
-      chatbox?.removeEventListener("scroll", (e) => {});
+      chatbox?.removeEventListener("scroll", (e) => { });
       clearTimeout(scrollTimer.current);
     };
   }, [toBottom]);
@@ -357,7 +356,7 @@ export default function Chat() {
   }
 
   return (
-    <NoSSR>
+    <>
       {/* 一个用于滚动到底部对悬浮按钮，如果following为false则显示 */}
       {/* 底部剧中 */}
       <div
@@ -411,9 +410,8 @@ export default function Chat() {
                 // 要根据uuid判断是否是自己发的，如果是自己发的靠右，别人发的靠左
 
                 <div
-                  className={`chat  chat-${
-                    item.userId === userId ? "end" : "start"
-                  }`}
+                  className={`chat  chat-${item.userId === userId ? "end" : "start"
+                    }`}
                   key={item.id}
                 >
                   {/* <div className="chat-image avatar">
@@ -430,9 +428,8 @@ export default function Chat() {
                   <div
                     className={`animate-duration-500 animate-ease-out chat-bubble ${genColor(
                       item.userId
-                    )} animate-fade-in-${
-                      item.userId === userId ? "right" : "left"
-                    }${item.type === "image" ? "  max-w-sm" : ""}`}
+                    )} animate-fade-in-${item.userId === userId ? "right" : "left"
+                      }${item.type === "image" ? "  max-w-sm" : ""}`}
                   >
                     <ReactMarkdown
                       // 图片可以点击放大
@@ -640,6 +637,6 @@ export default function Chat() {
           </div>
         </div>
       </dialog>
-    </NoSSR>
+    </>
   );
 }

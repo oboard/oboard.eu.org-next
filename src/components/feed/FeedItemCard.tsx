@@ -32,6 +32,8 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
   const summaryShort =
     summary.length > 40 ? `${summary.slice(0, 40)}...` : summary;
 
+  const renderTags = tags.filter((tag) => tag !== "post");
+
   function getCrossbellImageUrl(imageUrl: string) {
     return imageUrl.replace("ipfs://", "https://ipfs.crossbell.io/ipfs/");
   }
@@ -96,14 +98,13 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
           {title}
         </h3>
 
-        <p className="flex-1 text-sm leading-6 text-left max-h-14">
+        <p className="flex-1 text-sm leading-6 text-left">
           {summaryShort}
         </p>
 
-        <div className="flex flex-wrap gap-2">
-          {tags
-            .map((tag) => (tag === "post" ? "文章" : tag))
-            .map((tag) => (
+        {renderTags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {renderTags.map((tag) => (
               <div
                 key={tag}
                 className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
@@ -112,7 +113,8 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
                 <span>{tag}</span>
               </div>
             ))}
-        </div>
+          </div>
+        )}
         <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
           {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-success text-success-content">
     {tags.join(", ")}

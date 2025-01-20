@@ -1,5 +1,5 @@
-import LinkCard from "@/components/LinkCard";
-import useLive2D from "@/components/live2d";
+import Header from "@/components/Header";
+import useLive2D from "@/components/Live2D";
 import "./globals.css";
 
 import { Toaster } from "react-hot-toast";
@@ -45,7 +45,7 @@ export default function RootLayout({
         {/* <MouseTracker /> */}
         <Toaster />
         {children}
-        <LinkCard />
+        <Header />
       </body>
     </html>
   );

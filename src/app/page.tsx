@@ -4,7 +4,7 @@ import InterestingAvatar from "@/components/InterestingAvatar";
 import FeedItemCard, {
   type FeedBodyInfo,
 } from "@/components/feed/FeedItemCard";
-import Live2D from "@/components/live2d";
+import Live2D from "@/components/Live2D";
 
 export const ability = [
   {
@@ -212,35 +212,7 @@ export default async function Home() {
             <div>
               <div className="flex justify-between">
                 计算机专业大三在读 (全栈开发)
-                {/* <EmojiJumper emojiList={["🤣", "🥲", "😊", "😇", "🙂"]} /> */}
               </div>
-              {/* {JSON.stringify(blogJson)} */}
-              {/* 下面是我的能力👇 */}
-              {/* {ability.map((item) => (
-                <div key={item.name} className="flex flex-col gap-2">
-                  <div className="flex flex-row justify-between">
-                    <h2 className="text-xl font-medium">{item.name}</h2>
-                    <EmojiJumper
-                      className="hidden sm:block"
-                      emojiList={item.children.map((v) => (
-                        <i key={v.name} className={v.icon} />
-                      ))}
-                    />
-                  </div>
-                  <p>{item.description}</p>
-                  <div className="flex flex-row flex-wrap gap-2">
-                    {item.children.map((child) => (
-                      <div
-                        key={child.name}
-                        className="flex flex-row items-center gap-2"
-                      >
-                        <i className={child.icon} />
-                        <span>{child.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))} */}
             </div>
           </div>
         </div>
@@ -283,7 +255,10 @@ export default async function Home() {
       <p className="text-center text-gray-500 dark:text-gray-400">
         © 2024 oboard. All Rights Reserved.
       </p>
+
+
       <Live2D />
+
     </article>
   );
 }

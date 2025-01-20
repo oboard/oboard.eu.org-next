@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/live2d.tsx",
+    "src/components/Live2D.tsx",
   ],
   "exclude": ["node_modules"]
 }

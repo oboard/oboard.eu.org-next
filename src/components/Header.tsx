@@ -34,7 +34,7 @@ const routes = [
   },
 ];
 
-export default function LinkCard() {
+export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);

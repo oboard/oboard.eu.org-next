@@ -3,7 +3,6 @@
 import type React from "react";
 import { Component, type Key, useEffect, useRef, useState } from "react";
 import type Peer from "peerjs";
-import NoSSR from "@/components/NoSSR";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";

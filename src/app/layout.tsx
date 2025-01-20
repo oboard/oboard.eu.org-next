@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import type { Metadata, Viewport } from "next";
 import useLive2D from "@/hooks/Live2D";
 import Live2DWrapper from "@/components/Live2DWrapper";
+import { Providers } from '@/components/Providers'
 
 export const viewport: Viewport = {
   themeColor: "#0069ff",
@@ -45,9 +46,11 @@ export default function RootLayout({
       <body className="flex flex-col justify-center items-center">
         {/* <MouseTracker /> */}
         <Toaster />
-        {children}
-        <Header />
-        <Live2DWrapper />
+        <Providers>
+          <Header />
+          {children}
+          <Live2DWrapper />
+        </Providers>
       </body>
     </html>
   );

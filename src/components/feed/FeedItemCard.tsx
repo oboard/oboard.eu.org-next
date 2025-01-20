@@ -1,30 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-
-export interface FeedBodyInfo {
-  version: string;
-  title: string;
-  description: string;
-  icon: string;
-  home_page_url: string;
-  feed_url: string;
-  items: FeedItemInfo[];
-}
-
-export interface FeedItemInfo {
-  id: string;
-  url: string;
-  title: string;
-  image: string;
-  summary: string;
-  content_html: string;
-  date_published: string;
-  tags: string[];
-  author: string;
-}
+import type { FeedItemInfo } from '@/models/feed'
 
 export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
   const { title, summary, url, date_published, tags, author, image } = item;
@@ -72,12 +49,6 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
     <a
       href={url}
       className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
-    // whileTap={{ scale: 0.9 }}
-    // whileHover={{ scale: 1.02 }}
-    // transition={{
-    //   type: "spring",
-    //   stiffness: 100,
-    // }}
     >
       {
         <Image
@@ -88,11 +59,6 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
           className="w-full object-cover aspect-900/383"
         />
       }
-      {/* <p className="text-sm leading-5 opacity-80 text-base-content">
-          <time dateTime={date_published}>
-            {new Date(date_published).toLocaleString()}
-          </time>
-        </p> */}
       <div className="p-4 flex flex-col gap-3 flex-1">
         <h3 className="text-xl leading-7 font-semibold text-ellipsis overflow-hidden w-full inline-block text-nowrap whitespace-nowrap">
           {title}
@@ -116,11 +82,8 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
           </div>
         )}
         <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
-          {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-success text-success-content">
-    {tags.join(", ")}
-  </span> */}
+
           <span className="inline-flex items-center gap-2 rounded-full font-medium">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <Image
               src="https://obscloud.ulearning.cn/resources/web/1715838718885.png"
               alt={"Head"}

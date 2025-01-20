@@ -438,7 +438,7 @@ export default function GPTChat() {
             )}
           </div>
         </div>
-        <div className="px-4 py-2 fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row items-center pr-2 gap-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-base-100">
+        <div className="px-4 py-2 fixed bottom-16 md:bottom-0 left-0 right-0 flex flex-row items-center pr-2 gap-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-base-300">
           {/* // 要支持多行输入，按Shift+Enter 或者Ctrl+Enter换行 */}
           <input
             className="input flex-grow focus:outline-0 transition-all duration-200"
@@ -473,7 +473,7 @@ export default function GPTChat() {
           {/* 更多 */}
           {!input && (
             <details className="dropdown dropdown-end dropdown-top">
-              <summary className="btn btn-circle">
+              <summary className="btn btn-circle btn-ghost">
                 <i className="i-tabler-plus text-xl" />
               </summary>
               <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">

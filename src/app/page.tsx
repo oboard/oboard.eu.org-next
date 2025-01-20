@@ -1,9 +1,8 @@
 import type React from "react";
 import Link from "next/link";
 import InterestingAvatar from "@/components/InterestingAvatar";
-import FeedItemCard, {
-  type FeedBodyInfo,
-} from "@/components/feed/FeedItemCard";
+import FeedItemCard from "@/components/feed/FeedItemCard";
+import type { FeedItemInfo, FeedBodyInfo } from "@/models/feed";
 
 const links = [
   {
@@ -99,7 +98,7 @@ export default async function Home() {
 
         {/* blog */}
         <div className="w-full py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {blogJson.items.map((item) => (
+          {blogJson.items.map((item: FeedItemInfo) => (
             <FeedItemCard key={item.id} item={item} />
           ))}
         </div>

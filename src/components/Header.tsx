@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NightToggle from "./NightToggle";
 import { motion, AnimatePresence } from "framer-motion";
+import ConnectWalletButton from '@/components/ConnectWalletButton'
+import { appkit } from "@/lib/appkit";
+import { Button } from "@headlessui/react";
 
 const routes = [
   {
@@ -38,22 +41,19 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);
+  // 检查颜色模式
+
+  const applyTheme = useCallback((dark: boolean) => {
+    const html = document.querySelector("html");
+    setIsDark(dark);
+    html?.setAttribute("data-theme", dark ? "night" : "winter");
+    appkit.setThemeMode(dark ? "dark" : "light");
+  }, []);
 
   useEffect(() => {
-    // 检查颜色模式
     const checkColorScheme = () => {
-      // 根据系统主题切换浅色和深色模式
-      // 使用daisyUI
-      const html = document.querySelector("html");
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        setIsDark(true);
-        html?.setAttribute("data-theme", "night");
-      } else {
-        setIsDark(false);
-        html?.setAttribute("data-theme", "winter");
-      }
-    };
-
+      applyTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    }
     checkColorScheme();
 
     // 当系统颜色发生变化
@@ -62,22 +62,16 @@ export default function Header() {
       .addEventListener("change", (e) => {
         checkColorScheme();
       });
-  }, []);
+  }, [applyTheme]);
 
   return (
     <>
-      <div className="fixed right-4 top-10 z-100">
+      <div className="fixed right-4 top-10 z-100 flex flex-row items-center gap-2">
+        <ConnectWalletButton />
         <NightToggle
           value={isDark}
           onChange={(e) => {
-            console.log(e);
-            const html = document.querySelector("html");
-            setIsDark(e.target.checked);
-            if (e.target.checked) {
-              html?.setAttribute("data-theme", "night");
-            } else {
-              html?.setAttribute("data-theme", "winter");
-            }
+            applyTheme(e.target.checked);
           }}
         />
       </div>
@@ -113,8 +107,7 @@ export default function Header() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0 }}
-        className="flex-row items-center px-1 hidden md:flex z-100 fixed top-10 backdrop-blur bg-base-200 bg-opacity-50 ring-1 ring-base-100 ring-opacity-50 rounded-full shadow"
-        layout
+        className="flex-row items-center px-1 hidden md:flex z-100 fixed top-10 backdrop-blur bg-base-200 bg-opacity-50 ring-1 ring-base-300 ring-opacity-50 rounded-full"
         transition={{
           type: "spring",
           stiffness: 500,
@@ -125,13 +118,13 @@ export default function Header() {
         {pathname === "/" ? (
           <div className="w-2" />
         ) : (
-          <button
+          <Button
             type="button"
             className="btn btn-ghost btn-sm rounded-full"
             onClick={() => router.back()}
           >
             <i className="i-tabler-arrow-left" />
-          </button>
+          </Button>
         )}
 
         <AnimatePresence>

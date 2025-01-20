@@ -1,13 +1,7 @@
-import {
-    defineConfig,
-    presetAttributify,
-    presetIcons,
-    presetTypography,
-    presetUno,
-} from 'unocss'
-
-
+import { defineConfig, presetAttributify, presetIcons, presetTypography, presetUno } from 'unocss'
 import transformerAttributifyJsx from '@unocss/transformer-attributify-jsx'
+import tabler from '@iconify-json/tabler'
+import logos from '@iconify-json/logos'
 
 export default defineConfig({
     presets: [
@@ -23,8 +17,8 @@ export default defineConfig({
                 'vertical-align': 'middle',
             },
             collections: {
-                tabler: () => import('@iconify-json/tabler/icons.json').then(i => i.default as any),
-                logos: () => import('@iconify-json/logos/icons.json').then(i => i.default as any),
+                tabler: () => tabler.icons,
+                logos: () => logos.icons,
             },
         }),
     ], transformers: [

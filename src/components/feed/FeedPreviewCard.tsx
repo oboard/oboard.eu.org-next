@@ -1,4 +1,4 @@
-import type { FeedItemInfo } from "./FeedItemCard";
+import type { FeedItemInfo } from "../../models/feed";
 import { motion } from "framer-motion";
 
 export default function FeedPreviewCard({ item }: { item: FeedItemInfo }) {

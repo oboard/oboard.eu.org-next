@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import NightToggle from "./NightToggle";
-import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const routes = [
   {
@@ -33,8 +33,6 @@ const routes = [
     icon: "i-tabler-info-circle",
   },
 ];
-
-const paths = routes.map((route) => route.path);
 
 export default function LinkCard() {
   const router = useRouter();

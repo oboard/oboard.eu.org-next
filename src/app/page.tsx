@@ -1,18 +1,10 @@
 import type React from "react";
-import type { PropsWithChildren } from "react";
-// import clsx from 'clsx'
 import Link from "next/link";
 import InterestingAvatar from "@/components/InterestingAvatar";
 import FeedItemCard, {
   type FeedBodyInfo,
-  FeedItemInfo,
 } from "@/components/feed/FeedItemCard";
-// import Live2D from "@/components/live2d";
-import dynamic from "next/dynamic";
-
-const Live2D = dynamic(() => import("@/components/live2d"), {
-  ssr: false,
-});
+import Live2D from "@/components/live2d";
 
 export const ability = [
   {

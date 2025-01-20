@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { Component, type Key, useEffect, useRef, useState } from "react";
+import { Component, type Key, useCallback, useEffect, useRef, useState } from "react";
 import type Peer from "peerjs";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import ReactMarkdown from "react-markdown";
@@ -116,50 +116,7 @@ function P2PChat() {
     };
   }, [toBottom]);
 
-  // 检查peer是否连接
-  function checkPeer() {
-    if (
-      peerRef.current === undefined ||
-      peerRef.current === null ||
-      myIdRef.current === undefined ||
-      myIdRef.current === null ||
-      myIdRef.current === ""
-    ) {
-      init();
-      return false;
-    }
-    return true;
-  }
-
-  // 设置定时拉去信息
-  useEffect(() => {
-    checkPeer();
-    checkUserIdAvalible();
-    const timer = setInterval(() => {
-      console.log(`userId: ${userId}`);
-      checkPeer();
-      checkUserIdAvalible();
-
-      try {
-        fetch("/api/chat/peer", {
-          // Post
-          method: "post",
-          body: myIdRef.current,
-        }).then((res) => {
-          res.json().then((data) => {
-            setUserList(data);
-          });
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [checkPeer, checkUserIdAvalible, userId]);
-
-  function init() {
+  const init = useCallback(() => {
     import("peerjs").then(({ default: Peer }) => {
       const peer = new Peer("");
       peer.on("open", (id) => {
@@ -206,8 +163,50 @@ function P2PChat() {
         });
       });
     });
-  }
-  // init();
+  }, [setMessages]);
+
+  // 检查peer是否连接
+  const checkPeer = useCallback(() => {
+    if (
+      peerRef.current === undefined ||
+      peerRef.current === null ||
+      myIdRef.current === undefined ||
+      myIdRef.current === null ||
+      myIdRef.current === ""
+    ) {
+      init();
+      return false;
+    }
+    return true;
+  }, [init]);
+
+  // 设置定时拉去信息
+  useEffect(() => {
+    checkPeer();
+    checkUserIdAvalible();
+    const timer = setInterval(() => {
+      console.log(`userId: ${userId}`);
+      checkPeer();
+      checkUserIdAvalible();
+
+      try {
+        fetch("/api/chat/peer", {
+          // Post
+          method: "post",
+          body: myIdRef.current,
+        }).then((res) => {
+          res.json().then((data) => {
+            setUserList(data);
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [checkPeer, checkUserIdAvalible, userId]);
 
   function genColor(uuid: string) {
     if (uuid === undefined || uuid == null || uuid.length < 5) {

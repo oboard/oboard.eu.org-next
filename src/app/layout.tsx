@@ -1,9 +1,10 @@
 import Header from "@/components/Header";
-import useLive2D from "@/components/Live2D";
 import "./globals.css";
 
 import { Toaster } from "react-hot-toast";
 import type { Metadata, Viewport } from "next";
+import useLive2D from "@/hooks/Live2D";
+import Live2DWrapper from "@/components/Live2DWrapper";
 
 export const viewport: Viewport = {
   themeColor: "#0069ff",
@@ -46,6 +47,7 @@ export default function RootLayout({
         <Toaster />
         {children}
         <Header />
+        <Live2DWrapper />
       </body>
     </html>
   );

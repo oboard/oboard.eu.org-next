@@ -151,12 +151,16 @@ async function getPosts(link: string) {
   return meta;
 }
 
-export default async function WeixinArticle({ params }: any) {
-  //   if (params.slug) {
+export default async function WeixinArticle({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const slug = (await params).slug;
   let data: any = {};
   // 判断是否是url
-  if (params && params.slug) {
-    data = await getPosts(params.slug);
+  if (slug) {
+    data = await getPosts(slug);
   } else {
     data = undefined;
   }
@@ -168,7 +172,7 @@ export default async function WeixinArticle({ params }: any) {
         <h1 className="text-4xl font-bold">微信公众号解析助手</h1>
         <p className="text-lg text-opacity-50">同时支持秀米</p>
 
-        <ShareLinkBox shareText={params && params.slug} />
+        <ShareLinkBox shareText={slug} />
 
         {/* 展示数据
         'og:title': '开学季|关于面试，你值得拥有的心理小技巧！',

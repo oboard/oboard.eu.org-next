@@ -39,17 +39,17 @@ async function getPosts(link: string) {
     /* <html data-head-attrs="">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="theme-color" content="rgb(255, 255, 255)">
-	<meta name="server-rendered" content="true">
-	<meta name="og:description" content="2 亿人的生活经验，都在小红书">
-	<meta name="keywords" content="iPad, 平板, ipad配件, 壁纸, 全屏壁纸, ipadmini6, apple, iphone布局">
-	<meta name="description" content="苹果总部基地太帅了！        ">
-	<meta name="og:type" content="article">
-	<meta name="og:site_name" content="小红书">
-	<meta name="og:title" content="Apple park 壁纸">
-	<meta name="og:image" content="https://sns-img-qc.xhscdn.com/e89e2efe-3035-6905-dfcb-a9689b4ffe75">
-	<meta name="og:url" content="https://www.xiaohongshu.com/explore/64fa99c7000000002000299f"></meta> */
+  <meta charset="utf-8">
+  <meta name="theme-color" content="rgb(255, 255, 255)">
+  <meta name="server-rendered" content="true">
+  <meta name="og:description" content="2 亿人的生活经验，都在小红书">
+  <meta name="keywords" content="iPad, 平板, ipad配件, 壁纸, 全屏壁纸, ipadmini6, apple, iphone布局">
+  <meta name="description" content="苹果总部基地太帅了！        ">
+  <meta name="og:type" content="article">
+  <meta name="og:site_name" content="小红书">
+  <meta name="og:title" content="Apple park 壁纸">
+  <meta name="og:image" content="https://sns-img-qc.xhscdn.com/e89e2efe-3035-6905-dfcb-a9689b4ffe75">
+  <meta name="og:url" content="https://www.xiaohongshu.com/explore/64fa99c7000000002000299f"></meta> */
   }
   // 解析html
 
@@ -96,27 +96,26 @@ async function getPosts(link: string) {
   return meta;
 }
 
-export default async function XHSArticle({
+export default async function Page({
   params,
 }: {
-  params?: { slug: string };
+  params: Promise<{ slug: string }>
 }) {
-  //   if (params.slug) {
+  const slug = (await params).slug;
   let data: any = {};
   // 判断是否是url
-  if (params?.slug) {
-    data = await getPosts(params.slug);
+  if (slug) {
+    data = await getPosts(slug);
   } else {
     data = undefined;
   }
-  //   }
 
   return (
     <>
       <main className="py-24 px-4 flex flex-col gap-4 justify-center items-center">
         <h1 className="text-4xl font-bold">小红书</h1>
 
-        <ShareLinkBox shareText={params?.slug} />
+        <ShareLinkBox shareText={slug} />
 
         {/* 展示数据
         description: '苹果总部基地太帅了！        ',

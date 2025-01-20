@@ -1,12 +1,15 @@
 "use client";
-import { loadOml2d } from "oh-my-live2d";
+
 import { useEffect } from "react";
-export default function Live2D() {
+
+export default function useLive2D() {
 	useEffect(() => {
-		if (
-			typeof window !== "undefined" &&
-			!document.getElementById("oml2d-canvas")
-		) {
+		if (document.getElementById("oml2d-canvas")) {
+			return;
+		}
+
+		// 动态导入 oh-my-live2d
+		import("oh-my-live2d").then(({ loadOml2d }) => {
 			const oml2d = loadOml2d({
 				dockedPosition: "right",
 				sayHello: false,
@@ -15,16 +18,16 @@ export default function Live2D() {
 					items: [],
 				},
 				// statusBar: {
-				// 	disable: true,
+				//   disable: true,
 				// },
 				models: [
 					// {
-					// 	path: "https://model.oml2d.com/HK416-1-normal/model.json",
-					// 	position: [0, 60],
-					// 	scale: 0.08,
-					// 	stageStyle: {
-					// 		height: 450,
-					// 	},
+					//   path: "https://model.oml2d.com/HK416-1-normal/model.json",
+					//   position: [0, 60],
+					//   scale: 0.08,
+					//   stageStyle: {
+					//     height: 450,
+					//   },
 					// },
 					{
 						path: "/Resources/三月七/三月七.model3.json",
@@ -41,10 +44,9 @@ export default function Live2D() {
 				switch (status) {
 					case "success":
 						console.log("加载成功");
-
-						document
-							.getElementById("oml2d-canvas")
-							?.addEventListener("click", () => {
+						const canvas = document.getElementById("oml2d-canvas");
+						if (canvas) {
+							canvas.addEventListener("click", () => {
 								oml2d.stageSlideOut();
 								oml2d.statusBarOpen("显示看板娘");
 								oml2d.clearTips();
@@ -53,6 +55,7 @@ export default function Live2D() {
 									oml2d.statusBarClose();
 								});
 							});
+						}
 						break;
 					case "fail":
 						console.log("加载失败");
@@ -62,8 +65,6 @@ export default function Live2D() {
 						break;
 				}
 			});
-		}
-	}, []);
-
-	return <></>;
+		});
+	}, []); // 空依赖数组确保效果只运行一次
 }

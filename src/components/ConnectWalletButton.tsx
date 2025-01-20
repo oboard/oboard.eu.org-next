@@ -11,7 +11,7 @@ export default function ConnectWalletButton() {
     const character = useCrossbellCharacter(address)
 
     if (address && character) {
-        return <div className="flex flex-row items-center gap-2 text-sm leading-5 border border-base-300 bg-base-200 bg-opacity-80 backdrop-blur-sm rounded-full px-2 py-1">
+        return <div className="flex flex-row items-center gap-2 text-sm leading-5 border border-base-300 bg-base-200 bg-opacity-80 backdrop-blur-sm rounded-full pl-4 py-1">
             <Image
                 className='rounded-full overflow-clip'
                 src={getCrossbellImageUrl(character.metadata.content.avatars[0])}

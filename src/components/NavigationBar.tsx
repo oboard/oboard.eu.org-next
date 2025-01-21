@@ -144,24 +144,32 @@ export default function NavigationBar() {
 
       {/* 移动端 */}
       <ul
-        style={{
-          backgroundColor:
-            "var(--fallback-b2,oklch(var(--b2) / var(--un-bg-opacity)))",
-        }}
-        className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row backdrop-blur bg-opacity-50 gap-1 px-1 sm:px-2"
+        className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row items-center justify-around bg-base-200/80 backdrop-blur-md border-t border-base-300/50 px-2 z-50"
       >
         {routes.map((route) => (
           <li
             key={route.path}
-            className="flex-1 m-auto h-full py-1 sm:py-2 hoverable"
+            className="relative flex-1"
           >
             <Link
-              className={`transition-all active:scale-90 hover:text-primary rounded-full flex flex-col sm:flex-row justify-center items-center ${pathname === route.path ? "text-primary" : ""
+              className={`group flex flex-col items-center justify-center py-1 transition-all ${pathname === route.path ? "text-primary" : "text-base-content/70"
                 }`}
               href={route.path}
             >
-              <i className={`${route.icon} text-xl`} />
-              <div>{route.name}</div>
+              <i className={`${route.icon} text-xl mb-0.5 transition-transform group-active:scale-90`} />
+              <span className="text-xs font-medium">{route.name}</span>
+
+              {pathname === route.path && (
+                <motion.div
+                  layoutId="mobile-nav-indicator"
+                  className="absolute -top-1 w-1 h-1 rounded-full bg-primary"
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                />
+              )}
             </Link>
           </li>
         ))}

@@ -19,6 +19,7 @@ const metadata = {
 
 // 创建 Wagmi 适配器
 export const wagmiAdapter = new WagmiAdapter({
+    // @ts-ignore
     networks: [crossbell],
     projectId,
     ssr: true
@@ -27,6 +28,7 @@ export const wagmiAdapter = new WagmiAdapter({
 // 初始化 AppKit
 export const appkit = createAppKit({
     adapters: [wagmiAdapter],
+    // @ts-ignore
     networks: [crossbell],
     projectId,
     metadata,

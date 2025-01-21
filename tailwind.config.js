@@ -11,6 +11,7 @@ export default {
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
         'grid-slate': 'grid-slate 20s linear infinite',
         'float': 'float 6s ease-in-out infinite',
+        'orbit': 'orbit 20s linear infinite',
       },
       keyframes: {
         'gradient-x': {
@@ -34,6 +35,10 @@ export default {
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
+        },
+        orbit: {
+          '0%': { transform: 'rotate(0deg) translateX(150%) rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg) translateX(150%) rotate(-360deg)' },
         },
       },
     },

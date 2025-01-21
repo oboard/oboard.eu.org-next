@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import NavigationBar from "@/components/NavigationBar";
 import "./globals.css";
 
 import { Toaster } from "react-hot-toast";
@@ -47,7 +47,7 @@ export default function RootLayout({
         {/* <MouseTracker /> */}
         <Toaster />
         <Providers>
-          <Header />
+          <NavigationBar />
           {children}
           <Live2DWrapper />
         </Providers>

@@ -12,6 +12,7 @@ import { type MessageInfo, MessageStatus } from "../../models/chat/message";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
 import { v7 as uuidv7 } from 'uuid';
+import { useUserId } from "@/hooks/useUserId";
 
 const CodeBlock = ({
   language,
@@ -49,14 +50,14 @@ const upload = async (file: File) => {
 const sendedList: MessageInfo[] = [];
 
 // 上面是api的代码，下面是页面的代码
-export default function Chat() {
+export default function ChatPage() {
+  const { userId, checkUserIdAvalible } = useUserId();
   // 使用daisyUI和tailwindcss
   const [messages, setMessages] = useLocalStorage("messages", []) as [
     MessageInfo[],
     React.Dispatch<React.SetStateAction<MessageInfo[]>>
   ];
   const [input, setInput] = useLocalStorage("input", "");
-  const [userId, setUserId] = useLocalStorage("userId", uuidv7());
   const [following, setFollowing] = useState(true);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,20 +68,6 @@ export default function Chat() {
       top: chatbox?.scrollHeight,
       behavior: quick ? "auto" : "smooth",
     });
-  }
-
-  // 检查userId是否可用
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  function checkUserIdAvalible() {
-    if (userId === undefined || userId == null || userId.length < 5) {
-      setUserId(uuidv7());
-      // 刷新页面
-      if (typeof window !== "undefined") {
-        window.location.reload();
-        return false;
-      }
-    }
-    return true;
   }
 
   // 设置定时拉去信息
@@ -192,7 +179,7 @@ export default function Chat() {
     input.type = "file";
 
     input.onchange = () => {
-      if (input.files == null || input.files.length == 0) return;
+      if (input.files == null || input.files.length === 0) return;
 
       if (!checkUserIdAvalible()) return;
 
@@ -318,7 +305,7 @@ export default function Chat() {
 
   // uuid作为种子，生成随机数，然后取1-7数字，作为颜色
   function genColor(uuid: string) {
-    if (uuid == undefined || uuid == null || uuid.length < 5) {
+    if (uuid === undefined || uuid == null || uuid.length < 5) {
       return "";
     }
     const seed = Number.parseInt(uuid.replace(/-/g, "").slice(0, 8), 16);
@@ -379,6 +366,8 @@ export default function Chat() {
           }}
         >
           <svg
+            role="img"
+            aria-label="返回底部"
             viewBox="0 0 1024 1024"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -391,11 +380,11 @@ export default function Chat() {
             <path
               d="M792.855154 465.805779c-6.240882-6.208198-14.368821-9.311437-22.560409-9.311437s-16.446822 3.168606-22.687703 9.440452L539.696922 673.674614 539.696922 108.393173c0-17.695686-14.336138-31.99914-32.00086-31.99914s-32.00086 14.303454-32.00086 31.99914l0 563.712619L269.455396 465.941675c-6.271845-6.208198-14.432469-9.34412-22.624056-9.34412-8.224271 0-16.417578 3.135923-22.65674 9.407768-12.511007 12.512727-12.480043 32.768069 0.032684 45.248112l259.328585 259.125601c3.264938 3.263217 7.104421 5.599247 11.136568 7.135385 3.999462 1.792447 8.351566 2.879613 13.023626 2.879613 1.119849 0 2.07972-0.543583 3.19957-0.639914 8.287918 0.063647 16.60852-3.008628 22.976697-9.407768L792.982449 511.053891C805.462492 498.542884 805.429808 478.254858 792.855154 465.805779z"
               p-id="5073"
-            ></path>
+            />
             <path
               d="M892.561322 875.531353c0 17.664722-14.303454 32.00086-31.99914 32.00086L156.562183 907.532213c-17.664722 0-32.00086-14.334417-32.00086-31.99914 0-17.664722 14.336138-32.00086 32.00086-32.00086l704 0C878.257869 843.532213 892.561322 857.866631 892.561322 875.531353z"
               p-id="5074"
-            ></path>
+            />
           </svg>
           <span className="hidden md:ml-2 md:inline-block">返回底部</span>
         </button>
@@ -486,11 +475,13 @@ export default function Chat() {
                             <div className="flex flex-row gap-1 items-center">
                               {/* 链接图标 */}
                               <svg
+                                role="img"
+                                aria-label="链接"
                                 // 颜色
                                 className={
-                                  (item.userId === userId
+                                  `${item.userId === userId
                                     ? "text-primary-content"
-                                    : "text-base-content") + " fill-current"
+                                    : "text-base-content"} fill-current`
                                 }
                                 viewBox="0 0 1024 1024"
                                 version="1.1"
@@ -498,11 +489,11 @@ export default function Chat() {
                                 width="16"
                                 height="16"
                               >
-                                <path d="M573.44 640a187.68 187.68 0 0 1-132.8-55.36L416 560l45.28-45.28 24.64 24.64a124.32 124.32 0 0 0 170.08 5.76l1.44-1.28a49.44 49.44 0 0 0 4-3.84l101.28-101.28a124.16 124.16 0 0 0 0-176l-1.92-1.92a124.16 124.16 0 0 0-176 0l-51.68 51.68a49.44 49.44 0 0 0-3.84 4l-20 24.96-49.92-40L480 276.32a108.16 108.16 0 0 1 8.64-9.28l51.68-51.68a188.16 188.16 0 0 1 266.72 0l1.92 1.92a188.16 188.16 0 0 1 0 266.72l-101.28 101.28a112 112 0 0 1-8.48 7.84 190.24 190.24 0 0 1-125.28 48z"></path>
+                                <path d="M573.44 640a187.68 187.68 0 0 1-132.8-55.36L416 560l45.28-45.28 24.64 24.64a124.32 124.32 0 0 0 170.08 5.76l1.44-1.28a49.44 49.44 0 0 0 4-3.84l101.28-101.28a124.16 124.16 0 0 0 0-176l-1.92-1.92a124.16 124.16 0 0 0-176 0l-51.68 51.68a49.44 49.44 0 0 0-3.84 4l-20 24.96-49.92-40L480 276.32a108.16 108.16 0 0 1 8.64-9.28l51.68-51.68a188.16 188.16 0 0 1 266.72 0l1.92 1.92a188.16 188.16 0 0 1 0 266.72l-101.28 101.28a112 112 0 0 1-8.48 7.84 190.24 190.24 0 0 1-125.28 48z" />
                                 <path
                                   d="M350.72 864a187.36 187.36 0 0 1-133.28-55.36l-1.92-1.92a188.16 188.16 0 0 1 0-266.72l101.28-101.28a112 112 0 0 1 8.48-7.84 188.32 188.32 0 0 1 258.08 7.84L608 464l-45.28 45.28-24.64-24.64A124.32 124.32 0 0 0 368 478.88l-1.44 1.28a49.44 49.44 0 0 0-4 3.84l-101.28 101.28a124.16 124.16 0 0 0 0 176l1.92 1.92a124.16 124.16 0 0 0 176 0l51.68-51.68a49.44 49.44 0 0 0 3.84-4l20-24.96 50.08 40-20.8 25.12a108.16 108.16 0 0 1-8.64 9.28l-51.68 51.68A187.36 187.36 0 0 1 350.72 864z"
                                   p-id="4051"
-                                ></path>
+                                />
                               </svg>
                               <a
                                 className="link-hover"

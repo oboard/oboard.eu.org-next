@@ -11,6 +11,7 @@ import { type MessageInfo, MessageStatus } from "@/models/chat/message";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import toast from "react-hot-toast";
 import { v7 as uuidv7 } from 'uuid';
+import { useUserId } from "@/hooks/useUserId";
 
 const CodeBlock = ({
   language,
@@ -33,15 +34,15 @@ const CodeBlock = ({
 };
 
 // 上面是api的代码，下面是页面的代码
-export default function GPTChat() {
+export default function GPTChatPage() {
   const isFirst = useRef(true);
+  const { userId, checkUserIdAvalible } = useUserId();
   // 使用daisyUI和tailwindcss
   const [messages, setMessages] = useLocalStorage("gpt_messages", []) as [
     MessageInfo[],
     React.Dispatch<React.SetStateAction<MessageInfo[]>>
   ];
   const [input, setInput] = useLocalStorage("input", "");
-  const [userId, setUserId] = useLocalStorage("userId", uuidv7());
   const [following, setFollowing] = useState(true);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,20 +53,6 @@ export default function GPTChat() {
       top: chatbox?.scrollHeight,
       behavior: quick ? "auto" : "smooth",
     });
-  }
-
-  // 检查userId是否可用
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  function checkUserIdAvalible() {
-    if (userId == undefined || userId == null || userId.length < 5) {
-      setUserId(uuidv7());
-      // 刷新页面
-      if (typeof window !== "undefined") {
-        window.location.reload();
-        return false;
-      }
-    }
-    return true;
   }
 
   // 设置定时拉去信息

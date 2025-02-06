@@ -10,6 +10,7 @@ import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { type MessageInfo, MessageStatus } from "@/models/chat/message";
 import toast from "react-hot-toast";
 import { v7 as uuidv7 } from 'uuid';
+import { useUserId } from "@/hooks/useUserId";
 
 const CodeBlock = ({
   language,
@@ -31,11 +32,11 @@ const CodeBlock = ({
   );
 };
 
-function P2PChat() {
+export default function P2PChatPage() {
   const isFirst = useRef(true);
+  const { userId, checkUserIdAvalible } = useUserId();
   const [myId, setMyId] = useState("");
   const myIdRef = useRef(myId);
-  const [userId, setUserId] = useLocalStorage("userId", uuidv7());
   const [userList, setUserList] = useState<string[]>([]);
   const peerRef = useRef(undefined as Peer | undefined);
   const [mesType, setMesType] = useState(0);
@@ -50,20 +51,6 @@ function P2PChat() {
   useEffect(() => {
     setMessageFile(new File([], ""));
   }, []);
-
-  // 检查userId是否可用
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  function checkUserIdAvalible() {
-    if (userId === undefined || userId == null || userId.length < 5) {
-      setUserId(uuidv7());
-      // 刷新页面
-      if (typeof window !== "undefined") {
-        window.location.reload();
-        return false;
-      }
-    }
-    return true;
-  }
 
   const [following, setFollowing] = useState(true);
 
@@ -554,5 +541,3 @@ function P2PChat() {
     </>
   );
 }
-
-export default P2PChat;

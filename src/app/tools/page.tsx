@@ -22,6 +22,8 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
     文章解析: "bg-purple-500",
     小红书: "bg-red-500",
     青年大学习: "bg-red-500",
+    钩织: "bg-yellow-500",
+    毛线: "bg-yellow-500",
   };
 
   return (
@@ -63,6 +65,13 @@ const toolbox = [
   //   avalible: true,
   // },
   {
+    name: "毛线实验室",
+    desc: "织女们都在用～",
+    url: "https://yarnlab.oboard.fun",
+    img: "/preview/yarnlab.jpg",
+    tag: ["钩织", "毛线"],
+    avalible: true,
+  }, {
     name: "微信公众号文章解析助手",
     desc: "解析文章的封面、标题、简介，支持秀米！",
     url: "tools/wemedia/weixin/article",
@@ -144,7 +153,7 @@ export default function Home() {
               className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
             >
               {/* <div className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all"> */}
-              <figure className="sm:h-40">
+              <figure className="sm:h-40 overflow-hidden">
                 <img
                   src={item.img}
                   alt="preview"

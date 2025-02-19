@@ -9,6 +9,7 @@ import { links } from "@/config";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect } from "react";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [blogJson, setBlogJson] = useState<FeedBodyInfo | null>(null);
@@ -218,22 +219,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer with fade in */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="py-8 text-center bg-base-100"
-      >
-        <p className="text-base-content/60">
-          © 2024 oboard. All Rights Reserved.
-        </p>
-        <p className="text-base-content/60 mt-2">
-          <Link href="https://beian.miit.gov.cn/" target="_blank" className="hover:text-primary transition-colors">
-            粤ICP备2025373229号
-          </Link>
-        </p>
-      </motion.footer>
+      {/* Footer */}
+      <Footer />
     </article>
   );
 }

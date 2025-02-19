@@ -1,7 +1,9 @@
+"use client";
+
 import React, {PropsWithChildren} from "react";
-// import clsx from 'clsx'
 import Link from "next/link";
 import { ability } from "@/config";
+import Footer from "@/components/Footer";
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   return (
@@ -49,11 +51,7 @@ export default function About() {
         </li>
       </ul>
 
-      <div className="text-base-content/60 text-center mt-16">
-        <Link href="https://beian.miit.gov.cn/" target="_blank" className="hover:text-primary transition-colors">
-          粤ICP备2025373229号
-        </Link>
-      </div>
+      <Footer />
     </article>
   );
 }

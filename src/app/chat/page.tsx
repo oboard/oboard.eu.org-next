@@ -165,7 +165,7 @@ export default function ChatPage() {
       } catch (error) {
         console.log(error);
       }
-    }, [checkUserIdAvalible, messages, setMessages, userId]);
+    }, 1000); // 添加 1000ms 的时间间隔
     return () => {
       clearInterval(timer);
     };

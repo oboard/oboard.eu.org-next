@@ -26,7 +26,7 @@ export default function About() {
           ability.map((item) => (
             item.children.map((item1) => (
               <div className="grid grid-flow-col gap-2 items-center" key={item1.name}>
-                <i className={item1.icon}></i>
+                <i className={item1.icon} />
                 <span>{item1.name}</span>
               </div>
             ))
@@ -48,6 +48,12 @@ export default function About() {
           </Link>
         </li>
       </ul>
+
+      <div className="text-base-content/60 text-center mt-16">
+        <Link href="https://beian.miit.gov.cn/" target="_blank" className="hover:text-primary transition-colors">
+          粤ICP备2025373229号
+        </Link>
+      </div>
     </article>
   );
 }

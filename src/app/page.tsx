@@ -90,7 +90,7 @@ export default function Home() {
         </div>
 
         {/* 滚动提示 */}
-        <motion.div 
+        <motion.div
           className="absolute bottom-12 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 cursor-pointer"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,7 +105,7 @@ export default function Home() {
             }}
             transition={{
               duration: 1.5,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "easeInOut",
             }}
           >
@@ -227,6 +227,11 @@ export default function Home() {
       >
         <p className="text-base-content/60">
           © 2024 oboard. All Rights Reserved.
+        </p>
+        <p className="text-base-content/60 mt-2">
+          <Link href="https://beian.miit.gov.cn/" target="_blank" className="hover:text-primary transition-colors">
+            粤ICP备2025373229号
+          </Link>
         </p>
       </motion.footer>
     </article>

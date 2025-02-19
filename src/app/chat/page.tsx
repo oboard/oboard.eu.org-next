@@ -3,7 +3,7 @@
 "use client";
 
 import type React from "react";
-import { type Key, useEffect, useRef, useState } from "react";
+import { type Key, useEffect, useRef, useState, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -60,15 +60,14 @@ export default function ChatPage() {
   const [input, setInput] = useLocalStorage("input", "");
   const [following, setFollowing] = useState(true);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  function toBottom(quick?: boolean) {
+  const toBottom = useCallback((quick?: boolean) => {
     if (!following) return;
     const chatbox = document?.querySelector("html");
     chatbox?.scrollTo({
       top: chatbox?.scrollHeight,
       behavior: quick ? "auto" : "smooth",
     });
-  }
+  }, [following]);
 
   // 设置定时拉去信息
   useEffect(() => {
@@ -166,7 +165,7 @@ export default function ChatPage() {
       } catch (error) {
         console.log(error);
       }
-    }, 1000);
+    }, [checkUserIdAvalible, messages, setMessages, userId]);
     return () => {
       clearInterval(timer);
     };

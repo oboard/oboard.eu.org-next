@@ -253,7 +253,7 @@ export default function ChatPage() {
     // 等待页面更新后，页面自动滚动到底部
     setTimeout(() => {
       toBottom();
-    });
+    }, 0);
   };
 
   // 信息的结构

@@ -1,5 +1,5 @@
 # 构建阶段
-FROM node:20-alpine AS builder
+FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
@@ -7,16 +7,16 @@ WORKDIR /app
 COPY package*.json ./
 
 # 安装依赖
-RUN npm ci
+RUN bun install --frozen-lockfile
 
 # 复制源代码
 COPY . .
 
 # 构建应用
-RUN npm run build
+RUN bun run build
 
 # 生产阶段
-FROM node:20-alpine AS runner
+FROM oven/bun:1-slim AS runner
 
 WORKDIR /app
 
@@ -33,4 +33,4 @@ COPY --from=builder /app/.next/static ./.next/static
 EXPOSE 3000
 
 # 启动应用
-CMD ["node", "server.js"] 
+CMD ["bun", "server.js"] 

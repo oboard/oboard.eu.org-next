@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   // async rewrites() {
   //   return [
   //     //接口请求 前缀带上/utestapi/

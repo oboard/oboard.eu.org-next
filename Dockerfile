@@ -3,6 +3,9 @@ FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
+# 设置 Bun 使用国内镜像源
+ENV BUN_CONFIG_REGISTRY=https://registry.npmmirror.com
+
 # 复制 package.json 和 package-lock.json
 COPY package*.json ./
 

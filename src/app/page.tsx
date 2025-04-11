@@ -82,7 +82,6 @@ export default function Home() {
 
             {/* 头像区域 - 在桌面端靠右 */}
             <div className="w-48 h-48 sm:w-56 sm:h-56 xl:w-[400px] xl:h-[400px] relative group order-1 md:order-2 flex-shrink-0">
-              <div className="absolute inset-0 animate-spin-slow" />
               <div className="relative w-full h-full animate-float">
                 <InterestingAvatar />
               </div>

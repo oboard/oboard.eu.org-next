@@ -58,7 +58,7 @@ export default function ShareLinkBox(props) {
           {/* <span className="indicator-item badge badge-secondary">
                   new
                 </span> */}
-          <button className="btn join-item" onClick={share}>
+          <button type="button" className="btn join-item" onClick={share}>
             获取
           </button>
         </div>

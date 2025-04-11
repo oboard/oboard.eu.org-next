@@ -34,23 +34,6 @@ async function getPosts(link: string) {
   });
 
   const template = await res.text();
-  //   <!doctype html>
-  {
-    /* <html data-head-attrs="">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="theme-color" content="rgb(255, 255, 255)">
-  <meta name="server-rendered" content="true">
-  <meta name="og:description" content="2 亿人的生活经验，都在小红书">
-  <meta name="keywords" content="iPad, 平板, ipad配件, 壁纸, 全屏壁纸, ipadmini6, apple, iphone布局">
-  <meta name="description" content="苹果总部基地太帅了！        ">
-  <meta name="og:type" content="article">
-  <meta name="og:site_name" content="小红书">
-  <meta name="og:title" content="Apple park 壁纸">
-  <meta name="og:image" content="https://sns-img-qc.xhscdn.com/e89e2efe-3035-6905-dfcb-a9689b4ffe75">
-  <meta name="og:url" content="https://www.xiaohongshu.com/explore/64fa99c7000000002000299f"></meta> */
-  }
   // 解析html
 
   // meta转换为json，使用jsdom
@@ -91,7 +74,7 @@ async function getPosts(link: string) {
   });
 
   // 现在 imageLinks 数组包含了所有图片链接
-  meta["imageLinks"] = imageLinks;
+  meta.imageLinks = imageLinks;
 
   return meta;
 }
@@ -135,13 +118,13 @@ export default async function Page({
               </figure>
               <div className="card-body">
                 <h2 className="card-title">{data["og:title"]}</h2>
-                <p>{data["description"]}</p>
+                <p>{data.description}</p>
                 {/* 展示关键词 */}
-                <p>{data["keywords"]}</p>
+                <p>{data.keywords}</p>
                 <div className="card-actions justify-end">
                   <CopyButton body={data["og:title"]}>复制标题</CopyButton>
                   <CopyButton body={data["og:title"]}>复制文案</CopyButton>
-                  <CopyButton body={data["keywords"]}>复制关键词</CopyButton>
+                  <CopyButton body={data.keywords}>复制关键词</CopyButton>
                   <CopyButton body={data["og:url"]}>复制链接</CopyButton>
                 </div>
               </div>
@@ -149,7 +132,7 @@ export default async function Page({
 
             {/* 展示来自imageLinks的图片 */}
 
-            {data["imageLinks"].map((link: string, index: number) => (
+            {data.imageLinks.map((link: string, index: number) => (
               <div
                 className="rounded shadow-md hover:shadow-2xl transition-all"
                 key={link}

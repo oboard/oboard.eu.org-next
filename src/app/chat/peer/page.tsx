@@ -54,15 +54,14 @@ export default function P2PChatPage() {
 
   const [following, setFollowing] = useState(true);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  function toBottom(quick?: boolean) {
+  const toBottom = useCallback((quick?: boolean) => {
     if (!following) return;
     const chatbox = document?.querySelector("html");
     chatbox?.scrollTo({
       top: chatbox?.scrollHeight,
       behavior: quick ? "auto" : "smooth",
     });
-  }
+  }, [following]);
 
   const scrollTimer = useRef<NodeJS.Timeout | undefined>();
 

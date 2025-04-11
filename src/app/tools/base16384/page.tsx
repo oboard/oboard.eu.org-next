@@ -90,15 +90,17 @@ export default function Base16384() {
     <div>
       <h1 className="mt-16">Base16384</h1>
       <div className="flex flex-col">
-        <label className="label">Input</label>
+        <label htmlFor="input" className="label">Input</label>
         <textarea
+          id="input"
           value={input}
           placeholder="Enter text to encode or decode"
           className="textarea textarea-bordered"
           onChange={(e) => setInput(e.target.value)}
         />
-        <label className="label">Output</label>
+        <label htmlFor="output" className="label">Output</label>
         <textarea
+          id="output"
           value={output}
           className="textarea textarea-bordered"
           readOnly

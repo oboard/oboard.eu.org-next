@@ -144,7 +144,7 @@ export default function NavigationBar() {
 
       {/* 移动端 */}
       <ul
-        className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row items-center justify-around bg-base-200/80 backdrop-blur-md border-t border-base-300/50 px-2 z-50"
+        className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row items-center justify-around bg-base-200/80 backdrop-blur-md px-2 z-50"
       >
         {routes.map((route) => (
           <li

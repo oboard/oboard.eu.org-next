@@ -30,7 +30,9 @@ export const metadata: Metadata = {
   other: {
     name: "一块小板子",
     image: "https://obscloud.ulearning.cn/resources/web/1715838718885.png",
+    "google-adsense-account": "ca-pub-1951154877218910",
   },
+
 };
 
 export default function RootLayout({

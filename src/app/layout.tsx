@@ -44,7 +44,8 @@ export default function RootLayout({
     <html lang="zh-CN">
       <link rel="icon" href="/avatar.jpg" sizes="any" />
       <link rel="apple-touch-icon" href="/avatar.jpg" />
-
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1951154877218910"
+        crossOrigin="anonymous" />
       <body className="flex flex-col justify-center items-center">
         {/* <MouseTracker /> */}
         <Toaster />

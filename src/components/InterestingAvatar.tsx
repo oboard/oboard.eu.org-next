@@ -229,7 +229,7 @@ export default function InterestingAvatar() {
             }}
             xmlns="http://www.w3.org/2000/svg"
           >
-            <title>轨道路径 - {orbit.key}</title>
+            <title>轨道路径</title>
             <circle
               className="orbit-path"
               cx="50%"

@@ -44,6 +44,7 @@ export default function RootLayout({
     <html lang="zh-CN">
       <link rel="icon" href="/avatar.jpg" sizes="any" />
       <link rel="apple-touch-icon" href="/avatar.jpg" />
+      <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js" />
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1951154877218910"
         crossOrigin="anonymous" />
       <body className="flex flex-col justify-center items-center">
@@ -54,15 +55,16 @@ export default function RootLayout({
           {children}
           <Live2DWrapper />
         </Providers>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossOrigin="anonymous" />
-        {/* Homepage Leaderboard */}
-        <ins className="adsbygoogle"
-          style={{ display: "inline-block", width: "728px", height: "90px" }}
-          data-ad-client="ca-pub-1234567890123456"
-          data-ad-slot="1234567890" />
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({ });
-        </script>
+        {/* @ts-ignore */}
+        <amp-ad width="100vw" height="320"
+          type="adsense"
+          data-ad-client="ca-pub-1951154877218910"
+          data-ad-slot="2501207077"
+          data-auto-format="rspv"
+          data-full-width="">
+          <div overflow="" />
+          {/* @ts-ignore */}
+        </amp-ad>
       </body>
     </html>
   );

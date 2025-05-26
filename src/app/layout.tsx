@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: "一块小板子",
     description: "一个隐蔽的网站捏QAQ",
     images: {
-      url: "https://obscloud.ulearning.cn/resources/web/1715838718885.png",
+      url: "https://obscloud.ulearning.cn/resources/web/1748237070466.png",
       alt: "一块小板子",
       width: 720,
       height: 720,
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   other: {
     name: "一块小板子",
-    image: "https://obscloud.ulearning.cn/resources/web/1715838718885.png",
+    image: "https://obscloud.ulearning.cn/resources/web/1748237070466.png",
     "google-adsense-account": "ca-pub-1951154877218910",
   },
 

@@ -85,7 +85,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
 
           <span className="inline-flex items-center gap-2 rounded-full font-medium">
             <Image
-              src="https://obscloud.ulearning.cn/resources/web/1715838718885.png"
+              src="https://obscloud.ulearning.cn/resources/web/1748237070466.png"
               alt={"Head"}
               className="rounded-full overflow-clip"
               width={16}

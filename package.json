@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@giscus/react": "^3.1.0",
     "@headlessui/react": "^2.2.3",
     "@iconify-json/logos": "^1.2.4",
     "@iconify-json/lucide": "^1.2.42",

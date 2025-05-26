@@ -5,6 +5,7 @@ import type { PropsWithChildren } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Footer from "@/components/Footer";
 
 interface Colors {
   [key: string]: string;
@@ -218,6 +219,7 @@ export default function Home() {
         //   </div>
         // </div>
       ))}
+      <Footer />
     </article>
   );
 }

@@ -208,7 +208,7 @@ export default function InterestingAvatar() {
         {/* 头像容器 - 星球 */}
         <div className="relative w-full h-full rounded-full overflow-hidden transition-all duration-500">
           <Image
-            src="/avatar.jpg"
+            src="https://obscloud.ulearning.cn/resources/web/1748237070466.png"
             alt="头像"
             className="object-cover"
             fill

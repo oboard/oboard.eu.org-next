@@ -66,7 +66,7 @@ interface ChatBubbleProps {
 
 export default function ChatBubble({ message, isCurrentUser }: ChatBubbleProps) {
   return (
-    <div className={`chat chat-${isCurrentUser ? 'end' : 'start'}`}>
+    <div className={`chat ${isCurrentUser ? 'chat-end' : 'chat-start'}`}>
       <div className="chat-header">
         <time className="text-xs opacity-50">{getTime(message.time)}</time>
       </div>
@@ -137,4 +137,4 @@ export default function ChatBubble({ message, isCurrentUser }: ChatBubbleProps) 
       </div>
     </div>
   );
-} 
+}

@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
-import NightToggle from "./NightToggle";
-import { motion, AnimatePresence } from "framer-motion";
-import ConnectWalletButton from '@/components/ConnectWalletButton'
-import { appkit } from "@/lib/appkit";
-import { Button } from "@headlessui/react";
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
+import NightToggle from './NightToggle';
+import { motion, AnimatePresence } from 'framer-motion';
+import ConnectWalletButton from '@/components/ConnectWalletButton';
+import { appkit } from '@/lib/appkit';
+import { Button } from '@headlessui/react';
 
 const routes = [
   {
-    name: "首页",
-    path: "/",
-    icon: "i-tabler-home",
+    name: '首页',
+    path: '/',
+    icon: 'i-tabler-home',
   },
   {
-    name: "聊天",
-    path: "/chat",
-    icon: "i-tabler-message",
+    name: '聊天',
+    path: '/chat',
+    icon: 'i-tabler-message',
   },
   {
-    name: "GPT",
-    path: "/gpt",
-    icon: "i-tabler-robot",
+    name: 'GPT',
+    path: '/gpt',
+    icon: 'i-tabler-robot',
   },
   {
-    name: "工具",
-    path: "/tools",
-    icon: "i-tabler-tools",
+    name: '工具',
+    path: '/tools',
+    icon: 'i-tabler-tools',
   },
   {
-    name: "关于",
-    path: "/about",
-    icon: "i-tabler-info-circle",
+    name: '关于',
+    path: '/about',
+    icon: 'i-tabler-info-circle',
   },
 ];
 
@@ -44,24 +44,22 @@ export default function NavigationBar() {
   // 检查颜色模式
 
   const applyTheme = useCallback((dark: boolean) => {
-    const html = document.querySelector("html");
+    const html = document.querySelector('html');
     setIsDark(dark);
-    html?.setAttribute("data-theme", dark ? "night" : "winter");
-    appkit.setThemeMode(dark ? "dark" : "light");
+    html?.setAttribute('data-theme', dark ? 'night' : 'winter');
+    appkit.setThemeMode(dark ? 'dark' : 'light');
   }, []);
 
   useEffect(() => {
     const checkColorScheme = () => {
-      applyTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    }
+      applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    };
     checkColorScheme();
 
     // 当系统颜色发生变化
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => {
-        checkColorScheme();
-      });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      checkColorScheme();
+    });
   }, [applyTheme]);
 
   return (
@@ -81,13 +79,13 @@ export default function NavigationBar() {
           exit={{ opacity: 0 }}
           className="flex-row items-center px-2 hidden md:flex backdrop-blur bg-base-200 bg-opacity-50 ring-1 ring-base-300 ring-opacity-50 rounded-full"
           transition={{
-            type: "spring",
+            type: 'spring',
             stiffness: 500,
             damping: 30,
           }}
         >
           {/* {pathname} */}
-          {pathname === "/" ? (
+          {pathname === '/' ? (
             <div className="w-2" />
           ) : (
             <Button
@@ -111,8 +109,9 @@ export default function NavigationBar() {
                   whileTap={{ scale: 0.9, opacity: 0.6 }}
                 >
                   <Link
-                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary transition-colors ${pathname === route.path ? "text-primary" : ""
-                      }`}
+                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary transition-colors ${
+                      pathname === route.path ? 'text-primary' : ''
+                    }`}
                     href={route.path}
                   >
                     {route.name}
@@ -123,7 +122,7 @@ export default function NavigationBar() {
                         layoutId="underline"
                         className="absolute bottom--0.5 mt-1 left-1 right-1 bg-gradient-to-r from-primary/0 via-primary/40 h-0.5 rounded-full "
                         transition={{
-                          type: "spring",
+                          type: 'spring',
                           stiffness: 300,
                           damping: 30,
                         }}
@@ -137,26 +136,22 @@ export default function NavigationBar() {
         </motion.div>
         <div className="w-48 flex justify-end">
           <ConnectWalletButton />
-
         </div>
-
       </div>
 
       {/* 移动端 */}
-      <ul
-        className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row items-center justify-around bg-base-200/80 backdrop-blur-md px-2 z-50"
-      >
+      <ul className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row items-center justify-around bg-base-200/80 backdrop-blur-md px-2 z-50">
         {routes.map((route) => (
-          <li
-            key={route.path}
-            className="relative flex-1"
-          >
+          <li key={route.path} className="relative flex-1">
             <Link
-              className={`group flex flex-col items-center justify-center py-1 transition-all ${pathname === route.path ? "text-primary" : "text-base-content/70"
-                }`}
+              className={`group flex flex-col items-center justify-center py-1 transition-all ${
+                pathname === route.path ? 'text-primary' : 'text-base-content/70'
+              }`}
               href={route.path}
             >
-              <i className={`${route.icon} text-xl mb-0.5 transition-transform group-active:scale-90`} />
+              <i
+                className={`${route.icon} text-xl mb-0.5 transition-transform group-active:scale-90`}
+              />
               <span className="text-xs font-medium">{route.name}</span>
 
               {pathname === route.path && (
@@ -164,7 +159,7 @@ export default function NavigationBar() {
                   layoutId="mobile-nav-indicator"
                   className="absolute -top-1 w-1 h-1 rounded-full bg-primary"
                   transition={{
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 300,
                     damping: 30,
                   }}
@@ -176,7 +171,6 @@ export default function NavigationBar() {
       </ul>
 
       {/* 桌面端 */}
-
     </>
   );
 }

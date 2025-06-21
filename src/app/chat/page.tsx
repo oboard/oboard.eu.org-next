@@ -410,16 +410,6 @@ export default function ChatPage() {
                 </summary>
                 <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
                   <li>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        (document?.getElementById('my_modal_1') as HTMLDialogElement)?.showModal()
-                      }
-                    >
-                      长文本
-                    </button>
-                  </li>
-                  <li>
                     <button type="button" onClick={sendPicture}>
                       图片/文件
                     </button>
@@ -430,29 +420,6 @@ export default function ChatPage() {
           </div>
         </div>
       </div>
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">输入长信息</h3>
-          <textarea
-            className="w-full h-96 textarea textarea-bordered my-2"
-            placeholder="输入信息"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <div className="modal-action">
-            <form method="dialog">
-              <div className="flex flex-row gap-2">
-                <button type="button" className="btn" onClick={sendMessage}>
-                  发送
-                </button>
-                <button type="button" className="btn">
-                  取消
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </dialog>
     </>
   );
 }

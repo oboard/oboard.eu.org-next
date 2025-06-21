@@ -4,7 +4,6 @@ module.exports = {
       // Optional
       content: ['**/*.{html,js,ts,jsx,tsx}'],
     },
-    tailwindcss: {},
-    autoprefixer: {},
+    '@tailwindcss/postcss': {},
   },
-}
+};

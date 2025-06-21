@@ -138,7 +138,14 @@ export async function POST(request: Request) {
 
   // 返回成功
   return NextResponse.json(
-    { message: 'success' },
+    {
+      message: 'success',
+      data: newMessages.map(msg => ({
+        ...msg,
+        status: MessageStatus.Sent,
+        time: msg.time || new Date().getTime()
+      }))
+    },
     {
       headers: {
         'Access-Control-Allow-Origin': '*',

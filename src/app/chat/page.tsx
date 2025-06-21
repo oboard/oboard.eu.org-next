@@ -217,7 +217,6 @@ export default function ChatPage() {
 
     if (!checkUserIdAvalible()) return;
 
-    // let time = new Date().toLocaleString();
     const msg: MessageInfo = {
       id: uuidv7(),
       userId: userId,
@@ -234,11 +233,28 @@ export default function ChatPage() {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then(() => {
-      // 发送成功
-      msg.status = MessageStatus.Sent;
-      setMessages([...messages, msg]);
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === 'success') {
+          // 更新消息状态
+          setMessages((prevMessages) => {
+            const updatedMessages = prevMessages.map((m) =>
+              m.id === msg.id ? { ...m, ...data.data[0] } : m
+            );
+            return updatedMessages;
+          });
+          // 从待发送列表中移除
+          const index = sendedList.findIndex((item) => item.id === msg.id);
+          if (index !== -1) {
+            sendedList.splice(index, 1);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('发送消息失败:', error);
+        toast.error('发送失败');
+      });
     // 清空输入框
     setInput('');
 
@@ -298,7 +314,7 @@ export default function ChatPage() {
     <>
       {/* 连接状态指示器 */}
       {!isConnected && (
-        <div className="fixed flex justify-center items-center w-full h-full z-50 bg-base-100/50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-base-100/50">
           <div className="badge badge-error badge-lg">连接中...</div>
         </div>
       )}

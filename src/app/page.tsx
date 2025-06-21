@@ -1,22 +1,24 @@
-"use client";
+'use client';
 
-import type React from "react";
-import Link from "next/link";
-import InterestingAvatar from "@/components/InterestingAvatar";
-import FeedItemCard from "@/components/feed/FeedItemCard";
-import type { FeedBodyInfo } from "@/models/feed";
-import { links } from "@/config";
-import Image from "next/image";
+import type React from 'react';
+import Link from 'next/link';
+import InterestingAvatar from '@/components/InterestingAvatar';
+import FeedItemCard from '@/components/feed/FeedItemCard';
+import type { FeedBodyInfo } from '@/models/feed';
+import { links } from '@/config';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useState, useEffect } from "react";
-import Footer from "@/components/Footer";
+import { useState, useEffect } from 'react';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   const [blogJson, setBlogJson] = useState<FeedBodyInfo | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("https://oboard.xlog.app/feed?format=json", { next: { revalidate: 60 } });
+      const response = await fetch('https://oboard.xlog.app/feed?format=json', {
+        next: { revalidate: 60 },
+      });
       const data = await response.json();
       setBlogJson(data);
     };
@@ -65,7 +67,7 @@ export default function Home() {
                 <span className="block mb-4 animate-fade-in-up [animation-delay:200ms]">
                   Hello，这里是
                 </span>
-                <span className="block bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-[size:200%] animate-fade-in-up [animation-delay:400ms]">
+                <span className="block bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-[size:200%] animate-fade-in-up [animation-delay:400ms]">
                   一块小板子
                 </span>
                 <span className="block mt-4 animate-fade-in-up [animation-delay:600ms]">
@@ -106,7 +108,7 @@ export default function Home() {
             transition={{
               duration: 1.5,
               repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
+              ease: 'easeInOut',
             }}
           >
             <i className="i-tabler-chevron-down text-primary w-8 h-8" />
@@ -149,11 +151,7 @@ export default function Home() {
         <motion.div
           className="absolute inset-0 overflow-hidden"
           style={{
-            opacity: useTransform(
-              scrollYProgress,
-              [0.5, 0.8],
-              [0, 1]
-            )
+            opacity: useTransform(scrollYProgress, [0.5, 0.8], [0, 1]),
           }}
         >
           {/* 背景装饰 */}

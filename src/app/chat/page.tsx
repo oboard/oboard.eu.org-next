@@ -15,7 +15,7 @@ const upload = async (file: File) => {
   // Uint8Array
   const arrayBuffer = await file.arrayBuffer();
 
-  const res = await fetch('https://www.oboard.eu.org/api/chat/file', {
+  const res = await fetch('/api/chat/file', {
     method: 'POST',
     body: arrayBuffer,
   });
@@ -36,9 +36,6 @@ export default function ChatPage() {
   ];
   const [input, setInput] = useLocalStorage('input', '');
   const [following, setFollowing] = useState(true);
-  const [isConnected, setIsConnected] = useState(false);
-  const eventSourceRef = useRef<EventSource | null>(null);
-  const lastMessageTimeRef = useRef<number>(messages[messages.length - 1]?.time ?? 0);
 
   const toBottom = useCallback(
     (quick?: boolean) => {
@@ -52,106 +49,106 @@ export default function ChatPage() {
     [following]
   );
 
-  // 建立 SSE 连接
+  // 设置定时拉去信息
   useEffect(() => {
-    if (!userId) return;
-
-    const startTime = lastMessageTimeRef.current;
-    const eventSource = new EventSource(`https://www.oboard.eu.org/api/chat?sse=true&startTime=${startTime}`);
-    eventSourceRef.current = eventSource;
-
-    eventSource.onopen = () => {
-      // console.log("SSE 连接已建立");
-      setIsConnected(true);
-    };
-
-    eventSource.onmessage = (event) => {
-      if (event.data === 'connected') {
-        // console.log("SSE 连接成功");
-        return;
-      }
+    let first = true;
+    const timer = setInterval(() => {
+      console.log(`userId: ${userId}`);
+      checkUserIdAvalible();
 
       try {
-        const newMessages: MessageInfo[] = JSON.parse(event.data);
-        if (newMessages && newMessages.length > 0) {
-          setMessages((prevMessages) => {
-            let temp = [...prevMessages];
+        fetch(`/api/chat?startTime=${messages[messages.length - 1]?.time ?? 0}`)
+          .then((res) => res.json())
+          .then((data) => {
+            let temp = [...messages];
+            // 如果data不是空的
+            if (data !== undefined && data !== null) {
+              // data中去除掉自己的
+              // let data2 = data.filter((item: MessageInfo) => item.userId !== userId);
+              temp = [...data, ...temp];
+              // 去重
+              temp = temp.filter(
+                (item, index, array) => array.findIndex((item2) => item.id === item2.id) === index
+              );
 
-            // 合并新消息
-            temp = [...newMessages, ...temp];
-
-            // 去重
-            temp = temp.filter(
-              (item, index, array) => array.findIndex((item2) => item.id === item2.id) === index
-            );
-
-            // 处理待发送的消息
-            for (const item of sendedList) {
-              // 如果信息里没有正准备发的信息，就加入，并发送
-              if (temp.findIndex((item2) => item.id === item2.id) === -1) {
-                temp.push(item);
-                // 发送信息
-                fetch('https://www.oboard.eu.org/api/chat', {
-                  method: 'POST',
-                  body: JSON.stringify([item]),
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                }).then(() => {
-                  // 发送成功
-                  item.status = MessageStatus.Sent;
-                  setMessages((prev) => [...prev, item]);
-                });
+              for (const item of sendedList) {
+                // 如果信息里没有正准备发的信息，就加入，并发送
+                if (temp.findIndex((item2) => item.id === item2.id) === -1) {
+                  temp.push(item);
+                  // 发送信息
+                  fetch('/api/chat', {
+                    method: 'POST',
+                    body: JSON.stringify([item]),
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                  }).then(() => {
+                    // 发送成功
+                    item.status = MessageStatus.Sent;
+                    setMessages([...messages, item]);
+                  });
+                }
               }
+
+              // 过滤掉空信息
+              temp = temp.filter((item) => {
+                if (item.content === undefined || item.content == null) {
+                  return false;
+                }
+                return item.content.trim() !== '';
+              });
+
+              for (let i = 0; i < temp.length; i++) {
+                if (temp[i].time === undefined) {
+                  // 时间戳
+                  temp[i].time = new Date().getTime();
+                }
+              }
+
+              // 按照时间戳排序
+              temp.sort((a, b) => {
+                return (a.time ?? 0) - (b.time ?? 0);
+              });
+
+              // 筛选出服务器没有但本地有的信息
+              // let syncMessages = temp.filter((item) => {
+              //   return (
+              //     data.findIndex((item2: { id: string }) => {
+              //       return item.id === item2.id;
+              //     }) === -1
+              //   );
+              // });
+              // // 如果超过一百条只发送后面100条
+              // if (syncMessages.length > 100) {
+              //   syncMessages = syncMessages.slice(-100);
+              // }
+              // // 如果有，就发送给服务器
+              // if (syncMessages.length > 0) {
+              //   fetch("/api/chat", {
+              //     method: "POST",
+              //     body: JSON.stringify(syncMessages),
+              //     headers: {
+              //       "Content-Type": "application/json",
+              //     },
+              //   });
+              // }
             }
 
-            // 过滤掉空信息
-            temp = temp.filter((item) => {
-              if (item.content === undefined || item.content === null) {
-                return false;
-              }
-              return item.content.trim() !== '';
-            });
-
-            for (let i = 0; i < temp.length; i++) {
-              if (temp[i].time === undefined) {
-                // 时间戳
-                temp[i].time = new Date().getTime();
-              }
+            setMessages(temp);
+            if (first) {
+              // 等待页面更新后，页面自动滚动到底部
+              // toBottom(true);
+              first = false;
             }
-
-            // 按照时间戳排序
-            temp.sort((a, b) => {
-              return (a.time ?? 0) - (b.time ?? 0);
-            });
-
-            // 更新最新的消息时间
-            if (temp.length > 0) {
-              lastMessageTimeRef.current = temp[temp.length - 1]?.time ?? 0;
-            }
-
-            return temp;
           });
-        }
       } catch (error) {
-        console.error('解析 SSE 消息失败:', error);
+        console.log(error);
       }
-    };
-
-    eventSource.onerror = (error) => {
-      console.error('SSE 连接错误:', error);
-      setIsConnected(false);
-    };
-
-    // 清理函数
+    }, 1000); // 添加 1000ms 的时间间隔
     return () => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-        eventSourceRef.current = null;
-      }
-      setIsConnected(false);
+      clearInterval(timer);
     };
-  }, [userId, setMessages]);
+  }, [checkUserIdAvalible, messages, setMessages, userId]);
 
   // 定期检查用户ID
   useEffect(() => {
@@ -217,6 +214,7 @@ export default function ChatPage() {
 
     if (!checkUserIdAvalible()) return;
 
+    // let time = new Date().toLocaleString();
     const msg: MessageInfo = {
       id: uuidv7(),
       userId: userId,
@@ -227,34 +225,17 @@ export default function ChatPage() {
     setMessages([...messages, msg]);
     sendedList.push(msg);
     // 发送信息
-    fetch('https://www.oboard.eu.org/api/chat', {
+    fetch('/api/chat', {
       method: 'POST',
       body: JSON.stringify([msg]),
       headers: {
         'Content-Type': 'application/json',
       },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message === 'success') {
-          // 更新消息状态
-          setMessages((prevMessages) => {
-            const updatedMessages = prevMessages.map((m) =>
-              m.id === msg.id ? { ...m, ...data.data[0] } : m
-            );
-            return updatedMessages;
-          });
-          // 从待发送列表中移除
-          const index = sendedList.findIndex((item) => item.id === msg.id);
-          if (index !== -1) {
-            sendedList.splice(index, 1);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error('发送消息失败:', error);
-        toast.error('发送失败');
-      });
+    }).then(() => {
+      // 发送成功
+      msg.status = MessageStatus.Sent;
+      setMessages([...messages, msg]);
+    });
     // 清空输入框
     setInput('');
 
@@ -313,11 +294,11 @@ export default function ChatPage() {
   return (
     <>
       {/* 连接状态指示器 */}
-      {!isConnected && (
+      {/* {!isConnected && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-base-100/50">
           <div className="badge badge-error badge-lg">连接中...</div>
         </div>
-      )}
+      )} */}
 
       {/* 一个用于滚动到底部对悬浮按钮，如果following为false则显示 */}
       {/* 底部剧中 */}

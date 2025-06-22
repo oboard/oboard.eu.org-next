@@ -15,7 +15,7 @@ const upload = async (file: File) => {
   // Uint8Array
   const arrayBuffer = await file.arrayBuffer();
 
-  const res = await fetch('/api/chat/file', {
+  const res = await fetch('https://www.oboard.eu.org/api/chat/file', {
     method: 'POST',
     body: arrayBuffer,
   });
@@ -57,7 +57,7 @@ export default function ChatPage() {
     if (!userId) return;
 
     const startTime = lastMessageTimeRef.current;
-    const eventSource = new EventSource(`/api/chat?sse=true&startTime=${startTime}`);
+    const eventSource = new EventSource(`https://www.oboard.eu.org/api/chat?sse=true&startTime=${startTime}`);
     eventSourceRef.current = eventSource;
 
     eventSource.onopen = () => {
@@ -91,7 +91,7 @@ export default function ChatPage() {
               if (temp.findIndex((item2) => item.id === item2.id) === -1) {
                 temp.push(item);
                 // 发送信息
-                fetch('/api/chat', {
+                fetch('https://www.oboard.eu.org/api/chat', {
                   method: 'POST',
                   body: JSON.stringify([item]),
                   headers: {
@@ -195,7 +195,7 @@ export default function ChatPage() {
           // 直接插入到数组中
           setMessages([...messages, msg]);
           // 发送信息
-          fetch('/api/chat', {
+          fetch('https://www.oboard.eu.org/api/chat', {
             method: 'POST',
             body: JSON.stringify([msg]),
             headers: {
@@ -227,7 +227,7 @@ export default function ChatPage() {
     setMessages([...messages, msg]);
     sendedList.push(msg);
     // 发送信息
-    fetch('/api/chat', {
+    fetch('https://www.oboard.eu.org/api/chat', {
       method: 'POST',
       body: JSON.stringify([msg]),
       headers: {

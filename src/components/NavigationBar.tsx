@@ -26,7 +26,7 @@ const routes = [
     icon: 'i-tabler-robot',
   },
   {
-    name: '工具',
+    name: '作品集',
     path: '/tools',
     icon: 'i-tabler-tools',
   },

@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-import type React from "react";
-import type { PropsWithChildren } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
+'use client';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import Footer from '@/components/Footer';
 
 interface Colors {
   [key: string]: string;
@@ -13,18 +13,22 @@ interface Colors {
 
 const Tag: React.FC<PropsWithChildren> = (props) => {
   const colors: Colors = {
-    图床: "bg-red",
-    P2P: "bg-blue",
-    聊天: "bg-blue-500",
-    加密: "bg-yellow-500",
-    爬虫: "bg-yellow-500",
-    转换: "bg-indigo-500",
-    微信公众号: "bg-green-500",
-    文章解析: "bg-purple-500",
-    小红书: "bg-red-500",
-    青年大学习: "bg-red-500",
-    钩织: "bg-yellow-500",
-    毛线: "bg-yellow-500",
+    图床: 'bg-red',
+    P2P: 'bg-blue',
+    聊天: 'bg-blue-500',
+    加密: 'bg-yellow-500',
+    爬虫: 'bg-yellow-500',
+    转换: 'bg-indigo-500',
+    微信公众号: 'bg-green-500',
+    文章解析: 'bg-purple-500',
+    小红书: 'bg-red-500',
+    青年大学习: 'bg-red-500',
+    钩织: 'bg-yellow-500',
+    毛线: 'bg-yellow-500',
+    Flutter: 'bg-blue-500',
+    动态化: 'bg-red-500',
+    MoonBit: 'bg-purple-500',
+    美食: 'bg-yellow-500',
   };
 
   return (
@@ -32,10 +36,7 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
     <span className="flex rounded-full border text-[12px] px-1 flex-row gap-1 items-center">
       {props.children}
       {/* 圆圈 */}
-      <div
-        className={`w-2 h-2 rounded-full ${colors[props.children?.toString() ?? ""]
-          }`}
-      />
+      <div className={`w-2 h-2 rounded-full ${colors[props.children?.toString() ?? '']}`} />
     </span>
   );
 };
@@ -66,58 +67,91 @@ const toolbox = [
   //   avalible: true,
   // },
   {
-    name: "毛线实验室",
-    desc: "织女们都在用～",
-    url: "https://yarnlab.oboard.fun",
-    img: "/preview/yarnlab.jpg",
-    tag: ["钩织", "毛线"],
-    avalible: true,
-  }, {
-    name: "微信公众号文章解析助手",
-    desc: "解析文章的封面、标题、简介，支持秀米！",
-    url: "tools/wemedia/weixin/article",
-    img: "/preview/weixin_article.png",
-    tag: ["微信公众号", "文章解析"],
+    name: '毛线实验室',
+    desc: '钩织好帮手',
+    url: 'https://yarnlab.oboard.fun',
+    img: '/preview/yarnlab.jpg',
+    tag: ['钩织', '毛线'],
     avalible: true,
   },
   {
-    name: "小红书文章解析助手",
-    desc: "解析小红书文章的封面、标题、简介",
-    url: "tools/wemedia/xhs/article",
-    img: "/preview/xhs_article.png",
-    tag: ["小红书", "文章解析"],
+    name: '在线聊天',
+    desc: '可以连接 Web3 钱包来登陆',
+    url: 'https://www.oboard.fun/chat',
+    img: '/preview/chat.png',
+    tag: ['聊天'],
     avalible: true,
   },
   {
-    name: "P2P聊天",
-    desc: "通过PeerJS实现P2P聊天",
-    url: "chat/peer",
-    img: "/preview/peer.png",
-    tag: ["P2P", "聊天"],
+    name: '微信公众号文章解析助手',
+    desc: '解析文章的封面、标题、简介，支持秀米！',
+    url: 'tools/wemedia/weixin/article',
+    img: '/preview/weixin_article.png',
+    tag: ['微信公众号', '文章解析'],
     avalible: true,
   },
   {
-    name: "优图床",
-    desc: "使用ulearning的obs储存图片",
-    url: "https://pan.oboard.eu.org/pic ",
-    img: "/preview/upic.png",
-    tag: ["图床"],
+    name: '小红书文章解析助手',
+    desc: '解析小红书文章的封面、标题、简介',
+    url: 'tools/wemedia/xhs/article',
+    img: '/preview/xhs_article.png',
+    tag: ['小红书', '文章解析'],
     avalible: true,
   },
   {
-    name: "站点扫描工具",
-    desc: "根据网站链接发生链式反应，形成sitemap",
-    url: "https://site.oboard.eu.org/ ",
-    img: "/preview/sitemap.jpg",
-    tag: ["爬虫"],
+    name: 'P2P 聊天',
+    desc: '通过 PeerJS 实现 P2P 聊天',
+    url: 'chat/peer',
+    img: '/preview/peer.png',
+    tag: ['P2P', '聊天'],
     avalible: true,
   },
   {
-    name: "base16384",
-    desc: "base16384加密解密工具",
-    url: "tools/base16384",
-    img: "/preview/base16384.jpg",
-    tag: ["加密"],
+    name: '优图床',
+    desc: '使用 ulearning 的 obs 储存图片',
+    url: 'https://pan.oboard.eu.org/pic ',
+    img: '/preview/upic.png',
+    tag: ['图床'],
+    avalible: true,
+  },
+  {
+    name: '站点扫描工具',
+    desc: '根据网站链接发生链式反应，形成 sitemap',
+    url: 'https://site.oboard.eu.org/ ',
+    img: '/preview/sitemap.jpg',
+    tag: ['爬虫'],
+    avalible: true,
+  },
+  {
+    name: 'base16384',
+    desc: 'base16384 加密解密',
+    url: 'tools/base16384',
+    img: '/preview/base16384.jpg',
+    tag: ['加密'],
+    avalible: true,
+  },
+  {
+    name: 'TickML',
+    desc: 'Flutter 动态化方案',
+    url: 'https://tickml.oboard.eu.org/',
+    img: '/preview/tickml.jpg',
+    tag: ['Flutter', '动态化'],
+    avalible: true,
+  },
+  {
+    name: 'Mocket',
+    desc: 'A web framework for MoonBit.',
+    url: 'https://github.com/oboard/mocket',
+    img: '/preview/mocket.jpg',
+    tag: ['MoonBit'],
+    avalible: true,
+  },
+  {
+    name: '美食订餐',
+    desc: '一个现代化的食品订购应用，使用 Next.js 15 和 Supabase 构建。',
+    url: 'https://food.oboard.fun/',
+    img: '/preview/food.jpg',
+    tag: ['美食'],
     avalible: true,
   },
   // {
@@ -132,45 +166,30 @@ const toolbox = [
 
 export default function Home() {
   return (
-    <article
-      className={
-        "flex flex-wrap justify-center items-center gap-4 py-24 px-4 w-full"
-      }
-    >
+    <article className={'flex flex-wrap justify-center items-center gap-4 py-24 px-4 w-full'}>
       {toolbox.map((item, index) => (
         <Link href={item.url} key={item.name}>
           <motion.div
             className="no-underline w-full max-w-96 sm:w-96 flex flex-row items-center justify-center"
-            initial={{ scale: 0, y: "100%", filter: "blur(20px)" }}
-            animate={{ scale: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ scale: 0, y: '100%', filter: 'blur(20px)' }}
+            animate={{ scale: 1, y: 0, filter: 'blur(0px)' }}
             transition={{
-              type: "spring",
+              type: 'spring',
               stiffness: 100,
               damping: 17,
               delay: index / 10,
             }}
           >
-            <motion.div
-              className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
-            >
+            <motion.div className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300">
               {/* <div className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all"> */}
               <figure className="sm:h-40 overflow-hidden">
-                <img
-                  src={item.img}
-                  alt="preview"
-                  width={500}
-                  height={300}
-                />
+                <img src={item.img} alt="preview" width={500} height={300} />
               </figure>
               <div className="card-body px-4 pt-4 pb-4">
                 <div className="card-title font-normal text-primary">
                   {item.name}
-                  {item.avalible && (
-                    <i className="i-tabler-circle-check text-green-500" />
-                  )}
-                  {!item.avalible && (
-                    <i className="i-tabler-circle-x text-red-500" />
-                  )}
+                  {item.avalible && <i className="i-tabler-circle-check text-green-500" />}
+                  {!item.avalible && <i className="i-tabler-circle-x text-red-500" />}
                 </div>
                 <p>{item.desc}</p>
                 <div className="card-actions justify-end">

@@ -7,10 +7,10 @@ export async function GET(request: Request) {
 
   // 根据startTime筛选
   const { searchParams } = new URL(request.url);
-  const startTime = searchParams.get("startTime");
+  const from = searchParams.get("from");
 
   const result = messages.filter((item) => {
-    return (item.time ?? 0) > Number(startTime);
+    return (item.time ?? 0) > Number(from);
   });
 
   return NextResponse.json(result,

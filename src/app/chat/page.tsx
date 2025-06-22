@@ -36,28 +36,24 @@ export default function ChatPage() {
   ];
   const [input, setInput] = useLocalStorage('input', '');
   const [following, setFollowing] = useState(true);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const toBottom = useCallback(
     (quick?: boolean) => {
       if (!following) return;
-      const chatbox = document?.querySelector('html');
-      chatbox?.scrollTo({
-        top: chatbox?.scrollHeight,
-        behavior: quick ? 'auto' : 'smooth',
-      });
+      bottomRef.current?.scrollIntoView({ behavior: quick ? 'auto' : 'smooth' });
     },
     [following]
   );
 
   // 设置定时拉去信息
   useEffect(() => {
-    let first = true;
     const timer = setInterval(() => {
       console.log(`userId: ${userId}`);
       checkUserIdAvalible();
 
       try {
-        fetch(`/api/chat?startTime=${messages[messages.length - 1]?.time ?? 0}`)
+        fetch(`/api/chat?from=${messages[messages.length - 1]?.time ?? 0}`)
           .then((res) => res.json())
           .then((data) => {
             let temp = [...messages];
@@ -70,7 +66,6 @@ export default function ChatPage() {
               temp = temp.filter(
                 (item, index, array) => array.findIndex((item2) => item.id === item2.id) === index
               );
-
               for (const item of sendedList) {
                 // 如果信息里没有正准备发的信息，就加入，并发送
                 if (temp.findIndex((item2) => item.id === item2.id) === -1) {
@@ -135,20 +130,19 @@ export default function ChatPage() {
             }
 
             setMessages(temp);
-            if (first) {
-              // 等待页面更新后，页面自动滚动到底部
-              // toBottom(true);
-              first = false;
-            }
           });
       } catch (error) {
         console.log(error);
+      }
+
+      if (following) {
+        toBottom();
       }
     }, 1000); // 添加 1000ms 的时间间隔
     return () => {
       clearInterval(timer);
     };
-  }, [checkUserIdAvalible, messages, setMessages, userId]);
+  }, [checkUserIdAvalible, messages, setMessages, userId, following, toBottom]);
 
   // 定期检查用户ID
   useEffect(() => {
@@ -253,8 +247,6 @@ export default function ChatPage() {
   //     time: "time",
   // }
 
-  const scrollTimer = useRef<NodeJS.Timeout | undefined>();
-
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
     const chatbox = document?.querySelector('html');
@@ -263,20 +255,11 @@ export default function ChatPage() {
         // 如果滑动到底部或者超过底部，就设置following为true，否则为false
         if (
           (chatbox?.scrollHeight ?? 0) - (chatbox?.scrollTop ?? 0) <=
-          (chatbox?.clientHeight ?? 0)
+          (chatbox?.clientHeight ?? 0) + 100
         ) {
           setFollowing(true);
-          // 定时滚动到底部
-          if (scrollTimer.current) {
-            clearTimeout(scrollTimer.current);
-          }
-          scrollTimer.current = setInterval(() => {
-            toBottom();
-          }, 500);
         } else {
           setFollowing(false);
-          // 取消定时
-          clearTimeout(scrollTimer.current);
         }
       });
     }
@@ -285,7 +268,6 @@ export default function ChatPage() {
 
     return () => {
       chatbox?.removeEventListener('scroll', (e) => {});
-      clearTimeout(scrollTimer.current);
     };
   }, [toBottom]);
 
@@ -350,6 +332,7 @@ export default function ChatPage() {
             {messages.map((item: MessageInfo, index: Key | null | undefined) => (
               <ChatBubble key={item.id} message={item} isCurrentUser={item.userId === userId} />
             ))}
+            <div ref={bottomRef} />
           </div>
         </div>
         <div

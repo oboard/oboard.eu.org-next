@@ -166,79 +166,81 @@ const toolbox = [
 
 export default function Home() {
   return (
-    <article className={'flex flex-wrap justify-center items-center gap-4 py-24 px-4 w-full'}>
-      {toolbox.map((item, index) => (
-        <Link href={item.url} key={item.name}>
-          <motion.div
-            className="no-underline w-full max-w-96 sm:w-96 flex flex-row items-center justify-center"
-            initial={{ scale: 0, y: '100%', filter: 'blur(20px)' }}
-            animate={{ scale: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{
-              type: 'spring',
-              stiffness: 100,
-              damping: 17,
-              delay: index / 10,
-            }}
-          >
-            <motion.div className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300">
-              {/* <div className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all"> */}
-              <figure className="sm:h-40 overflow-hidden">
-                <img src={item.img} alt="preview" width={500} height={300} />
-              </figure>
-              <div className="card-body px-4 pt-4 pb-4">
-                <div className="card-title font-normal text-primary">
-                  {item.name}
-                  {item.avalible && <i className="i-tabler-circle-check text-green-500" />}
-                  {!item.avalible && <i className="i-tabler-circle-x text-red-500" />}
-                </div>
-                <p>{item.desc}</p>
-                <div className="card-actions justify-end">
-                  {/* <div className="badge badge-outline">Fashion</div> 
+    <div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 py-24 px-4 w-full">
+        {toolbox.map((item, index) => (
+          <Link href={item.url} key={item.name}>
+            <motion.div
+              className="no-underline w-full max-w-96 sm:w-96 flex flex-row items-center justify-center"
+              initial={{ scale: 0, y: '100%', filter: 'blur(20px)' }}
+              animate={{ scale: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{
+                type: 'spring',
+                stiffness: 100,
+                damping: 17,
+                delay: index / 10,
+              }}
+            >
+              <motion.div className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300">
+                {/* <div className="card relative w-full sm:h-70 bg-base-100 ring-1 ring-primary hover:scale-102 active:scale-90 ease-out duration-300 transition-all"> */}
+                <figure className="sm:h-40 overflow-hidden">
+                  <img src={item.img} alt="preview" width={500} height={300} />
+                </figure>
+                <div className="card-body px-4 pt-4 pb-4">
+                  <div className="card-title font-normal text-primary">
+                    {item.name}
+                    {item.avalible && <i className="i-tabler-circle-check text-green-500" />}
+                    {!item.avalible && <i className="i-tabler-circle-x text-red-500" />}
+                  </div>
+                  <p>{item.desc}</p>
+                  <div className="card-actions justify-end">
+                    {/* <div className="badge badge-outline">Fashion</div> 
             <div className="badge badge-outline">Products</div> */}
-                  {item.tag.map((tag) => (
-                    <Tag key={tag}>{tag}</Tag>
-                  ))}
+                    {item.tag.map((tag) => (
+                      <Tag key={tag}>{tag}</Tag>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              {/* </div> */}
+                {/* </div> */}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </Link>
-        // <div className="card w-96 bg-base-100 shadow-xl image-full">
-        //   <figure>
-        //     <Image
-        //       src={item.img}
-        //       alt="preview"
-        //       sizes="100vw"
-        //       layout="responsive"
-        //       width={500}
-        //       height={300}
-        //     />
-        //   </figure>
-        //   <div className="card-body">
-        //     <h2 className="card-title">{item.name}</h2>
-        //     <p>{item.desc}</p>
-        //     <div className="card-actions justify-end">
-        //       {/* <button className="btn btn-primary">Buy Now</button> */}
-        //       <Link href={item.url} className="btn no-underline">
-        //         使用
-        //       </Link>
-        //     </div>
-        //   </div>
-        // </div>
-        // <div className="card bordered shadow-lg bg-base-100" key={item.name}>
-        //   <div className="card-body">
-        //     <h2 className="card-title">{item.name}</h2>
-        //     <p>{item.desc}</p>
-        //   </div>
-        //   <div className="card-footer">
-        //     <Link href={item.url} className="btn no-underline">
-        //       使用
-        //     </Link>
-        //   </div>
-        // </div>
-      ))}
+          </Link>
+          // <div className="card w-96 bg-base-100 shadow-xl image-full">
+          //   <figure>
+          //     <Image
+          //       src={item.img}
+          //       alt="preview"
+          //       sizes="100vw"
+          //       layout="responsive"
+          //       width={500}
+          //       height={300}
+          //     />
+          //   </figure>
+          //   <div className="card-body">
+          //     <h2 className="card-title">{item.name}</h2>
+          //     <p>{item.desc}</p>
+          //     <div className="card-actions justify-end">
+          //       {/* <button className="btn btn-primary">Buy Now</button> */}
+          //       <Link href={item.url} className="btn no-underline">
+          //         使用
+          //       </Link>
+          //     </div>
+          //   </div>
+          // </div>
+          // <div className="card bordered shadow-lg bg-base-100" key={item.name}>
+          //   <div className="card-body">
+          //     <h2 className="card-title">{item.name}</h2>
+          //     <p>{item.desc}</p>
+          //   </div>
+          //   <div className="card-footer">
+          //     <Link href={item.url} className="btn no-underline">
+          //       使用
+          //     </Link>
+          //   </div>
+          // </div>
+        ))}
+      </div>
       <Footer />
-    </article>
+    </div>
   );
 }

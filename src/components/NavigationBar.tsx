@@ -93,7 +93,7 @@ export default function NavigationBar() {
               className="btn btn-ghost btn-sm rounded-full"
               onClick={() => router.back()}
             >
-              <i className="i-tabler-arrow-left" />
+              <i className="i-tabler-arrow-left text-lg" />
             </Button>
           )}
 

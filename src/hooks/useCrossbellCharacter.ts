@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
-
-interface CrossbellCharacter {
+export interface CrossbellCharacter {
     characterId: number
     handle: string
     primary: boolean
@@ -46,16 +45,23 @@ interface CrossbellIndexerResponse {
     cursor: string | null
 }
 
+const fetcher = async (url: string) => {
+    const res = await fetch(url)
+    const data: CrossbellIndexerResponse = await res.json()
+    return data.list[0] || null
+}
+
 export function useCrossbellCharacter(address: string | undefined) {
-    const [data, setData] = useState<CrossbellCharacter | null>(null)
-
-    useEffect(() => {
-        if (!address) return
-
-        fetch(`https://indexer.crossbell.io/v1/addresses/${address}/characters?limit=1&primary=true`)
-            .then(res => res.json())
-            .then((res: CrossbellIndexerResponse) => setData(res.list[0]))
-    }, [address])
+    const { data } = useSWR(
+        address ? `https://indexer.crossbell.io/v1/addresses/${address}/characters?limit=1&primary=true` : null,
+        fetcher,
+        {
+            revalidateOnFocus: false, // 当页面重新获得焦点时不重新验证
+            revalidateOnReconnect: false, // 重新连接时不重新验证
+            refreshInterval: 0, // 禁用自动刷新
+            dedupingInterval: 1000 * 60 * 60, // 1小时内的重复请求会被去重
+        }
+    )
 
     return data
 } 

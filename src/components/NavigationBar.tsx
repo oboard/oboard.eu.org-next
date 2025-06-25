@@ -115,12 +115,12 @@ export default function NavigationBar() {
                     href={route.path}
                   >
                     {route.name}
-                    <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0" />
+                    <span className="absolute inset-x-1 -bottom-px h-px bg-linear-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0" />
 
                     {pathname === route.path && (
                       <motion.div
                         layoutId="underline"
-                        className="absolute bottom--0.5 mt-1 left-1 right-1 bg-gradient-to-r from-primary/0 via-primary/40 h-0.5 rounded-full "
+                        className="absolute bottom--0.5 mt-1 left-1 right-1 bg-linear-to-r from-primary/0 via-primary/40 h-0.5 rounded-full "
                         transition={{
                           type: 'spring',
                           stiffness: 300,

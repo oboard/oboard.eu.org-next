@@ -1,7 +1,11 @@
+'use client';
 import { type MessageInfo } from '@/models/chat/message';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { darcula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { useCrossbellCharacter } from '@/hooks/useCrossbellCharacter';
+import Image from 'next/image';
+import { getCrossbellImageUrl } from '@/utils/crossbell';
 
 const CodeBlock = ({
   language,
@@ -65,10 +69,22 @@ interface ChatBubbleProps {
 }
 
 export default function ChatBubble({ message, isCurrentUser }: ChatBubbleProps) {
+  const character = useCrossbellCharacter(message.userId);
+
   return (
     <div className={`chat ${isCurrentUser ? 'chat-end' : 'chat-start'}`}>
+      {character && (
+        <Image
+          className="chat-image w-10 avatar rounded-full"
+          src={getCrossbellImageUrl(character?.metadata?.content?.avatars?.[0])}
+          alt="avatar"
+          width={40}
+          height={40}
+        />
+      )}
       <div className="chat-header">
-        <time className="text-xs opacity-50">{getTime(message.time)}</time>
+        <time className="text-xs opacity-50 ml-2">{getTime(message.time)}</time>
+        {character?.metadata?.content?.name ?? ''}
       </div>
       <div
         className={`animate-duration-500 animate-ease-out chat-bubble ${genColor(

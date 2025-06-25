@@ -285,7 +285,7 @@ export default function InterestingAvatar() {
                 title={tech.name}
                 style={{ zIndex: 40 }}
               >
-                <i className={`${tech.icon} text-lg`} />
+                <i className={`${tech.icon} w-5 h-5`} />
               </div>
             </Orbit>
           ))}

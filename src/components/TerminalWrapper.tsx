@@ -198,8 +198,9 @@ export default function TerminalWrapper() {
             console.error('Shell输入错误:', error);
           });
         });
-        
+
         setLoading(false);
+        input.write('node main.js\n');
       } catch (error: any) {
         console.error('WebContainer或Shell启动失败:', error);
       }

@@ -1,6 +1,5 @@
 import '@xterm/xterm/css/xterm.css';
 import { Terminal } from '@xterm/xterm';
-import { WebContainer } from '@webcontainer/api';
 import { FitAddon } from '@xterm/addon-fit';
 import { useEffect, useRef, useState } from 'react';
 /** @satisfies {import('@webcontainer/api').FileSystemTree} */
@@ -35,6 +34,8 @@ export default function TerminalWrapper() {
     // 启动WebContainer和shell
     const initializeContainer = async () => {
       try {
+        // Dynamically import WebContainer to avoid SSR issues
+        const { WebContainer } = await import('@webcontainer/api');
         webcontainerInstance = await WebContainer.boot({
           workdirName: 'oboard-workspace'
         });

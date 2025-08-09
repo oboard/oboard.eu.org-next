@@ -10,7 +10,19 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Footer from '@/components/Footer';
-import TerminalWrapper from '@/components/TerminalWrapper';
+import dynamic from 'next/dynamic';
+
+const TerminalWrapper = dynamic(() => import('@/components/TerminalWrapper'), {
+  ssr: false,
+  loading: () => (
+    <div className="rounded-xl p-4 bg-black h-[300px] mt-16 text-left relative">
+      <div className="h-full w-full left-0 top-0 absolute bg-black/50 flex items-center justify-center gap-2 px-2">
+        <div className="loading loading-spinner" />
+        <span>欢迎来到 oboard 的终端，正在初始化中...</span>
+      </div>
+    </div>
+  ),
+});
 
 export default function Home() {
   const [blogJson, setBlogJson] = useState<FeedBodyInfo | null>(null);

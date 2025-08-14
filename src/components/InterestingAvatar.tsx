@@ -227,18 +227,6 @@ export default function InterestingAvatar() {
         {/* 光晕效果 */}
         <div className="absolute inset-0 rounded-full bg-linear-to-r from-yellow-500/30 to-orange-500/30 blur-3xl transition-all duration-500" />
 
-        {/* 头像容器 - 星球 */}
-        <div className="relative w-full h-full rounded-full overflow-hidden transition-all duration-500">
-          <Image
-            src="https://obscloud.ulearning.cn/resources/web/1748237070466.png"
-            alt="头像"
-            className="object-cover"
-            fill
-            sizes="(max-width: 640px) 12rem, (max-width: 768px) 14rem, 18rem"
-            priority
-          />
-        </div>
-
         {/* 轨道线圈 */}
         {orbits.map((orbit) => (
           <svg
@@ -247,7 +235,6 @@ export default function InterestingAvatar() {
             aria-hidden="true"
             style={{
               overflow: 'visible',
-              zIndex: 20,
             }}
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -283,12 +270,23 @@ export default function InterestingAvatar() {
               <div
                 className="w-8 h-8 -ml-4 -mt-4 bg-base-100/80 rounded-lg shadow-lg flex items-center justify-center cursor-pointer hover:scale-125 hover:bg-primary/10 transition-all duration-300"
                 title={tech.name}
-                style={{ zIndex: 40 }}
               >
                 <i className={`${tech.icon} w-5 h-5`} />
               </div>
             </Orbit>
           ))}
+        </div>
+
+        {/* 头像容器 - 星球 */}
+        <div className="relative w-full h-full rounded-full overflow-hidden transition-all duration-500">
+          <Image
+            src="https://obscloud.ulearning.cn/resources/web/1748237070466.png"
+            alt="头像"
+            className="object-cover z-30"
+            fill
+            sizes="(max-width: 640px) 12rem, (max-width: 768px) 14rem, 18rem"
+            priority
+          />
         </div>
 
         {/* 方向控制按钮 */}

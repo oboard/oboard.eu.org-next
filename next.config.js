@@ -1,77 +1,47 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp',
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
-        ],
-      },
-    ];
-  },
-  // async rewrites() {
-  //   return [
-  //     //接口请求 前缀带上/utestapi/
-  //     {
-  //       source: `/utestapi/:path*`,
-  //       destination: `https://utestapi.ulearning.cn/:path*`,
-  //     },
-  //     {
-  //       source: `/courseapi/:path*`,
-  //       destination: `https://courseapi.ulearning.cn/:path*`,
-  //     },
-  //   ];
-  // },
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "upload.jianshu.io",
+        protocol: 'https',
+        hostname: 'upload.jianshu.io',
       },
       {
-        protocol: "https",
-        hostname: "sns-img-hw.xhscdn.net",
+        protocol: 'https',
+        hostname: 'sns-img-hw.xhscdn.net',
       },
       {
-        protocol: "https",
-        hostname: "sns-img-bd.xhscdn.com",
+        protocol: 'https',
+        hostname: 'sns-img-bd.xhscdn.com',
       },
       {
-        protocol: "http",
-        hostname: "sns-webpic-qc.xhscdn.com",
+        protocol: 'http',
+        hostname: 'sns-webpic-qc.xhscdn.com',
       },
       {
-        protocol: "https",
-        hostname: "mmbiz.qpic.cn",
+        protocol: 'https',
+        hostname: 'mmbiz.qpic.cn',
       },
       {
-        protocol: "https",
-        hostname: "img.xiumi.us",
+        protocol: 'https',
+        hostname: 'img.xiumi.us',
       },
       {
-        protocol: "https",
-        hostname: "statics.xiumi.us",
+        protocol: 'https',
+        hostname: 'statics.xiumi.us',
       },
       {
-        protocol: "http",
-        hostname: "mmbiz.qpic.cn",
+        protocol: 'http',
+        hostname: 'mmbiz.qpic.cn',
       },
       {
-        protocol: "https",
-        hostname: "ipfs.crossbell.io",
+        protocol: 'https',
+        hostname: 'ipfs.crossbell.io',
       },
       {
-        protocol: "https",
-        hostname: "obscloud.ulearning.cn",
+        protocol: 'https',
+        hostname: 'obscloud.ulearning.cn',
       },
       {
         protocol: 'https',

@@ -1,0 +1,10 @@
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+  - '@reown/appkit'
+  - '@tailwindcss/oxide'
+  - bufferutil
+  - esbuild
+  - keccak
+  - secp256k1
+  - sharp
+  - utf-8-validate

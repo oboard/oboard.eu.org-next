@@ -62,7 +62,7 @@ export default function RootLayout({
           data-ad-slot="2501207077"
           data-auto-format="rspv"
           data-full-width="">
-          <div overflow="" />
+          {/* <div overflow="" /> */}
           {/* @ts-ignore */}
         </amp-ad>
       </body>

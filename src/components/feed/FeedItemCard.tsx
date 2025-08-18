@@ -73,7 +73,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
             {renderTags.map((tag) => (
               <div
                 key={tag}
-                className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary-content text-primary"
+                className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-primary text-primary-content"
               >
                 <i className="i-tabler-tag" />
                 <span>{tag}</span>

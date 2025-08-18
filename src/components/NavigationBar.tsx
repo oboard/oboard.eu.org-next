@@ -47,7 +47,7 @@ export default function NavigationBar() {
   const applyTheme = useCallback((dark: boolean) => {
     const html = document.querySelector('html');
     setIsDark(dark);
-    html?.setAttribute('data-theme', dark ? 'night' : 'pastel');
+    html?.setAttribute('data-theme', dark ? 'night' : 'winter');
     appkit.setThemeMode(dark ? 'dark' : 'light');
   }, []);
 
@@ -123,7 +123,7 @@ export default function NavigationBar() {
                   whileTap={{ scale: 0.9, opacity: 0.6 }}
                 >
                   <Link
-                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary-content transition-colors ${pathname === route.path ? 'text-primary-content' : ''
+                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary transition-colors ${pathname === route.path ? 'text-primary' : ''
                       }`}
                     href={route.path}
                   >
@@ -182,7 +182,7 @@ export default function NavigationBar() {
                 <h2 className="text-xl font-bold text-base-content">菜单</h2>
                 <Button
                   type="button"
-                  className="btn btn-ghost btn-sm rounded-full"
+                  className="btn btn-circle"
                   onClick={() => setIsDrawerOpen(false)}
                 >
                   <i className="i-tabler-x text-lg" />
@@ -211,7 +211,7 @@ export default function NavigationBar() {
                         {pathname === route.path && (
                           <motion.div
                             layoutId="drawer-indicator"
-                            className="ml-auto w-2 h-2 rounded-full bg-primary-content"
+                            className="ml-auto w-2 h-2 rounded-full bg-primary"
                             transition={{
                               type: 'spring',
                               stiffness: 300,

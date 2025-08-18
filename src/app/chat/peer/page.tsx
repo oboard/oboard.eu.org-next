@@ -199,7 +199,6 @@ export default function P2PChatPage() {
     const colors = [
       "chat-bubble-primary",
       "chat-bubble-secondary",
-      "chat-bubble-accent",
       "chat-bubble-neutral",
       "chat-bubble-success",
       "chat-bubble-warning",

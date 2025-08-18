@@ -32,6 +32,7 @@ const CodeBlock = ({
 
 export default function GPTChatPage() {
   const isFirst = useRef(true);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { userId, checkUserIdAvalible } = useUserId();
   const [messages, setMessages] = useLocalStorage<MessageInfo[]>('gpt_messages', []);
   const [input, setInput] = useLocalStorage<string>('input', '');
@@ -40,14 +41,13 @@ export default function GPTChatPage() {
 
   const toBottom = useCallback(
     (quick?: boolean) => {
-      if (!following) return;
-      const chatbox = document?.querySelector('html');
-      chatbox?.scrollTo({
-        top: chatbox?.scrollHeight,
+      if (!messagesContainerRef.current) return;
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
         behavior: quick ? 'auto' : 'smooth',
       });
     },
-    [following]
+    []
   );
 
   // 设置定时拉去信息
@@ -147,46 +147,36 @@ export default function GPTChatPage() {
     }, 100);
   }, [input, checkUserIdAvalible, isLoading, userId, messages, updateMessages, toBottom, setInput]);
 
-  const scrollTimer = useRef<NodeJS.Timeout | undefined>();
-
-  // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
+  // 监听消息容器的滚动事件
   useEffect(() => {
-    const chatbox = document?.querySelector('html');
-    if (typeof window !== 'undefined') {
-      window?.addEventListener('scroll', (e) => {
-        // 如果滑动到底部或者超过底部，就设置following为true，否则为false
-        if (
-          (chatbox?.scrollHeight ?? 0) - (chatbox?.scrollTop ?? 0) <=
-          (chatbox?.clientHeight ?? 0)
-        ) {
-          setFollowing(true);
-          // 定时滚动到底部
-          if (scrollTimer.current) {
-            clearTimeout(scrollTimer.current);
-          }
-          scrollTimer.current = setInterval(() => {
-            toBottom();
-          }, 500);
-        } else {
-          setFollowing(false);
-          // 取消定时
-          clearTimeout(scrollTimer.current);
-        }
-      });
-    }
+    const container = messagesContainerRef.current;
+    if (!container) return;
 
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 50;
+      setFollowing(isAtBottom);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    
+    // 初始化时滚动到底部
     if (isFirst.current) {
-      toBottom(true);
+      setTimeout(() => toBottom(true), 100);
       isFirst.current = false;
-    } else {
-      toBottom();
     }
 
     return () => {
-      chatbox?.removeEventListener('scroll', (e) => { });
-      clearTimeout(scrollTimer.current);
+      container.removeEventListener('scroll', handleScroll);
     };
   }, [toBottom]);
+
+  // 当消息更新时，如果正在跟随，自动滚动到底部
+  useEffect(() => {
+    if (following) {
+      setTimeout(() => toBottom(), 100);
+    }
+  }, [following, toBottom]);
 
   // 页面启动的时候，滚动到底部
 
@@ -195,7 +185,7 @@ export default function GPTChatPage() {
 
       {/* Messages Container */}
       <div className="flex-1 overflow-hidden relative">
-        <div className="h-full overflow-y-auto px-4 py-6 space-y-4">
+        <div ref={messagesContainerRef} className="h-full overflow-y-auto px-4 py-6 space-y-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-4">
@@ -234,11 +224,8 @@ export default function GPTChatPage() {
               type="button"
               className="btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-all duration-200"
               onClick={() => {
-                const chatbox = document?.querySelector('html');
-                chatbox?.scrollTo({
-                  top: chatbox?.scrollHeight,
-                  behavior: 'smooth',
-                });
+                setFollowing(true);
+                toBottom();
               }}
             >
               <i className="i-tabler-arrow-down text-lg" />

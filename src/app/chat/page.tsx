@@ -20,6 +20,7 @@ const upload = async (file: File) => {
 };
 
 export default function ChatPage() {
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { userId, checkUserIdAvalible } = useUserId();
   const [messages, setMessages] = useLocalStorage<MessageInfo[]>('messages', []);
   const [input, setInput] = useLocalStorage('input', '');
@@ -30,10 +31,13 @@ export default function ChatPage() {
 
   const toBottom = useCallback(
     (quick?: boolean) => {
-      if (!following) return;
-      bottomRef.current?.scrollIntoView({ behavior: quick ? 'auto' : 'smooth' });
+      if (!messagesContainerRef.current) return;
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: quick ? 'auto' : 'smooth',
+      });
     },
-    [following]
+    []
   );
 
   const updateMessages = useCallback((newMessages: MessageInfo[]) => {
@@ -170,29 +174,33 @@ export default function ChatPage() {
     }
   }, [input, checkUserIdAvalible, isLoading, userId, messages, updateMessages, setInput, toBottom]);
 
-  // 监听滚动事件
+  // 监听消息容器的滚动事件
   useEffect(() => {
-    const chatbox = document?.querySelector('html');
-    if (typeof window !== 'undefined') {
-      window?.addEventListener('scroll', (e) => {
-        // 如果滑动到底部或者超过底部，就设置following为true，否则为false
-        if (
-          (chatbox?.scrollHeight ?? 0) - (chatbox?.scrollTop ?? 0) <=
-          (chatbox?.clientHeight ?? 0) + 100
-        ) {
-          setFollowing(true);
-        } else {
-          setFollowing(false);
-        }
-      });
-    }
+    const container = messagesContainerRef.current;
+    if (!container) return;
 
-    toBottom();
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 50;
+      setFollowing(isAtBottom);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    
+    // 初始化时滚动到底部
+    setTimeout(() => toBottom(true), 100);
 
     return () => {
-      chatbox?.removeEventListener('scroll', (e) => { });
+      container.removeEventListener('scroll', handleScroll);
     };
   }, [toBottom]);
+
+  // 当消息更新时，如果正在跟随，自动滚动到底部
+  useEffect(() => {
+    if (following) {
+      setTimeout(() => toBottom(), 100);
+    }
+  }, [following, toBottom]);
 
   // 页面启动的时候，滚动到底部
 
@@ -200,7 +208,7 @@ export default function ChatPage() {
     <div className="flex flex-col h-screen w-full md:max-w-xl">
       {/* Messages Container */}
       <div className="flex-1 overflow-hidden relative">
-        <div className="h-full overflow-y-auto">
+        <div ref={messagesContainerRef} className="h-full overflow-y-auto">
           <div className="max-w-4xl mx-auto px-4 py-6 space-y-4">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center py-20">
@@ -238,11 +246,8 @@ export default function ChatPage() {
               type="button"
               className="btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-all duration-200"
               onClick={() => {
-                const chatbox = document?.querySelector('html');
-                chatbox?.scrollTo({
-                  top: chatbox?.scrollHeight,
-                  behavior: 'smooth',
-                });
+                setFollowing(true);
+                toBottom();
               }}
             >
               <i className="i-tabler-arrow-down text-lg" />

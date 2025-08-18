@@ -42,10 +42,7 @@ export default function P2PChatPage() {
   const [mesType, setMesType] = useState(0);
   const [message, setMessage] = useState<string>("");
   const [messageFile, setMessageFile] = useState<File | ArrayBuffer>();
-  const [messages, setMessages] = useLocalStorage("peer_messages", []) as [
-    MessageInfo[],
-    React.Dispatch<React.SetStateAction<MessageInfo[]>>
-  ];
+  const [messages, setMessages] = useLocalStorage<MessageInfo[]>("peer_messages", []);
   const messagesRef = useRef(messages);
 
   useEffect(() => {

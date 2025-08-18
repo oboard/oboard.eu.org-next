@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import type React from 'react';
@@ -12,9 +10,7 @@ import { useUserId } from '@/hooks/useUserId';
 import ChatBubble from '@/components/ChatBubble';
 
 const upload = async (file: File) => {
-  // Uint8Array
   const arrayBuffer = await file.arrayBuffer();
-
   const res = await fetch('/api/chat/file', {
     method: 'POST',
     body: arrayBuffer,
@@ -23,19 +19,13 @@ const upload = async (file: File) => {
   return data.url;
 };
 
-// 用于防吞信息
-const sendedList: MessageInfo[] = [];
-
-// 上面是api的代码，下面是页面的代码
 export default function ChatPage() {
   const { userId, checkUserIdAvalible } = useUserId();
-  // 使用daisyUI和tailwindcss
-  const [messages, setMessages] = useLocalStorage('messages', []) as [
-    MessageInfo[],
-    React.Dispatch<React.SetStateAction<MessageInfo[]>>,
-  ];
+  const [messages, setMessages] = useLocalStorage<MessageInfo[]>('messages', []);
   const [input, setInput] = useLocalStorage('input', '');
   const [following, setFollowing] = useState(true);
+  const [isConnected, setIsConnected] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const toBottom = useCallback(
@@ -46,208 +36,141 @@ export default function ChatPage() {
     [following]
   );
 
-  // 设置定时拉去信息
+  const updateMessages = useCallback((newMessages: MessageInfo[]) => {
+    const uniqueMessages = newMessages
+      .filter((item, index, array) =>
+        array.findIndex((item2) => item.id === item2.id) === index
+      )
+      .filter((item) => item.content?.trim())
+      .sort((a, b) => (a.time ?? 0) - (b.time ?? 0));
+    setMessages(uniqueMessages);
+  }, [setMessages]);
+
+  // 简化的消息同步逻辑
   useEffect(() => {
-    const timer = setInterval(() => {
-      console.log(`userId: ${userId}`);
-      checkUserIdAvalible();
+    const timer = setInterval(async () => {
+      if (!checkUserIdAvalible()) return;
 
       try {
-        fetch(`/api/chat?from=${messages[messages.length - 1]?.time ?? 0}`)
-          .then((res) => res.json())
-          .then((data) => {
-            let temp = [...messages];
-            // 如果data不是空的
-            if (data !== undefined && data !== null) {
-              // data中去除掉自己的
-              // let data2 = data.filter((item: MessageInfo) => item.userId !== userId);
-              temp = [...data, ...temp];
-              // 去重
-              temp = temp.filter(
-                (item, index, array) => array.findIndex((item2) => item.id === item2.id) === index
-              );
-              for (const item of sendedList) {
-                // 如果信息里没有正准备发的信息，就加入，并发送
-                if (temp.findIndex((item2) => item.id === item2.id) === -1) {
-                  temp.push(item);
-                  // 发送信息
-                  fetch('/api/chat', {
-                    method: 'POST',
-                    body: JSON.stringify([item]),
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                  }).then(() => {
-                    // 发送成功
-                    item.status = MessageStatus.Sent;
-                    setMessages([...messages, item]);
-                  });
-                }
-              }
+        setIsConnected(true);
+        const res = await fetch(`/api/chat?from=${messages[messages.length - 1]?.time ?? 0}`);
+        const data = await res.json();
 
-              // 过滤掉空信息
-              temp = temp.filter((item) => {
-                if (item.content === undefined || item.content == null) {
-                  return false;
-                }
-                return item.content.trim() !== '';
-              });
-
-              for (let i = 0; i < temp.length; i++) {
-                if (temp[i].time === undefined) {
-                  // 时间戳
-                  temp[i].time = new Date().getTime();
-                }
-              }
-
-              // 按照时间戳排序
-              temp.sort((a, b) => {
-                return (a.time ?? 0) - (b.time ?? 0);
-              });
-
-              // 筛选出服务器没有但本地有的信息
-              // let syncMessages = temp.filter((item) => {
-              //   return (
-              //     data.findIndex((item2: { id: string }) => {
-              //       return item.id === item2.id;
-              //     }) === -1
-              //   );
-              // });
-              // // 如果超过一百条只发送后面100条
-              // if (syncMessages.length > 100) {
-              //   syncMessages = syncMessages.slice(-100);
-              // }
-              // // 如果有，就发送给服务器
-              // if (syncMessages.length > 0) {
-              //   fetch("/api/chat", {
-              //     method: "POST",
-              //     body: JSON.stringify(syncMessages),
-              //     headers: {
-              //       "Content-Type": "application/json",
-              //     },
-              //   });
-              // }
-            }
-
-            setMessages(temp);
-          });
+        if (data && Array.isArray(data)) {
+          const newMessages = [...data, ...messages]
+            .map(item => ({
+              ...item,
+              time: item.time ?? new Date().getTime()
+            }));
+          updateMessages(newMessages);
+        }
       } catch (error) {
-        console.log(error);
+        console.error('同步消息失败:', error);
+        setIsConnected(false);
       }
 
       if (following) {
         toBottom();
       }
-    }, 1000); // 添加 1000ms 的时间间隔
-    return () => {
-      clearInterval(timer);
-    };
-  }, [checkUserIdAvalible, messages, setMessages, userId, following, toBottom]);
+    }, 2000);
+
+    return () => clearInterval(timer);
+  }, [checkUserIdAvalible, messages, following, toBottom, updateMessages]);
 
   // 定期检查用户ID
   useEffect(() => {
     const timer = setInterval(() => {
-      console.log(`userId: ${userId}`);
       checkUserIdAvalible();
     }, 5000);
+    return () => clearInterval(timer);
+  }, [checkUserIdAvalible]);
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, [checkUserIdAvalible, userId]);
-
-  // 发送图片
-  const sendPicture = () => {
-    // 读取图片
-    const input = document?.createElement('input');
+  const sendPicture = useCallback(() => {
+    const input = document.createElement('input');
     input.type = 'file';
+    input.accept = 'image/*,*/*';
 
-    input.onchange = () => {
-      if (input.files == null || input.files.length === 0) return;
-
-      if (!checkUserIdAvalible()) return;
+    input.onchange = async () => {
+      if (!input.files?.length || !checkUserIdAvalible()) return;
 
       const file = input.files[0];
-
       const isImage = file.type.startsWith('image');
 
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onload = () => {
-        upload(file).then((url) => {
-          const msg: MessageInfo = {
-            id: uuidv7(),
-            userId: userId,
-            content: isImage ? `![${file.name}](${url})` : `[${file.name}](${url})`,
-            time: undefined,
-            type: isImage ? 'image' : 'file',
-            status: MessageStatus.Sending,
-          };
-          // 直接插入到数组中
-          setMessages([...messages, msg]);
-          // 发送信息
-          fetch('https://www.oboard.eu.org/api/chat', {
-            method: 'POST',
-            body: JSON.stringify([msg]),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+      setIsLoading(true);
+      try {
+        const url = await upload(file);
+        const msg: MessageInfo = {
+          id: uuidv7(),
+          userId: userId,
+          content: isImage ? `![${file.name}](${url})` : `[${file.name}](${url})`,
+          time: new Date().getTime(),
+          type: isImage ? 'image' : 'file',
+          status: MessageStatus.Sending,
+        };
+
+        const newMessages = [...messages, msg];
+        updateMessages(newMessages);
+
+        await fetch('/api/chat', {
+          method: 'POST',
+          body: JSON.stringify([msg]),
+          headers: { 'Content-Type': 'application/json' },
         });
-      };
+
+        msg.status = MessageStatus.Sent;
+        updateMessages([...messages, msg]);
+        toast.success('文件发送成功');
+      } catch (error) {
+        console.error('文件上传失败:', error);
+        toast.error('文件发送失败');
+      } finally {
+        setIsLoading(false);
+      }
     };
     input.click();
-  };
+  }, [checkUserIdAvalible, userId, messages, updateMessages]);
 
-  // 发送信息
-  const sendMessage = () => {
-    if (input.length === 0 || input.trim().length === 0) {
-      toast.error('请输入内容');
+  const sendMessage = useCallback(async () => {
+    if (!input.trim() || !checkUserIdAvalible() || isLoading) {
+      if (!input.trim()) toast.error('请输入内容');
       return;
     }
 
-    if (!checkUserIdAvalible()) return;
-
-    // let time = new Date().toLocaleString();
+    setIsLoading(true);
     const msg: MessageInfo = {
       id: uuidv7(),
       userId: userId,
       content: input,
+      time: new Date().getTime(),
       status: MessageStatus.Sending,
     };
-    // 直接插入到数组中
-    setMessages([...messages, msg]);
-    sendedList.push(msg);
-    // 发送信息
-    fetch('/api/chat', {
-      method: 'POST',
-      body: JSON.stringify([msg]),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(() => {
-      // 发送成功
-      msg.status = MessageStatus.Sent;
-      setMessages([...messages, msg]);
-    });
-    // 清空输入框
+
+    const currentInput = input;
     setInput('');
 
-    // 等待页面更新后，页面自动滚动到底部
-    setTimeout(() => {
-      toBottom();
-    }, 0);
-  };
+    const newMessages = [...messages, msg];
+    updateMessages(newMessages);
 
-  // 信息的结构
-  // {
-  //     id: "uuid",
-  //     userId: "uuid",
-  //     content: "message",
-  //     time: "time",
-  // }
+    try {
+      await fetch('/api/chat', {
+        method: 'POST',
+        body: JSON.stringify([msg]),
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-  // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
+      msg.status = MessageStatus.Sent;
+      updateMessages([...messages, msg]);
+    } catch (error) {
+      console.error('发送失败:', error);
+      toast.error('发送失败，请重试');
+      setInput(currentInput);
+    } finally {
+      setIsLoading(false);
+      setTimeout(() => toBottom(), 100);
+    }
+  }, [input, checkUserIdAvalible, isLoading, userId, messages, updateMessages, setInput, toBottom]);
+
+  // 监听滚动事件
   useEffect(() => {
     const chatbox = document?.querySelector('html');
     if (typeof window !== 'undefined') {
@@ -267,139 +190,159 @@ export default function ChatPage() {
     toBottom();
 
     return () => {
-      chatbox?.removeEventListener('scroll', (e) => {});
+      chatbox?.removeEventListener('scroll', (e) => { });
     };
   }, [toBottom]);
 
   // 页面启动的时候，滚动到底部
 
   return (
-    <>
-      {/* 连接状态指示器 */}
-      {/* {!isConnected && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-base-100/50">
-          <div className="badge badge-error badge-lg">连接中...</div>
-        </div>
-      )} */}
-
-      {/* 一个用于滚动到底部对悬浮按钮，如果following为false则显示 */}
-      {/* 底部剧中 */}
-      <div
-        className="fixed bottom-32 z-40 left-1/2 transform -translate-x-1/2"
-        style={{
-          display: following ? 'none' : 'block',
-        }}
-      >
-        <button
-          type="button"
-          className={'btn rounded-full btn-accent flex items-center justify-center'}
-          onClick={() => {
-            const chatbox = document?.querySelector('html');
-            chatbox?.scrollTo({
-              top: chatbox?.scrollHeight,
-              behavior: 'smooth',
-            });
-          }}
-        >
-          <svg
-            role="img"
-            aria-label="返回底部"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            p-id="5072"
-            width="24"
-            height="24"
-            // 颜色
-            fill="currentColor"
-          >
-            <path
-              d="M792.855154 465.805779c-6.240882-6.208198-14.368821-9.311437-22.560409-9.311437s-16.446822 3.168606-22.687703 9.440452L539.696922 673.674614 539.696922 108.393173c0-17.695686-14.336138-31.99914-32.00086-31.99914s-32.00086 14.303454-32.00086 31.99914l0 563.712619L269.455396 465.941675c-6.271845-6.208198-14.432469-9.34412-22.624056-9.34412-8.224271 0-16.417578 3.135923-22.65674 9.407768-12.511007 12.512727-12.480043 32.768069 0.032684 45.248112l259.328585 259.125601c3.264938 3.263217 7.104421 5.599247 11.136568 7.135385 3.999462 1.792447 8.351566 2.879613 13.023626 2.879613 1.119849 0 2.07972-0.543583 3.19957-0.639914 8.287918 0.063647 16.60852-3.008628 22.976697-9.407768L792.982449 511.053891C805.462492 498.542884 805.429808 478.254858 792.855154 465.805779z"
-              p-id="5073"
-            />
-            <path
-              d="M892.561322 875.531353c0 17.664722-14.303454 32.00086-31.99914 32.00086L156.562183 907.532213c-17.664722 0-32.00086-14.334417-32.00086-31.99914 0-17.664722 14.336138-32.00086 32.00086-32.00086l704 0C878.257869 843.532213 892.561322 857.866631 892.561322 875.531353z"
-              p-id="5074"
-            />
-          </svg>
-          <span className="hidden md:ml-2 md:inline-block">返回底部</span>
-        </button>
-      </div>
-      <div className="flex flex-col w-full">
-        {/* 底部需要空出一些距离 */}
-        <div className="flex-grow flex flex-col w-full items-center">
-          <div className="chatbox w-full max-w-4xl flex-grow flex flex-col p-4 py-48">
-            {messages.map((item: MessageInfo, index: Key | null | undefined) => (
-              <ChatBubble key={item.id} message={item} isCurrentUser={item.userId === userId} />
-            ))}
+    <div className="flex flex-col h-screen w-full md:max-w-xl">
+      {/* Messages Container */}
+      <div className="flex-1 overflow-hidden relative">
+        <div className="h-full overflow-y-auto">
+          <div className="max-w-4xl mx-auto px-4 py-6 space-y-4">
+            {messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center py-20">
+                <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-4">
+                  <i className="i-tabler-message-circle text-2xl text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">欢迎来到聊天室</h3>
+                <p className="text-base-content/60 max-w-md">
+                  这里是一个实时聊天空间，您可以与其他用户进行交流，分享图片和文件。开始您的第一条消息吧！
+                </p>
+              </div>
+            ) : (
+              messages.map((item: MessageInfo) => (
+                <ChatBubble key={item.id} message={item} isCurrentUser={item.userId === userId} />
+              ))
+            )}
+            {isLoading && (
+              <div className="flex justify-center">
+                <div className="bg-base-200 rounded-2xl px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <span className="loading loading-spinner loading-sm" />
+                    <span className="text-sm text-base-content/60">发送中...</span>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={bottomRef} />
           </div>
         </div>
-        <div
-          style={{
-            backgroundColor: 'var(--fallback-b2,oklch(var(--b3) / var(--un-bg-opacity)))',
-          }}
-          className="px-4 py-2 fixed bottom-16 md:bottom-0 left-0 right-0 flex justify-center backdrop-filter backdrop-blur-lg bg-opacity-30"
-        >
-          <div className="w-full max-w-4xl flex flex-row items-center gap-2">
+
+        {/* Scroll to bottom button */}
+        {!following && (
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
+            <button
+              type="button"
+              className="btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-all duration-200"
+              onClick={() => {
+                const chatbox = document?.querySelector('html');
+                chatbox?.scrollTo({
+                  top: chatbox?.scrollHeight,
+                  behavior: 'smooth',
+                });
+              }}
+            >
+              <i className="i-tabler-arrow-down text-lg" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Input Area */}
+      <div className="flex-shrink-0 bg-base-100/90 backdrop-blur-md border-t border-base-300 p-4">
+        <div className="flex items-end gap-3 max-w-4xl mx-auto">
+          <div className="flex-1 relative">
             <textarea
               rows={1}
-              className="textarea textarea-bordered flex-grow focus:outline-0 transition-all duration-200 min-h-[3rem] max-h-32 resize-none"
+              className="textarea textarea-bordered w-full resize-none min-h-[2.5rem] max-h-32 pr-12 focus:border-primary transition-colors duration-200"
               value={input}
               placeholder="输入消息..."
+              disabled={isLoading}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && (e.ctrlKey || e.shiftKey)) {
-                  setInput(`${input}\n`);
-                } else if (e.key === 'Enter') {
-                  sendMessage();
+                if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey) {
                   e.preventDefault();
+                  sendMessage();
+                } else if (e.key === 'Enter' && (e.shiftKey || e.ctrlKey)) {
+                  // Allow line break
                 }
-                // 自动调整高度
+                // Auto-resize
                 const target = e.target as HTMLTextAreaElement;
-                target.style.height = 'auto';
-                target.style.height = `${target.scrollHeight}px`;
+                setTimeout(() => {
+                  target.style.height = 'auto';
+                  target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
+                }, 0);
               }}
               onChange={(e) => {
                 setInput(e.target.value);
-                // 自动调整高度
+                // Auto-resize
                 e.target.style.height = 'auto';
-                e.target.style.height = `${e.target.scrollHeight}px`;
+                e.target.style.height = `${Math.min(e.target.scrollHeight, 128)}px`;
               }}
             />
+          </div>
 
-            {/* 发送按钮 */}
-            {input && (
-              <button
-                type="button"
-                className="btn btn-circle btn-primary"
-                // 字数限制10000字
-                disabled={input.length > 10000}
-                onClick={() => {
-                  sendMessage();
-                }}
-              >
-                <i className="i-tabler-send text-xl" />
-              </button>
-            )}
-
-            {/* 更多 */}
+          <div className="flex gap-2">
             {!input && (
               <details className="dropdown dropdown-end dropdown-top">
-                <summary className="btn btn-circle">
-                  <i className="i-tabler-plus text-xl" />
+                <summary className="btn btn-circle btn-ghost">
+                  <i className="i-tabler-plus text-lg" />
                 </summary>
-                <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                <ul className="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-300">
                   <li>
-                    <button type="button" onClick={sendPicture}>
+                    <button
+                      type="button"
+                      onClick={sendPicture}
+                      className="flex items-center gap-2"
+                      disabled={isLoading}
+                    >
+                      <i className="i-tabler-photo" />
                       图片/文件
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMessages([]);
+                        toast.success('聊天记录已清空');
+                      }}
+                      className="flex items-center gap-2 text-error"
+                    >
+                      <i className="i-tabler-trash" />
+                      清空聊天
                     </button>
                   </li>
                 </ul>
               </details>
             )}
+
+            <button
+              type="button"
+              className={`btn btn-circle transition-all duration-200 ${input.trim() && !isLoading && input.length <= 10000
+                ? 'btn-primary shadow-lg hover:shadow-xl'
+                : 'btn-disabled'
+                }`}
+              disabled={!input.trim() || isLoading || input.length > 10000}
+              onClick={sendMessage}
+            >
+              {isLoading ? (
+                <span className="loading loading-spinner loading-sm" />
+              ) : (
+                <i className="i-tabler-send text-lg" />
+              )}
+            </button>
           </div>
         </div>
+
+        <div className="text-center mt-2">
+          <p className="text-xs text-base-content/40">
+            按 Enter 发送，Shift + Enter 换行
+          </p>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

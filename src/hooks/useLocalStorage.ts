@@ -1,24 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 
-export default function useLocalStorage(
+export default function useLocalStorage<T>(
   storageKey: string,
-  fallbackState: string | never[]
-) {
-  const [value, setValue] = useState(
-    (typeof window !== "undefined" &&
-      JSON.parse(localStorage.getItem(storageKey) ?? "[]")) ||
-      fallbackState
-  );
+  fallbackState: T
+): [T, Dispatch<SetStateAction<T>>] {
+  const [value, setValue] = useState<T>(() => {
+    if (typeof window === "undefined") return fallbackState;
+
+    try {
+      const item = localStorage.getItem(storageKey);
+      return item ? JSON.parse(item) : fallbackState;
+    } catch (error) {
+      console.warn(`Error reading localStorage key "${storageKey}":`, error);
+      return fallbackState;
+    }
+  });
 
   useEffect(() => {
-    if (typeof window !== "undefined")
-      localStorage.setItem(storageKey, JSON.stringify(value));
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(value));
+      } catch (error) {
+        console.warn(`Error setting localStorage key "${storageKey}":`, error);
+      }
+    }
   }, [value, storageKey]);
 
-  if (typeof window === "undefined") return [fallbackState, () => {}];
-
   return [value, setValue];
-
-  // If there is no window (e.g., server-side rendering), provide a fallback.
-  // return [fallbackState, () => {}]; // Return a dummy setState function.
 }

@@ -42,8 +42,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <link rel="icon" href="/avatar.jpg" sizes="any" />
-      <link rel="apple-touch-icon" href="/avatar.jpg" />
+      <link rel="icon" href="/avatar3.jpg" sizes="any" />
+      <link rel="apple-touch-icon" href="/avatar3.jpg" />
       <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js" />
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1951154877218910"
         crossOrigin="anonymous" />

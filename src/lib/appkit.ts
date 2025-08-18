@@ -12,14 +12,13 @@ export const queryClient = new QueryClient()
 const projectId = 'c728bad560b63a6cfcb7fc44e645bc2a'
 const metadata = {
     name: 'oboard',
-    description: 'AppKit Example',
-    url: 'https://oboard.eu.org',
-    icons: ['https://oboard.eu.org/favicon.ico']
+    description: 'oboard website',
+    url: 'https://www.oboard.fun',
+    icons: ['https://www.oboard.fun/avatar3.jpg']
 }
 
 // 创建 Wagmi 适配器
 export const wagmiAdapter = new WagmiAdapter({
-    // @ts-ignore
     networks: [crossbell],
     projectId,
     ssr: true

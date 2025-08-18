@@ -41,6 +41,7 @@ export default function NavigationBar() {
   const router = useRouter();
   const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // 检查颜色模式
 
   const applyTheme = useCallback((dark: boolean) => {
@@ -66,12 +67,25 @@ export default function NavigationBar() {
     <>
       <div className="fixed left-4 right-4 top-5 z-100 flex flex-row items-center justify-between gap-2">
         <div className="w-48 flex justify-start">
-          <NightToggle
-            value={isDark}
-            onChange={(e) => {
-              applyTheme(e.target.checked);
-            }}
-          />
+          {/* 移动端菜单按钮 */}
+          <Button
+            type="button"
+            className="btn btn-lg rounded-full md:hidden"
+            onClick={() => setIsDrawerOpen(true)}
+          >
+            <i className="i-tabler-menu-2 text-lg" />
+            菜单
+          </Button>
+
+          {/* 桌面端夜间模式切换 */}
+          <div className="hidden md:block">
+            <NightToggle
+              value={isDark}
+              onChange={(e) => {
+                applyTheme(e.target.checked);
+              }}
+            />
+          </div>
         </div>
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -109,9 +123,8 @@ export default function NavigationBar() {
                   whileTap={{ scale: 0.9, opacity: 0.6 }}
                 >
                   <Link
-                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary transition-colors ${
-                      pathname === route.path ? 'text-primary' : ''
-                    }`}
+                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary transition-colors ${pathname === route.path ? 'text-primary' : ''
+                      }`}
                     href={route.path}
                   >
                     {route.name}
@@ -139,36 +152,101 @@ export default function NavigationBar() {
         </div>
       </div>
 
-      {/* 移动端 */}
-      <ul className="md:hidden fixed bottom-0 left-0 right-0 h-16 flex flex-row items-center justify-around bg-base-200/80 backdrop-blur-md px-2 z-50">
-        {routes.map((route) => (
-          <li key={route.path} className="relative flex-1">
-            <Link
-              className={`group flex flex-col items-center justify-center py-1 transition-all ${
-                pathname === route.path ? 'text-primary' : 'text-base-content/70'
-              }`}
-              href={route.path}
-            >
-              <i
-                className={`${route.icon} text-xl mb-0.5 transition-transform group-active:scale-90`}
-              />
-              <span className="text-xs font-medium">{route.name}</span>
+      {/* 移动端抽屉菜单 */}
+      <AnimatePresence>
+        {isDrawerOpen && (
+          <>
+            {/* 背景遮罩 */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-200 md:hidden"
+              onClick={() => setIsDrawerOpen(false)}
+            />
 
-              {pathname === route.path && (
-                <motion.div
-                  layoutId="mobile-nav-indicator"
-                  className="absolute -top-1 w-1 h-1 rounded-full bg-primary"
-                  transition={{
-                    type: 'spring',
-                    stiffness: 300,
-                    damping: 30,
-                  }}
-                />
-              )}
-            </Link>
-          </li>
-        ))}
-      </ul>
+            {/* 抽屉内容 */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 30,
+              }}
+              className="fixed left-0 top-0 bottom-0 w-80 bg-base-100 shadow-2xl z-300 md:hidden"
+            >
+              {/* 抽屉头部 */}
+              <div className="flex items-center justify-between p-6 border-b border-base-300">
+                <h2 className="text-xl font-bold text-base-content">菜单</h2>
+                <Button
+                  type="button"
+                  className="btn btn-ghost btn-sm rounded-full"
+                  onClick={() => setIsDrawerOpen(false)}
+                >
+                  <i className="i-tabler-x text-lg" />
+                </Button>
+              </div>
+
+              {/* 导航菜单 */}
+              <nav className="p-4">
+                <ul className="space-y-2">
+                  {routes.map((route) => (
+                    <motion.li
+                      key={route.path}
+                      whileHover={{ x: 4 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Link
+                        className={`flex items-center gap-4 p-3 rounded-lg transition-all ${pathname === route.path
+                            ? 'bg-primary text-primary-content shadow-md'
+                            : 'hover:bg-base-200 text-base-content'
+                          }`}
+                        href={route.path}
+                        onClick={() => setIsDrawerOpen(false)}
+                      >
+                        <i className={`${route.icon} text-xl`} />
+                        <span className="font-medium">{route.name}</span>
+                        {pathname === route.path && (
+                          <motion.div
+                            layoutId="drawer-indicator"
+                            className="ml-auto w-2 h-2 rounded-full bg-primary-content"
+                            transition={{
+                              type: 'spring',
+                              stiffness: 300,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* 抽屉底部 - 夜间模式切换和钱包连接 */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-base-300 space-y-4">
+                {/* 夜间模式切换 */}
+                <div className="flex items-center justify-between">
+                  <span className="text-base-content font-medium">夜间模式</span>
+                  <NightToggle
+                    value={isDark}
+                    onChange={(e) => {
+                      applyTheme(e.target.checked);
+                    }}
+                  />
+                </div>
+
+                {/* 钱包连接 */}
+                <div className="w-full">
+                  <ConnectWalletButton />
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* 桌面端 */}
     </>

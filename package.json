@@ -2,6 +2,7 @@
   "name": "oboard.eu.org-next",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -41,6 +42,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@eslint/eslintrc": "^3.3.1",
     "@types/jsdom": "^21.1.7",
     "@types/node": "20.5.6",
     "@types/react": "18.2.21",
@@ -52,6 +54,7 @@
     "@unocss/preset-typography": "latest",
     "@unocss/transformer-attributify-jsx": "latest",
     "daisyui": "latest",
+    "eslint-config-next": "^15.4.6",
     "postcss": "8.4.28",
     "react-markdown": "^8.0.7",
     "react-syntax-highlighter": "^15.6.1",

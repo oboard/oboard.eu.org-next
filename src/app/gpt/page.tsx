@@ -1,30 +1,8 @@
 'use client';
 
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { darcula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import ChatContainer from '@/components/ChatContainer';
 import ActionDropdown, { createClearAction, createLongTextAction } from '@/components/ActionDropdown';
 import { useChatLogic } from '@/hooks/useChatLogic';
-
-const CodeBlock = ({
-  language,
-  children,
-}: {
-  language: string | undefined;
-  children: any;
-}) => {
-  return (
-    <SyntaxHighlighter
-      showLineNumbers={true}
-      wrapLines={true}
-      PreTag="div"
-      language={language}
-      style={darcula}
-    >
-      {children}
-    </SyntaxHighlighter>
-  );
-};
 
 export default function GPTChatPage() {
   const chatLogic = useChatLogic({

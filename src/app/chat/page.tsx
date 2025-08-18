@@ -90,24 +90,22 @@ export default function ChatPage() {
   );
 
   return (
-    <div className="flex flex-col h-screen w-full md:max-w-xl">
-      <ChatContainer
-        chatLogic={chatLogic}
-        actionDropdown={actionDropdown}
-        messageListProps={{
-          emptyStateConfig: {
-            title: '欢迎来到聊天室',
-            description: '这里是一个实时聊天空间，您可以与其他用户进行交流，分享图片和文件。开始您的第一条消息吧！'
-          },
-          loadingConfig: {
-            text: '发送中...',
-            position: 'center'
-          }
-        }}
-        chatInputProps={{
-          placeholder: '输入消息...'
-        }}
-      />
-    </div>
+    <ChatContainer
+      chatLogic={chatLogic}
+      actionDropdown={actionDropdown}
+      messageListProps={{
+        emptyStateConfig: {
+          title: '欢迎来到聊天室',
+          description: '这里是一个实时聊天空间，您可以与其他用户进行交流，分享图片和文件。开始您的第一条消息吧！'
+        },
+        loadingConfig: {
+          text: '发送中...',
+          position: 'center'
+        }
+      }}
+      chatInputProps={{
+        placeholder: '输入消息...'
+      }}
+    />
   );
 }

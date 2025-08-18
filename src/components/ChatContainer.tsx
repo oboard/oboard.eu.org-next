@@ -34,7 +34,7 @@ export default function ChatContainer({
     userId
   } = chatLogic;
 
-  const defaultClassName = 'flex flex-col h-screen bg-gradient-to-br from-base-100 to-base-200';
+  const defaultClassName = 'flex flex-col w-full h-screen bg-gradient-to-br from-base-100 to-base-200';
   const containerClassName = className || defaultClassName;
 
   return (

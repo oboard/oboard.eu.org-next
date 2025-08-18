@@ -67,7 +67,7 @@ export default function Home() {
                 <span className="block mb-4 animate-fade-in-up [animation-delay:200ms]">
                   Hello，这里是
                 </span>
-                <span className="block bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-[size:200%] animate-fade-in-up [animation-delay:400ms]">
+                <span className="block bg-linear-to-r from-primary-content via-secondary-content to-primary-content bg-clip-text text-transparent bg-[size:200%] animate-fade-in-up [animation-delay:400ms]">
                   一块小板子
                 </span>
                 <span className="block mt-4 animate-fade-in-up [animation-delay:600ms]">
@@ -171,7 +171,7 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
                 className="backdrop-blur-sm bg-base-100/30 rounded-2xl p-8 border border-base-content/5 hover:shadow-lg transition-all"
               >
-                <h2 className="text-3xl font-bold mb-8 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <h2 className="text-3xl font-bold mb-8 bg-linear-to-r from-primary-content to-secondary-content bg-clip-text text-transparent">
                   {category.name}
                 </h2>
                 <div className="grid gap-4">

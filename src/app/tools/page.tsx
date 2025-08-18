@@ -187,7 +187,7 @@ export default function Home() {
                   <img src={item.img} alt="preview" width={500} height={300} />
                 </figure>
                 <div className="card-body px-4 pt-4 pb-4">
-                  <div className="card-title font-normal text-primary">
+                  <div className="card-title font-normal text-primary-content">
                     {item.name}
                     {item.avalible && <i className="i-tabler-circle-check text-green-500" />}
                     {!item.avalible && <i className="i-tabler-circle-x text-red-500" />}

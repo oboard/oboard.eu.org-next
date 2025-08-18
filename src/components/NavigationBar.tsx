@@ -47,7 +47,7 @@ export default function NavigationBar() {
   const applyTheme = useCallback((dark: boolean) => {
     const html = document.querySelector('html');
     setIsDark(dark);
-    html?.setAttribute('data-theme', dark ? 'night' : 'winter');
+    html?.setAttribute('data-theme', dark ? 'night' : 'pastel');
     appkit.setThemeMode(dark ? 'dark' : 'light');
   }, []);
 
@@ -123,17 +123,17 @@ export default function NavigationBar() {
                   whileTap={{ scale: 0.9, opacity: 0.6 }}
                 >
                   <Link
-                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary transition-colors ${pathname === route.path ? 'text-primary' : ''
+                    className={`relative hoverable block py-2 px-3 font-medium text-md hover:text-primary-content transition-colors ${pathname === route.path ? 'text-primary-content' : ''
                       }`}
                     href={route.path}
                   >
                     {route.name}
-                    <span className="absolute inset-x-1 -bottom-px h-px bg-linear-to-r from-primary/0 via-primary/40 dark:via-primary/60 to-primary/0 transition-opacity opacity-0" />
+                    <span className="absolute inset-x-1 -bottom-px h-px bg-linear-to-r from-primary/0 via-primary dark:via-primary/60 to-primary/0 transition-opacity opacity-0" />
 
                     {pathname === route.path && (
                       <motion.div
                         layoutId="underline"
-                        className="absolute bottom--0.5 mt-1 left-1 right-1 bg-linear-to-r from-primary/0 via-primary/40 h-0.5 rounded-full "
+                        className="absolute bottom--0.5 mt-1 left-1 right-1 bg-linear-to-r from-primary/0 via-primary h-0.5 rounded-full "
                         transition={{
                           type: 'spring',
                           stiffness: 300,
@@ -200,8 +200,8 @@ export default function NavigationBar() {
                     >
                       <Link
                         className={`flex items-center gap-4 p-3 rounded-lg transition-all ${pathname === route.path
-                            ? 'bg-primary text-primary-content shadow-md'
-                            : 'hover:bg-base-200 text-base-content'
+                          ? 'bg-primary text-primary-content shadow-md'
+                          : 'hover:bg-base-200 text-base-content'
                           }`}
                         href={route.path}
                         onClick={() => setIsDrawerOpen(false)}

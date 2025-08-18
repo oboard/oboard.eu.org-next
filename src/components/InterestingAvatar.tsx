@@ -282,7 +282,7 @@ export default function InterestingAvatar() {
           <Image
             src="https://obscloud.ulearning.cn/resources/web/1748237070466.png"
             alt="头像"
-            className="object-cover z-30"
+            className="object-cover z-30 rounded-full"
             fill
             sizes="(max-width: 640px) 12rem, (max-width: 768px) 14rem, 18rem"
             priority

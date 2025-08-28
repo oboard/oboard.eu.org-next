@@ -19,10 +19,10 @@ export interface UseChatLogicReturn {
   following: boolean;
   isLoading: boolean;
   isConnected?: boolean;
-  
+
   // Refs
   messagesContainerRef: React.RefObject<HTMLDivElement>;
-  
+
   // Actions
   setInput: (value: string) => void;
   setFollowing: (value: boolean) => void;
@@ -30,7 +30,7 @@ export interface UseChatLogicReturn {
   sendMessage: () => Promise<void>;
   clearMessages: () => void;
   toBottom: (quick?: boolean) => void;
-  
+
   // Utils
   updateMessages: (newMessages: MessageInfo[]) => void;
   userId: string;
@@ -39,7 +39,7 @@ export interface UseChatLogicReturn {
 
 export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
   const { storageKey, apiEndpoint, enableFileUpload = false, enableStreaming = false } = options;
-  
+
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { userId, checkUserIdAvalible } = useUserId();
   const [messages, setMessages] = useLocalStorage<MessageInfo[]>(storageKey, []);
@@ -108,7 +108,7 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
 
         const res = await fetch(`${apiEndpoint}?prompt=${encodeURIComponent(currentInput)}&userId=${userId}`);
         const reader = res.body?.getReader();
-        
+
         if (!reader) {
           throw new Error('无法获取响应流');
         }
@@ -130,7 +130,7 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
           }
           return reader?.read().then(processResult);
         };
-        
+
         await reader?.read().then(processResult);
       } else {
         // Regular chat logic
@@ -152,7 +152,7 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
       console.error('发送失败:', error);
       toast.error('发送失败，请重试');
       setInput(currentInput);
-      
+
       if (enableStreaming) {
         const robot_msg: MessageInfo = {
           id: uuidv7(),
@@ -181,7 +181,7 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
     };
 
     container.addEventListener('scroll', handleScroll);
-    
+
     // 初始化时滚动到底部
     setTimeout(() => toBottom(true), 100);
 
@@ -205,6 +205,39 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
     return () => clearInterval(timer);
   }, [checkUserIdAvalible]);
 
+  if (!apiEndpoint?.includes('gpt')) {
+    // 消息同步逻辑
+    useEffect(() => {
+      const timer = setInterval(async () => {
+        if (!checkUserIdAvalible()) return;
+
+        try {
+          setIsConnected(true);
+          const res = await fetch(`/api/chat?from=${messages[messages.length - 1]?.time ?? 0}`);
+          const data = await res.json();
+
+          if (data && Array.isArray(data)) {
+            const newMessages = [...data, ...messages]
+              .map(item => ({
+                ...item,
+                time: item.time ?? new Date().getTime()
+              }));
+            updateMessages(newMessages);
+          }
+        } catch (error) {
+          console.error('同步消息失败:', error);
+          setIsConnected(false);
+        }
+
+        if (following) {
+          toBottom();
+        }
+      }, 2000);
+
+      return () => clearInterval(timer);
+    }, [checkUserIdAvalible, messages, following, toBottom, updateMessages]);
+  }
+
   return {
     // State
     messages,
@@ -212,10 +245,10 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
     following,
     isLoading,
     isConnected,
-    
+
     // Refs
     messagesContainerRef,
-    
+
     // Actions
     setInput,
     setFollowing,
@@ -223,7 +256,7 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
     sendMessage,
     clearMessages,
     toBottom,
-    
+
     // Utils
     updateMessages,
     userId,

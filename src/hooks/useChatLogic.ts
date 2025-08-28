@@ -205,9 +205,9 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
     return () => clearInterval(timer);
   }, [checkUserIdAvalible]);
 
-  if (!apiEndpoint?.includes('gpt')) {
-    // 消息同步逻辑
-    useEffect(() => {
+  // 消息同步逻辑
+  useEffect(() => {
+    if (!apiEndpoint?.includes('gpt')) {
       const timer = setInterval(async () => {
         if (!checkUserIdAvalible()) return;
 
@@ -235,8 +235,8 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
       }, 2000);
 
       return () => clearInterval(timer);
-    }, [checkUserIdAvalible, messages, following, toBottom, updateMessages]);
-  }
+    }
+  }, [checkUserIdAvalible, messages, following, toBottom, updateMessages, apiEndpoint?.includes]);
 
   return {
     // State

@@ -190,12 +190,19 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
     };
   }, [toBottom]);
 
-  // 当消息更新时，如果正在跟随，自动滚动到底部
+  // 如果正在跟随，自动滚动到底部
   useEffect(() => {
     if (following) {
       setTimeout(() => toBottom(), 100);
     }
   }, [following, toBottom]);
+
+  // 当消息更新时，如果正在跟随，自动滚动到底部
+  useEffect(() => {
+    if (following && messages.length > 0) {
+      toBottom();
+    }
+  }, [toBottom, following, messages.length]);
 
   // 定期检查用户ID
   useEffect(() => {

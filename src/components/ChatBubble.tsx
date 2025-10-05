@@ -6,6 +6,7 @@ import { darcula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { useCrossbellCharacter } from '@/hooks/useCrossbellCharacter';
 import Image from 'next/image';
 import { getCrossbellImageUrl } from '@/utils/crossbell';
+import remarkBreaks from 'remark-breaks';
 
 const CodeBlock = ({
   language,
@@ -88,11 +89,11 @@ export default function ChatBubble({ message, isCurrentUser }: ChatBubbleProps) 
       <div
         className={`animate-duration-500 animate-ease-out chat-bubble ${genColor(
           message.userId
-        )} animate-fade-in-${isCurrentUser ? 'right' : 'left'}${
-          message.type === 'image' ? ' max-w-sm' : ''
-        }`}
+        )} animate-fade-in-${isCurrentUser ? 'right' : 'left'}${message.type === 'image' ? ' max-w-sm' : ''
+          }`}
       >
         <ReactMarkdown
+          remarkPlugins={[remarkBreaks]}
           components={{
             img: ({ node, ...props }) => (
               <button
@@ -122,9 +123,8 @@ export default function ChatBubble({ message, isCurrentUser }: ChatBubbleProps) 
                   <svg
                     role="img"
                     aria-label="链接"
-                    className={`${
-                      isCurrentUser ? 'text-primary-content' : 'text-base-content'
-                    } fill-current`}
+                    className={`${isCurrentUser ? 'text-primary-content' : 'text-base-content'
+                      } fill-current`}
                     viewBox="0 0 1024 1024"
                     version="1.1"
                     xmlns="http://www.w3.org/2000/svg"

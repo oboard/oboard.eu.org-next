@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     };
     const payload = {
         "prompt": prompt,
-        "userId": "#/chat/" + userId,
+        "userId": `#/chat/${userId}`,
         "network": true,
         "system": "",
         "withoutContext": false,

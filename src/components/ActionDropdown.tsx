@@ -26,14 +26,15 @@ export default function ActionDropdown({
   return (
     <div className="dropdown dropdown-end dropdown-top">
       <button
+        type="button"
         tabIndex={0}
-        role="button"
         className={`btn btn-circle btn-ghost ${buttonClassName}`}
         aria-disabled={disabled}
       >
         <i className="i-tabler-plus text-lg" />
       </button>
       <ul
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
         tabIndex={0}
         className={`dropdown-content menu p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-300 ${dropdownClassName}`}
       >

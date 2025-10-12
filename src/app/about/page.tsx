@@ -1,6 +1,6 @@
 "use client";
 
-import React, {PropsWithChildren} from "react";
+import React, { PropsWithChildren } from "react";
 import Link from "next/link";
 import { ability } from "@/config";
 import Footer from "@/components/Footer";
@@ -15,43 +15,45 @@ const Tag: React.FC<PropsWithChildren> = (props) => {
 
 export default function About() {
   return (
-    <article className={"text-base prose py-24 px-4"}>
-      <h2>🎨 关于本站</h2>
-      <p>
-        存一些文章或者日记 + 小工具， 本站技术栈为 Next.js、UnoCSS、TypeScript
-      </p>
+    <>
+      <article className={"text-base prose py-24 px-4"}>
+        <h2>💻 关于本站 About This Site</h2>
+        <p>
+          Next.js、TailwindCSS、TypeScript
+        </p>
 
-      <h2>😯 关于我</h2>
-      <p>一个随便写写代码的人，我的技能 👇🏻</p>
-      <div className="flex items-start flex-wrap gap-2">
-        {
-          ability.map((item) => (
-            item.children.map((item1) => (
-              <div className="grid grid-flow-col gap-2 items-center" key={item1.name}>
-                <i className={item1.icon} />
-                <span>{item1.name}</span>
-              </div>
+        <h2>😯 关于我 About Me</h2>
+        <p>I'm a passionate software developer working with various programming languages and frameworks. I enjoy building applications for different platforms and exploring new technologies. My projects focus on text, images, and calculations, bringing creative ideas to life through code.</p>
+        <div className="flex items-start flex-wrap gap-2">
+          {
+            ability.map((item) => (
+              item.children.map((item1) => (
+                <div className="grid grid-flow-col gap-2 items-center" key={item1.name}>
+                  <i className={item1.icon} />
+                  <span>{item1.name}</span>
+                </div>
+              ))
             ))
-          ))
-        }
-        ...
-      </div>
+          }
+          ...
+        </div>
 
-      <h2>📮 找到我</h2>
-      <ul>
-        <li>
-          Email -{" "}
-          <Link href="mailto:oboard@outlook.com">oboard@outlook.com</Link>
-        </li>
-        <li>
-          Github -{" "}
-          <Link href="https://github.com/oboard">
-            https://github.com/oboard
-          </Link>
-        </li>
-      </ul>
+        <h2>📮 找到我</h2>
+        <ul>
+          <li>
+            Email -{" "}
+            <Link href="mailto:oboard@outlook.com">oboard@outlook.com</Link>
+          </li>
+          <li>
+            Github -{" "}
+            <Link href="https://github.com/oboard">
+              https://github.com/oboard
+            </Link>
+          </li>
+        </ul>
 
+      </article>
       <Footer />
-    </article>
+    </>
   );
 }

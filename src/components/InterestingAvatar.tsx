@@ -78,12 +78,16 @@ const Orbit = React.memo(
   }) => {
     const orbitRef = useRef<HTMLDivElement>(null);
 
+    // 为避免 SSR 与客户端渲染的浮点数精度差异，统一格式化到固定精度
+    const roundedAngle = Number(angle.toFixed(4));
+    const roundedDelay = Number(delay.toFixed(4));
+
     useEffect(() => {
       if (orbitRef.current) {
         orbitRef.current.style.setProperty('--radius', `${radius}px`);
-        orbitRef.current.style.setProperty('--angle', `${angle}deg`);
+        orbitRef.current.style.setProperty('--angle', `${roundedAngle}deg`);
       }
-    }, [radius, angle]);
+    }, [radius, roundedAngle]);
 
     return (
       <div
@@ -91,9 +95,9 @@ const Orbit = React.memo(
         className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-0 w-0 animate-orbit ${className}`}
         style={{
           animationDirection: direction,
-          animationDuration: `${duration}s`,
-          animationDelay: `${-delay}s`,
-          transform: `rotate(${angle}deg)`, // 应用初始旋转角度
+          animationDuration: `${Number(duration.toFixed(4))}s`,
+          animationDelay: `-${roundedDelay}s`,
+          transform: `rotate(${roundedAngle}deg)`, // 应用初始旋转角度（已格式化）
         }}
       >
         {children}
@@ -155,8 +159,8 @@ export default function InterestingAvatar() {
         return {
           key: category.name,
           radius: getRadius(category.name),
-          duration: baseDuration,
-          delay: i * 1.5,
+          duration: Number(baseDuration.toFixed(4)),
+          delay: Number((i * 1.5).toFixed(4)),
           color: getCategoryColor(category.name),
           icons: category.children.map((tech, techIndex) => {
             // 为每个图标生成稳定的随机种子
@@ -172,9 +176,9 @@ export default function InterestingAvatar() {
 
             return {
               ...tech,
-              angle: baseAngle + angleOffset,
-              duration: Math.floor(baseDuration * speedFactor),
-              delay: techIndex * 0.5 + random * 2, // 添加0-2秒的随机延迟
+              angle: Number((baseAngle + angleOffset).toFixed(4)),
+              duration: Number(Math.floor(baseDuration * speedFactor).toFixed(4)),
+              delay: Number((techIndex * 0.5 + random * 2).toFixed(4)), // 添加0-2秒的随机延迟
             };
           }),
         };
@@ -206,9 +210,9 @@ export default function InterestingAvatar() {
             name: tech.name,
             category: category.name,
             radius: getRadius(category.name),
-            duration: Math.floor(baseDuration * speedFactor),
-            delay: category.children.indexOf(tech) * 0.5 + random * 3, // 添加0-3秒的随机延迟
-            angle: baseAngle + angleOffset, // 添加角度信息
+            duration: Number(Math.floor(baseDuration * speedFactor).toFixed(4)),
+            delay: Number((category.children.indexOf(tech) * 0.5 + random * 3).toFixed(4)), // 添加0-3秒的随机延迟
+            angle: Number((baseAngle + angleOffset).toFixed(4)), // 添加角度信息
           };
         });
       }),

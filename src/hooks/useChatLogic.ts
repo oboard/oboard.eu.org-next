@@ -243,7 +243,7 @@ export function useChatLogic(options: UseChatLogicOptions): UseChatLogicReturn {
 
       return () => clearInterval(timer);
     }
-  }, [checkUserIdAvalible, messages, following, toBottom, updateMessages, apiEndpoint?.includes]);
+  }, [checkUserIdAvalible, messages, following, toBottom, updateMessages, apiEndpoint]);
 
   return {
     // State

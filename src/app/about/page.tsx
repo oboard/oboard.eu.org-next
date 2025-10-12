@@ -23,7 +23,7 @@ export default function About() {
         </p>
 
         <h2>😯 关于我 About Me</h2>
-        <p>I'm a passionate software developer working with various programming languages and frameworks. I enjoy building applications for different platforms and exploring new technologies. My projects focus on text, images, and calculations, bringing creative ideas to life through code.</p>
+        <p>I&apos;m a passionate software developer working with various programming languages and frameworks. I enjoy building applications for different platforms and exploring new technologies. My projects focus on text, images, and calculations, bringing creative ideas to life through code.</p>
         <div className="flex items-start flex-wrap gap-2">
           {
             ability.map((item) => (

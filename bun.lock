@@ -5,38 +5,39 @@
       "name": "oboard.eu.org-next",
       "dependencies": {
         "@giscus/react": "^3.1.0",
-        "@headlessui/react": "^2.2.7",
+        "@headlessui/react": "^2.2.9",
         "@iconify-json/logos": "^1.2.9",
-        "@iconify-json/lucide": "^1.2.62",
-        "@iconify-json/tabler": "^1.2.22",
-        "@reown/appkit": "^1.7.19",
-        "@reown/appkit-adapter-wagmi": "^1.7.19",
-        "@tailwindcss/postcss": "^4.1.12",
-        "@tanstack/react-query": "^5.85.3",
+        "@iconify-json/lucide": "^1.2.69",
+        "@iconify-json/tabler": "^1.2.23",
+        "@reown/appkit": "^1.8.9",
+        "@reown/appkit-adapter-wagmi": "^1.8.9",
+        "@tailwindcss/postcss": "^4.1.14",
+        "@tanstack/react-query": "^5.90.2",
         "@unocss/reset": "latest",
         "@xterm/addon-fit": "^0.10.0",
         "@xterm/xterm": "^5.5.0",
-        "eslint": "^9.33.0",
+        "eslint": "^9.37.0",
         "framer-motion": "^11.18.2",
         "gsap": "^3.13.0",
         "jsdom": "^22.1.0",
         "lit": "3.3.0",
-        "next": "^15.4.6",
+        "next": "^15.5.4",
         "oh-my-live2d": "^0.19.3",
         "peerjs": "^1.5.5",
-        "pino-pretty": "^13.1.1",
+        "pino-pretty": "^13.1.2",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-hot-toast": "^2.6.0",
         "remark-breaks": "^4.0.0",
         "swr": "^2.3.6",
-        "tailwindcss": "^4.1.12",
+        "tailwindcss": "^4.1.14",
         "uuid": "^10.0.0",
-        "viem": "^2.33.3",
-        "wagmi": "^2.16.3",
+        "viem": "^2.38.0",
+        "wagmi": "^2.18.0",
       },
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
+        "@csstools/postcss-oklab-function": "^4.0.12",
         "@eslint/eslintrc": "^3.3.1",
         "@types/jsdom": "^21.1.7",
         "@types/node": "20.5.6",
@@ -49,10 +50,10 @@
         "@unocss/preset-typography": "latest",
         "@unocss/transformer-attributify-jsx": "latest",
         "daisyui": "latest",
-        "eslint-config-next": "^15.4.6",
+        "eslint-config-next": "^15.5.4",
         "postcss": "8.4.28",
         "react-markdown": "^8.0.7",
-        "react-syntax-highlighter": "^15.6.1",
+        "react-syntax-highlighter": "^15.6.6",
         "typescript": "latest",
         "unocss": "latest",
       },
@@ -106,6 +107,22 @@
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@1.9.4", "https://registry.npmmirror.com/@biomejs/cli-win32-x64/-/cli-win32-x64-1.9.4.tgz", { "os": "win32", "cpu": "x64" }, "sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA=="],
 
     "@coinbase/wallet-sdk": ["@coinbase/wallet-sdk@4.3.6", "https://registry.npmmirror.com/@coinbase/wallet-sdk/-/wallet-sdk-4.3.6.tgz", { "dependencies": { "@noble/hashes": "1.4.0", "clsx": "1.2.1", "eventemitter3": "5.0.1", "idb-keyval": "6.2.1", "ox": "0.6.9", "preact": "10.24.2", "viem": "^2.27.2", "zustand": "5.0.3" } }, "sha512-4q8BNG1ViL4mSAAvPAtpwlOs1gpC+67eQtgIwNvT3xyeyFFd+guwkc8bcX5rTmQhXpqnhzC4f0obACbP9CqMSA=="],
+
+    "@csstools/color-helpers": ["@csstools/color-helpers@5.1.0", "https://registry.npmmirror.com/@csstools/color-helpers/-/color-helpers-5.1.0.tgz", {}, "sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA=="],
+
+    "@csstools/css-calc": ["@csstools/css-calc@2.1.4", "https://registry.npmmirror.com/@csstools/css-calc/-/css-calc-2.1.4.tgz", { "peerDependencies": { "@csstools/css-parser-algorithms": "^3.0.5", "@csstools/css-tokenizer": "^3.0.4" } }, "sha512-3N8oaj+0juUw/1H3YwmDDJXCgTB1gKU6Hc/bB502u9zR0q2vd786XJH9QfrKIEgFlZmhZiq6epXl4rHqhzsIgQ=="],
+
+    "@csstools/css-color-parser": ["@csstools/css-color-parser@3.1.0", "https://registry.npmmirror.com/@csstools/css-color-parser/-/css-color-parser-3.1.0.tgz", { "dependencies": { "@csstools/color-helpers": "^5.1.0", "@csstools/css-calc": "^2.1.4" }, "peerDependencies": { "@csstools/css-parser-algorithms": "^3.0.5", "@csstools/css-tokenizer": "^3.0.4" } }, "sha512-nbtKwh3a6xNVIp/VRuXV64yTKnb1IjTAEEh3irzS+HkKjAOYLTGNb9pmVNntZ8iVBHcWDA2Dof0QtPgFI1BaTA=="],
+
+    "@csstools/css-parser-algorithms": ["@csstools/css-parser-algorithms@3.0.5", "https://registry.npmmirror.com/@csstools/css-parser-algorithms/-/css-parser-algorithms-3.0.5.tgz", { "peerDependencies": { "@csstools/css-tokenizer": "^3.0.4" } }, "sha512-DaDeUkXZKjdGhgYaHNJTV9pV7Y9B3b644jCLs9Upc3VeNGg6LWARAT6O+Q+/COo+2gg/bM5rhpMAtf70WqfBdQ=="],
+
+    "@csstools/css-tokenizer": ["@csstools/css-tokenizer@3.0.4", "https://registry.npmmirror.com/@csstools/css-tokenizer/-/css-tokenizer-3.0.4.tgz", {}, "sha512-Vd/9EVDiu6PPJt9yAh6roZP6El1xHrdvIVGjyBsHR0RYwNHgL7FJPyIIW4fANJNG6FtyZfvlRPpFI4ZM/lubvw=="],
+
+    "@csstools/postcss-oklab-function": ["@csstools/postcss-oklab-function@4.0.12", "https://registry.npmmirror.com/@csstools/postcss-oklab-function/-/postcss-oklab-function-4.0.12.tgz", { "dependencies": { "@csstools/css-color-parser": "^3.1.0", "@csstools/css-parser-algorithms": "^3.0.5", "@csstools/css-tokenizer": "^3.0.4", "@csstools/postcss-progressive-custom-properties": "^4.2.1", "@csstools/utilities": "^2.0.0" }, "peerDependencies": { "postcss": "^8.4" } }, "sha512-HhlSmnE1NKBhXsTnNGjxvhryKtO7tJd1w42DKOGFD6jSHtYOrsJTQDKPMwvOfrzUAk8t7GcpIfRyM7ssqHpFjg=="],
+
+    "@csstools/postcss-progressive-custom-properties": ["@csstools/postcss-progressive-custom-properties@4.2.1", "https://registry.npmmirror.com/@csstools/postcss-progressive-custom-properties/-/postcss-progressive-custom-properties-4.2.1.tgz", { "dependencies": { "postcss-value-parser": "^4.2.0" }, "peerDependencies": { "postcss": "^8.4" } }, "sha512-uPiiXf7IEKtUQXsxu6uWtOlRMXd2QWWy5fhxHDnPdXKCQckPP3E34ZgDoZ62r2iT+UOgWsSbM4NvHE5m3mAEdw=="],
+
+    "@csstools/utilities": ["@csstools/utilities@2.0.0", "https://registry.npmmirror.com/@csstools/utilities/-/utilities-2.0.0.tgz", { "peerDependencies": { "postcss": "^8.4" } }, "sha512-5VdOr0Z71u+Yp3ozOx8T11N703wIFGVRgOWbOZMKgglPJsWA54MRIoMNVMa7shUToIhx5J8vX4sOZgD2XiihiQ=="],
 
     "@ecies/ciphers": ["@ecies/ciphers@0.2.4", "https://registry.npmmirror.com/@ecies/ciphers/-/ciphers-0.2.4.tgz", { "peerDependencies": { "@noble/ciphers": "^1.0.0" } }, "sha512-t+iX+Wf5nRKyNzk8dviW3Ikb/280+aEJAnw9YXvCp2tYGPSkMki+NRY+8aNLmVFv3eNtMdvViPNOPxS8SZNP+w=="],
 
@@ -1518,6 +1535,8 @@
     "possible-typed-array-names": ["possible-typed-array-names@1.1.0", "https://registry.npmmirror.com/possible-typed-array-names/-/possible-typed-array-names-1.1.0.tgz", {}, "sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg=="],
 
     "postcss": ["postcss@8.4.28", "https://registry.npmmirror.com/postcss/-/postcss-8.4.28.tgz", { "dependencies": { "nanoid": "^3.3.6", "picocolors": "^1.0.0", "source-map-js": "^1.0.2" } }, "sha512-Z7V5j0cq8oEKyejIKfpD8b4eBy9cwW2JWPk0+fB1HOAMsfHbnAXLLS+PfVWlzMSLQaWttKDt607I0XHmpE67Vw=="],
+
+    "postcss-value-parser": ["postcss-value-parser@4.2.0", "https://registry.npmmirror.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz", {}, "sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ=="],
 
     "preact": ["preact@10.24.2", "https://registry.npmmirror.com/preact/-/preact-10.24.2.tgz", {}, "sha512-1cSoF0aCC8uaARATfrlz4VCBqE8LwZwRfLgkxJOQwAlQt6ayTmi0D9OF7nXid1POI5SZidFuG9CnlXbDfLqY/Q=="],
 

@@ -75,7 +75,7 @@ export default function Home() {
                 </span>
               </h1>
               <p className="text-xl sm:text-2xl md:text-3xl text-base-content/80 animate-fade-in-up [animation-delay:800ms]">
-                计算机专业大三在读（即将大四）
+                计算机专业大四在读
                 <span className="hidden sm:inline"> | </span>
                 <br className="sm:hidden" />
                 前端开发工程师

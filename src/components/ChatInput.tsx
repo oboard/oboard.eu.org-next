@@ -60,12 +60,12 @@ export default function ChatInput({
   const canSend = input.trim() && !isLoading && input.length <= maxLength && !disabled;
 
   return (
-    <div className="flex-shrink-0 bg-base-100/90 backdrop-blur-md border-t border-base-300 p-4">
+    <div className="shrink-0 bg-base-100/90 backdrop-blur-md border-t border-base-300 p-4">
       <div className="flex items-end gap-3 max-w-4xl mx-auto">
         <div className="flex-1 relative">
           <textarea
             rows={1}
-            className="textarea textarea-bordered w-full resize-none min-h-[2.5rem] max-h-32 pr-12 focus:border-primary transition-colors duration-200"
+            className="textarea textarea-bordered w-full resize-none min-h-10 max-h-32 pr-12 focus:border-primary transition-colors duration-200"
             value={input}
             placeholder={placeholder}
             disabled={isLoading || disabled}

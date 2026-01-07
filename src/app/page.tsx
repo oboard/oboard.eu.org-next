@@ -4,7 +4,7 @@ import type React from 'react';
 import Link from 'next/link';
 import InterestingAvatar from '@/components/InterestingAvatar';
 import FeedItemCard from '@/components/feed/FeedItemCard';
-import type { FeedBodyInfo } from '@/models/feed';
+import type { FeedBodyInfo, FeedItemInfo } from '@/models/feed';
 import { links } from '@/config';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -50,7 +50,7 @@ export default function Home() {
 
       {/* Hero Section - 全屏展示区 */}
       <motion.div
-        className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10"
+        className="relative min-h-[90vh] flex items-center justify-center bg-linear-to-br from-primary/10 via-base-100 to-secondary/10"
         style={{
           opacity: heroOpacity,
           scale: heroScale,
@@ -86,7 +86,7 @@ export default function Home() {
             </div>
 
             {/* 头像区域 - 在桌面端靠右 */}
-            <div className="w-48 h-48 sm:w-56 sm:h-56 xl:w-[400px] xl:h-[400px] relative group order-1 md:order-2 flex-shrink-0">
+            <div className="w-48 h-48 sm:w-56 sm:h-56 xl:w-[400px] xl:h-[400px] relative group order-1 md:order-2 shrink-0">
               <div className="relative w-full h-full animate-float">
                 <InterestingAvatar />
               </div>
@@ -119,7 +119,7 @@ export default function Home() {
         </motion.div>
 
         {/* 底部渐变 */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-base-100 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-base-100 to-transparent" />
       </motion.div>
 
       {/* Blog Section - 博客展示区 */}
@@ -134,7 +134,7 @@ export default function Home() {
             最新文章
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogJson?.items.map((item, index) => (
+            {blogJson?.items.map((item: FeedItemInfo, index: number) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -158,7 +158,7 @@ export default function Home() {
           }}
         >
           {/* 背景装饰 */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5" />
+          <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-secondary/5" />
           <div className="absolute w-96 h-96 bg-primary/10 rounded-full blur-3xl -top-48 -left-48 animate-pulse" />
           <div className="absolute w-96 h-96 bg-secondary/10 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" />
         </motion.div>

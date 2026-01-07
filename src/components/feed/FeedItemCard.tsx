@@ -81,7 +81,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
             ))}
           </div>
         )}
-        <div className="flex-shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
+        <div className="shrink-0 flex flex-row gap-2 items-center text-sm leading-5">
 
           <span className="inline-flex items-center gap-2 rounded-full font-medium">
             <Image

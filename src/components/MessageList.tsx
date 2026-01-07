@@ -52,7 +52,7 @@ export default function MessageList({
         <div className="max-w-4xl mx-auto px-4 py-6 space-y-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center py-20">
-              <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-4">
+              <div className="w-16 h-16 bg-linear-to-r from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-4">
                 <i className={`${emptyState.icon} text-2xl text-primary`} />
               </div>
               <h3 className="text-xl font-semibold mb-2">{emptyState.title}</h3>

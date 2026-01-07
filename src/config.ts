@@ -35,6 +35,10 @@ export const ability = [
         icon: "i-logos-unocss",
         name: "UnoCSS",
       },
+      {
+        icon: "i-logos-moonbit",
+        name: "MoonBit",
+      },
     ],
   },
   {

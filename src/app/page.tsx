@@ -78,7 +78,7 @@ export default function Home() {
                 计算机专业大四在读
                 <span className="hidden sm:inline"> | </span>
                 <br className="sm:hidden" />
-                前端开发工程师
+                前端/移动端开发工程师
               </p>
             </div>
 

@@ -16,10 +16,13 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('https://oboard.xlog.app/feed?format=json', {
+      const response = await fetch('https://blog.oboard.fun/feed.json', {
         next: { revalidate: 60 },
       });
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`Blog feed request failed: ${response.status}`);
+      }
+      const data = (await response.json()) as FeedBodyInfo;
       setBlogJson(data);
     };
     fetchData();

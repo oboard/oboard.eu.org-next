@@ -50,7 +50,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
       href={url}
       className="rounded-xl bg-base-100 overflow-clip relative h-full w-full flex flex-col justify-between cursor-pointer border border-base-300 hover:scale-[1.02] hover:shadow-xl transition-ease transition-duration-300"
     >
-      {
+      {image && (
         <Image
           width={900}
           height={383}
@@ -58,7 +58,7 @@ export default function FeedItemCard({ item }: { item: FeedItemInfo }) {
           alt={title}
           className="w-full object-cover aspect-900/383"
         />
-      }
+      )}
       <div className="p-4 flex flex-col gap-3 flex-1">
         <h3 className="text-xl leading-7 font-semibold text-ellipsis overflow-hidden w-full inline-block text-nowrap whitespace-nowrap">
           {title}

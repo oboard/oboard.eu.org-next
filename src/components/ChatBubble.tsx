@@ -1,11 +1,10 @@
 'use client';
+
 import { type MessageInfo } from '@/models/chat/message';
+import type React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { darcula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import { useCrossbellCharacter } from '@/hooks/useCrossbellCharacter';
-import Image from 'next/image';
-import { getCrossbellImageUrl } from '@/utils/crossbell';
 import remarkBreaks from 'remark-breaks';
 
 const CodeBlock = ({
@@ -28,9 +27,8 @@ const CodeBlock = ({
   );
 };
 
-// uuid作为种子，生成随机数，然后取1-7数字，作为颜色
 function genColor(uuid: string) {
-  if (uuid === undefined || uuid === null || uuid.length < 5) {
+  if (!uuid || uuid.length < 5) {
     return '';
   }
   const seed = Number.parseInt(uuid.replace(/-/g, '').slice(0, 8), 16);
@@ -42,11 +40,9 @@ function genColor(uuid: string) {
     'chat-bubble-warning',
     'chat-bubble-error',
   ];
-  const color = colors[seed % 7];
-  return color;
+  return colors[seed % colors.length];
 }
 
-// 通过时间戳获取时间，如果时间不是很久，就显示多久之前，否则显示具体时间
 function getTime(time: number | undefined) {
   if (time === undefined) return '发送中';
   const now = new Date().getTime();
@@ -63,45 +59,41 @@ function getTime(time: number | undefined) {
   return new Date(time).toLocaleString();
 }
 
+function formatUserId(userId: string) {
+  if (userId === 'robot') return 'AI';
+  if (userId.startsWith('0x') && userId.length >= 10) {
+    return `${userId.slice(0, 6)}...${userId.slice(-4)}`;
+  }
+  return userId.slice(0, 8);
+}
+
 interface ChatBubbleProps {
   message: MessageInfo;
   isCurrentUser: boolean;
 }
 
 export default function ChatBubble({ message, isCurrentUser }: ChatBubbleProps) {
-  const character = useCrossbellCharacter(message.userId);
-
   return (
     <div className={`chat ${isCurrentUser ? 'chat-end' : 'chat-start'}`}>
-      {character && (
-        <Image
-          className="chat-image w-10 avatar rounded-full"
-          src={getCrossbellImageUrl(character?.metadata?.content?.avatars?.[0])}
-          alt="avatar"
-          width={40}
-          height={40}
-        />
-      )}
       <div className="chat-header">
         <time className="text-xs opacity-50 ml-2">{getTime(message.time)}</time>
-        {character?.metadata?.content?.name ?? ''}
+        {formatUserId(message.userId)}
       </div>
       <div
         className={`animate-duration-500 animate-ease-out chat-bubble ${genColor(
           message.userId
-        )} animate-fade-in-${isCurrentUser ? 'right' : 'left'}${message.type === 'image' ? ' max-w-sm' : ''
-          }`}
+        )} animate-fade-in-${isCurrentUser ? 'right' : 'left'}${message.type === 'image' ? ' max-w-sm' : ''}`}
       >
         <ReactMarkdown
           remarkPlugins={[remarkBreaks]}
           components={{
-            img: ({ node, ...props }) => (
+            img: ({ ...props }) => (
               <button
                 type="button"
                 className="gap-1 flex flex-row items-center link link-hover"
                 onClick={() => {
                   if (typeof window !== 'undefined') {
-                    window.open(props.src);
+                    window.open(typeof props.src === 'string' ? props.src : undefined);
                   }
                 }}
               >
@@ -109,22 +101,28 @@ export default function ChatBubble({ message, isCurrentUser }: ChatBubbleProps) 
                 查看图片
               </button>
             ),
-            code: ({ node, inline, className, children, ...props }) => {
+            code: (codeProps) => {
+              const { inline, className, children, props } = codeProps as {
+                inline?: boolean;
+                className?: string;
+                children?: React.ReactNode;
+                props?: React.HTMLAttributes<HTMLElement>;
+              };
+              void props;
               const match = /language-(\w+)/.exec(className || '');
               return !inline && match ? (
                 <CodeBlock language={match[1]}>{String(children).replace(/\n$/, '')}</CodeBlock>
               ) : (
-                <CodeBlock language={'js'}>{String(children).replace(/\n$/, '')}</CodeBlock>
+                <CodeBlock language="js">{String(children).replace(/\n$/, '')}</CodeBlock>
               );
             },
-            a: ({ node, className, children, ...props }) => {
+            a: ({ children, ...props }) => {
               return (
                 <div className="flex flex-row gap-1 items-center">
                   <svg
                     role="img"
                     aria-label="链接"
-                    className={`${isCurrentUser ? 'text-primary-content' : 'text-base-content'
-                      } fill-current`}
+                    className={`${isCurrentUser ? 'text-primary-content' : 'text-base-content'} fill-current`}
                     viewBox="0 0 1024 1024"
                     version="1.1"
                     xmlns="http://www.w3.org/2000/svg"

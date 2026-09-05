@@ -38,10 +38,6 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'ipfs.crossbell.io',
-      },
-      {
-        protocol: 'https',
         hostname: 'obscloud.ulearning.cn',
       },
       {

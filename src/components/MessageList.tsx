@@ -7,7 +7,7 @@ export interface MessageListProps {
   userId: string;
   isLoading: boolean;
   following: boolean;
-  messagesContainerRef: React.RefObject<HTMLDivElement>;
+  messagesContainerRef: React.RefObject<HTMLDivElement | null>;
   onScrollToBottom: () => void;
   setFollowing: (value: boolean) => void;
   emptyStateConfig?: {

@@ -1,39 +1,42 @@
-# 构建阶段
-FROM oven/bun:1 AS builder
+# Build stage
+FROM node:24-alpine AS base
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 
 WORKDIR /app
 
-# 设置 Bun 使用国内镜像源
-ENV BUN_CONFIG_REGISTRY=https://registry.npmmirror.com
+RUN corepack enable && corepack prepare pnpm@11.22.0 --activate
 
-# 复制 package.json 和 package-lock.json
-COPY package*.json ./
+FROM base AS deps
 
-# 安装依赖
-RUN bun install --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
-# 复制源代码
+FROM base AS builder
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN pnpm build
 
-# 构建应用
-RUN bun run build
-
-# 生产阶段
-FROM oven/bun:1-slim AS runner
+# Production stage
+FROM node:24-alpine AS runner
 
 WORKDIR /app
 
-# 设置环境变量
 ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# 从构建阶段复制必要文件
-COPY --from=builder /app/next.config.js ./
+RUN addgroup --system --gid 1001 nodejs \
+  && adduser --system --uid 1001 nextjs
+
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# 暴露端口
+USER nextjs
+
 EXPOSE 3000
 
-# 启动应用
-CMD ["bun", "server.js"] 
+CMD ["node", "server.js"]

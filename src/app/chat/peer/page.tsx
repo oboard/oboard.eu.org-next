@@ -41,13 +41,9 @@ export default function P2PChatPage() {
   const peerRef = useRef(undefined as Peer | undefined);
   const [mesType, setMesType] = useState(0);
   const [message, setMessage] = useState<string>("");
-  const [messageFile, setMessageFile] = useState<File | ArrayBuffer>();
+  const [messageFile, setMessageFile] = useState<File | ArrayBuffer>(() => new File([], ""));
   const [messages, setMessages] = useLocalStorage<MessageInfo[]>("peer_messages", []);
   const messagesRef = useRef(messages);
-
-  useEffect(() => {
-    setMessageFile(new File([], ""));
-  }, []);
 
   const [following, setFollowing] = useState(true);
 
@@ -60,7 +56,7 @@ export default function P2PChatPage() {
     });
   }, [following]);
 
-  const scrollTimer = useRef<NodeJS.Timeout | undefined>();
+  const scrollTimer = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // 监听chatbox的滚动事件，如果滑动到底部，就设置following为true，否则为false
   useEffect(() => {
@@ -345,13 +341,13 @@ export default function P2PChatPage() {
                               className="gap-1 flex flex-row items-center link link-hover"
                               onClick={() => {
                                 if (typeof window !== "undefined") {
-                                  window.open(props.src);
+                                  window.open(typeof props.src === 'string' ? props.src : undefined);
                                 }
                               }}
                               onKeyDown={(e) => {
                                 if (e.key === "Enter") {
                                   if (typeof window !== "undefined") {
-                                    window.open(props.src);
+                                    window.open(typeof props.src === 'string' ? props.src : undefined);
                                     e.preventDefault();
                                   }
                                 }
@@ -372,15 +368,16 @@ export default function P2PChatPage() {
                           ),
                           code: ({
                             node,
-                            inline,
                             className,
                             children,
                             ...props
                           }) => {
+                            void node;
+                            void props;
                             const match = /language-(\w+)/.exec(
                               className || ""
                             );
-                            return !inline && match ? (
+                            return match ? (
                               <CodeBlock language={match[1]}>
                                 {String(children).replace(/\n$/, "")}
                               </CodeBlock>

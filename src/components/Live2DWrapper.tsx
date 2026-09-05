@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
-import useLive2D from "@/hooks/Live2D";
+import dynamic from 'next/dynamic';
 
-export default function Live2DWrapper() {
-  useLive2D();
-  return null; // 这个组件不需要渲染任何内容
-} 
+const Live2DWrapper = dynamic(() => import('./Live2DWrapperInner'), { ssr: false });
+
+export default Live2DWrapper;

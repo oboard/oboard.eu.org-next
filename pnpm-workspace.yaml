@@ -1,13 +1,18 @@
 packages:
   - '.'
 
-onlyBuiltDependencies:
-  - '@biomejs/biome'
-  - '@reown/appkit'
-  - '@tailwindcss/oxide'
-  - bufferutil
-  - esbuild
-  - keccak
-  - secp256k1
-  - sharp
-  - utf-8-validate
+overrides:
+  use-sync-external-store: 1.6.0
+  zod: 3.25.76
+
+allowBuilds:
+  '@biomejs/biome': true
+  '@reown/appkit': true
+  '@tailwindcss/oxide': true
+  bufferutil: true
+  esbuild: true
+  keccak: true
+  secp256k1: true
+  sharp: true
+  unrs-resolver: true
+  utf-8-validate: true

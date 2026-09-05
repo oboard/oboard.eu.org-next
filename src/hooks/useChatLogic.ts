@@ -21,7 +21,7 @@ export interface UseChatLogicReturn {
   isConnected?: boolean;
 
   // Refs
-  messagesContainerRef: React.RefObject<HTMLDivElement>;
+  messagesContainerRef: React.RefObject<HTMLDivElement | null>;
 
   // Actions
   setInput: (value: string) => void;

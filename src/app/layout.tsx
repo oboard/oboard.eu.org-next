@@ -15,6 +15,22 @@ export const metadata: Metadata = {
   title: "一块小板子",
   description: "一个隐蔽的网站捏QAQ",
   metadataBase: new URL("https://oboard.eu.org"),
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        {
+          url: "https://blog.oboard.fun/rss.xml",
+          title: "oboard blog RSS",
+        },
+      ],
+      "application/feed+json": [
+        {
+          url: "https://blog.oboard.fun/feed.json",
+          title: "oboard blog JSON Feed",
+        },
+      ],
+    },
+  },
   openGraph: {
     type: "website",
     url: "https://oboard.eu.org",
